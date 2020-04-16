@@ -21,14 +21,14 @@ public class AuthorizationController {
 	
     @RequestMapping(value = "/registracija", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody Pacijent pacijent) {
+    	System.out.println(pacijent);
         try {
             System.out.println("asdasdasdasdsd");
             //pacijent.setConfirmed(false);
-            pacijent = pacijentService.save(pacijent);
-            
+            pacijent = pacijentService.save(pacijent);            
             return new ResponseEntity<>(pacijent, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }

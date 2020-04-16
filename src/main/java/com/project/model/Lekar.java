@@ -15,13 +15,13 @@ import javax.persistence.OneToMany;
 @Entity
 @DiscriminatorValue("L")
 public class Lekar extends Korisnik{
-	@Column(name = "prosecna_ocena", nullable = false)
+	@Column(name = "prosecna_ocena", nullable = true)
 	private Double prosecnaOcena;
 	
-	@Column(name="pocetak_rada", unique=false, nullable=false)
+	@Column(name="pocetak_rada", unique=false, nullable=true)
 	private LocalTime pocetakRada;
 	
-	@Column(name="kraj_rada", unique=false, nullable=false)
+	@Column(name="kraj_rada", unique=false, nullable=true)
 	private LocalTime krajRada;
 	
 	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @DiscriminatorValue("P")
 public class Pacijent extends Korisnik{
 	
-	@Column(name = "lbo", nullable = false)
+	@Column(name = "lbo", nullable = true)
 	private String lbo;
 		
 	//@OneToOne(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -28,6 +28,11 @@ public class Pacijent extends Korisnik{
 	
 	public Pacijent(Integer id, String email, String lozinka, String ime, String prezime, String adresa, String broj,String lbo, ZdravstveniKarton zdravstveniKarton) {
 		super(id, email, lozinka, ime, prezime, adresa, broj);
+		this.lbo = lbo;
+	}
+	
+	public Pacijent(String email, String lozinka, String ime, String prezime, String adresa, String broj,String lbo) {
+		super(0, email, lozinka, ime, prezime, adresa, broj);
 		this.lbo = lbo;
 	}
 

@@ -33,7 +33,7 @@
 				console.log("NESTO")
 				axios({
                 	method : 'post',
-                    url : 'loginKor',
+                    url : 'api/loginKor',
                     data:{username:this.username,password:this.password},
                 }).then(function(response){
                     alert(response.data);
