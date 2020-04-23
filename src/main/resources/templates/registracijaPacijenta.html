@@ -177,7 +177,7 @@
                     url : 'api/registracija',
                     data:{email:this.email, lozinka:this.lozinka, ime:this.ime, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
                 }).then(function(response){                	
-                	document.location.replace("/pacijentPocetna.html");
+                	document.location.replace("/pacijentPocetna");
                 }).catch((error)=>{
                 	this.email = "";
                 	this.errorMessage = "Postoji korisnik sa tim email-om";
