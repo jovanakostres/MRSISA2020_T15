@@ -6,46 +6,151 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script></head>
+  	<script>
+	  	$(document).ready( function() {
+			$( "#registracija" ).hide();
+		});
+  	</script>
 <body>
+<div id = "klinika">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 	    	<ul class="nav navbar-nav">
-				<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Klinike.html">Prikaz klinika</a></li>
-		      	<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Istorija.html">Istorija</a></li>
-		      	<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/zKarton.html">Zdravstveni karton</a></li>
-		      	<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Profil.html">Profil</a></li>
+				<li><a class="navbar-brand" v-on:click="prikazi_klinike">Prikaz klinika</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
 	    	<ul class="nav navbar-nav navbar-right">
 	      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 	    	</ul>
   		</div>
 	</nav>
+	<div th:replace="pacijent_html/Profil :: regg"></div>
+</div>
 </body>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://vuejs.org/js/vue.js"></script>
 
-
 <script>
-	new Vue({
-		el: '#click',
+
+	var app = new Vue({
+		el: '#klinika',
+		data: {
+			ime_pl : '',
+			prez_pl : '',
+			adr_pl : '',
+			br_pl : '',
+			new_pass : '' ,
+			error_message: '',
+			id: '',
+			lbo: '',
+			email : '',
+			ime : '',
+			prezime : '',
+			pass : '',
+			pass2 : '',
+			adresa : '',
+			broj : '',
+		},
 		methods: {
-			goToProfile: function (ind) {
-				switch(ind){
-				case 0:
-					document.location.replace("/pacijent_html/Klinike.html");
-					break;
-				case 1:
-					document.location.replace("/pacijent_html/Istorija.html");
-					break;
-				case 2:
-					document.location.replace("/pacijent_html/zKarton.html");
-					break;
-				case 3:
-					document.location.replace("/pacijent_html/Profil.html");
+			prikazi_profil()
+			{
+				$( "#registracija" ).show();
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/klinike',
+                }).then(function(response){
+                    this.ime_pl = response.data.ime;
+					this.prez_pl = response.data.prezime;
+					this.adr_pl = response.data.adresa;
+					this.br_pl = response.data.broj;
+					this.new_pass = response.data.lozinka;
+					this.id = response.data.id;
+					this.lbo = response.data.lbo;
+					this.email = response.data.email;
+                    console.log(response.data);
+                }.bind(this));
+            },
+			prikazi_klinike()
+			{
+				$( "#registracija" ).show();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/klinike',
+                }).then(function(response){
+                    this.ime_pl = response.data;
+                    console.log(this.ime_pl);
+                }.bind(this));
+            },
+			prikazi_istoriju()
+			{
+				$( "#registracija" ).show();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/klinike',
+                }).then(function(response){
+                    this.ime_pl = response.data;
+                    console.log(this.ime_pl);
+                }.bind(this));
+            },
+			prikazi_karton()
+			{
+				$( "#registracija" ).show();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/klinike',
+                }).then(function(response){
+                    this.ime_pl = response.data;
+                    console.log(this.ime_pl);
+                }.bind(this));
+            },
+            validEmail:function(email) {
+			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				return re.test(email);
+			},
+            check(){
+				var s = true;
+				
+				if(this.ime == "") this.ime = this.ime_pl;
+				if(this.prezime == "") this.prezime = this.prez_pl;
+				if(this.adresa == "") this.adresa = this.adr_pl;
+				if(this.broj == "") this.broj = this.br_pl;
+				
+				if(this.pass != "" && this.pass2 != "") 
+					if(this.pass != this.pass2){
+						this.error_message = "Lozinke se razlikuju";
+						s = false;
+					} else new_pass = this.pass;
+				
+				if(this.pass != "" && this.pass2 == ""){
+					this.error_message = "Morate ponoviti lozinku";
+					s = false;
 				}
-		 	}
+								
+				return s;
+			},
+			izmeni_korisnika()
+            {
+            	if(!this.check()) return;
+				axios({
+                	method : 'post',
+                    url : 'api/pacijent/izmena_profila',
+                    data:{id:this.id, email:this.email, lozinka:this.new_pass, ime:this.ime, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
+                }).then(function(response){                	
+                	document.location.replace("/pacijentPocetna");
+                }).catch((error)=>{
+                	this.email = "";
+                	this.error_message = "Podaci nisu izmenjeni";
+                });
+            }
 		}
-	})
+		});
+
 </script>
+
 </html>

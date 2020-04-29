@@ -1,5 +1,8 @@
 package com.project.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +26,25 @@ public class PacijentController {
     public String getProfil() {
     	return "";
     }
+    
+   @GetMapping(value ="/klinike")
+   public Optional<Pacijent> getKlinike() {
+	   return pacijentService.findById();
+   }
+   
+   
+   @RequestMapping(value = "/izmena_profila", method = RequestMethod.POST)
+   public ResponseEntity updateProfil(@RequestBody Pacijent pacijent) {
+   	System.out.println(pacijent.getIme() + " " + pacijent.getPrezime() );
+   	try {
+   		System.out.println("PROSAOOO");
+   		pacijentService.save(pacijent);
+   		return new ResponseEntity(HttpStatus.OK);
+   	}
+   	catch(Exception ex){
+   		return new ResponseEntity(HttpStatus.BAD_REQUEST);
+   	}
+    
+   }
+   
 }

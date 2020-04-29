@@ -1,5 +1,7 @@
 package com.project.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,13 @@ public class PacijentService {
 	
 	public Pacijent save(Pacijent pacijent) {
 		return pacijentRepository.save(pacijent);
+	}
+	
+	public Optional<Pacijent> findById() {
+		return pacijentRepository.findById(1);
+	}
+	
+	public Pacijent updateById(Pacijent p) {
+		return pacijentRepository.save(p);
 	}
 }

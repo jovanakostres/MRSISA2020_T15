@@ -22,9 +22,10 @@ public class HomeController {
 	
 	@GetMapping(value = "/pacijentPocetna")
 	public String pacijentPocetna() {
-		System.out.println("aaaaa");
+		System.out.println("pacijent");
 		return "pacijent_html/pacijentPocetna";
 		
 	}
+	
 	
 }
