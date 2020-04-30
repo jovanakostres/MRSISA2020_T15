@@ -24,7 +24,7 @@
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 	    	<ul class="nav navbar-nav">
-				<li><a class="navbar-brand" v-on:click="prikazi_klinike">Prikaz klinika</a></li>
+				<li><a class="navbar-brand" v-on:click="prikazi_pacijente">Prikaz pacijenata</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
@@ -35,7 +35,7 @@
   		</div>
 	</nav>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
-	<div th:replace="pacijent_html/Klinike :: table"></div>
+	<div th:replace="tabela :: table"></div>
 </div>
 </body>
 
@@ -86,16 +86,16 @@
                     console.log(response.data);
                 }.bind(this));
             },
-			prikazi_klinike()
+			prikazi_pacijente()
 			{
             	$( "#registracija" ).hide();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/lekar/pacijentiklinike',
                 }).then(function(response){
-                    this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
-                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                    this.columns = [ 'email', 'ime', 'prezime', 'broj'];
+                    this.labels = [ 'Email', 'Ime', 'Prezime', 'Broj'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
                 }.bind(this));

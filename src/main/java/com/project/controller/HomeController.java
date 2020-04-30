@@ -27,5 +27,12 @@ public class HomeController {
 		
 	}
 	
+	@GetMapping(value = "/lekarPocetna")
+	public String lekarPocetna() {
+		System.out.println("lekar");
+		return "lekar_html/lekarPocetna";
+		
+	}
+	
 	
 }
