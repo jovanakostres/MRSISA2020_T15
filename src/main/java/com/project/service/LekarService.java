@@ -15,7 +15,7 @@ public class LekarService {
 	@Autowired
 	private LekarRepository lekarRepository;
 	
-	public Set<Pacijent> getPacijentiKlinike(Integer id){
+	public Set<Pacijent> getPacijentiKlinike(Long id){
 		Lekar lekar = lekarRepository.findById(id).orElseGet(null);
 		return lekar.getKlinika().getPacijenti();
 	}

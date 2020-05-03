@@ -17,14 +17,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name="korisnici")
 @Inheritance(strategy=SINGLE_TABLE)
+@SequenceGenerator(name="korisnik_generator",initialValue = 8 ,sequenceName = "korisnik_seq")
 @DiscriminatorColumn(name="type", discriminatorType=STRING)
 public class Korisnik {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "korisnik_generator")
-	@SequenceGenerator(name="korisnik_generator", sequenceName = "korisnik_seq")
-	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	@Column(name = "id", updatable = false, nullable = false)
+	private Long id;
 	
 	@Column(name="email", unique=true, nullable=false)
 	private String email;
@@ -48,7 +48,7 @@ public class Korisnik {
 		
 	}
 	
-	public Korisnik(Integer id, String email, String lozinka, String ime, String prezime, String adresa, String broj) {
+	public Korisnik(Long id, String email, String lozinka, String ime, String prezime, String adresa, String broj) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -60,12 +60,11 @@ public class Korisnik {
 	}
 
 
-
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

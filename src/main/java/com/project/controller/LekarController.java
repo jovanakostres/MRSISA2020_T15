@@ -23,14 +23,14 @@ public class LekarController {
 	
 	   @GetMapping(value ="/pacijentiklinike")
 	   public Set<Pacijent> getPacijenti() {
-		   
+		   /*
 		   Pacijent k = new Pacijent("aaa@email.com", "aaa", "aaa", "aaa", "aaa", "aaa","aaa");
 		   Set<Pacijent> lista = new HashSet<Pacijent>();
 		   lista.add(k);
 		   lista.add(k);
 		   return lista;
-		   
-		   //return lekarService.getPacijentiKlinike(1);
+		   */
+		   return lekarService.getPacijentiKlinike(3L);
 	   }
 	
 }

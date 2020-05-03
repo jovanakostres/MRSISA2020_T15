@@ -24,7 +24,7 @@ public class Klinika {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "klinika_generator")
 	@SequenceGenerator(name="klinika_generator", sequenceName = "klinika_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="naziv", unique=false, nullable=false)
 	private String naziv;
@@ -55,12 +55,16 @@ public class Klinika {
 		this.opis = opis;
 		this.ocena = ocena;
 	}
-
-	public Integer getId() {
+	
+	public Klinika() {
+		
+	}
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

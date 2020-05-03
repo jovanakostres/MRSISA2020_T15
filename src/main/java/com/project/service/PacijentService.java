@@ -19,7 +19,7 @@ public class PacijentService {
 	}
 	
 	public Optional<Pacijent> findById() {
-		return pacijentRepository.findById(1);
+		return pacijentRepository.findById(1L);
 	}
 	
 	public Pacijent updateById(Pacijent p) {
