@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name="sale")
@@ -29,9 +32,11 @@ public class Sala {
 	private String naziv;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Klinika klinika;
 	
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Set<Pregled> pregledi;
 
 	public Sala() {

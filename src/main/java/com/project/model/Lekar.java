@@ -11,6 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @DiscriminatorValue("L")
@@ -25,9 +28,11 @@ public class Lekar extends Korisnik{
 	private LocalTime krajRada;
 	
 	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Set<Pregled> pregledi;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Klinika klinika;
 	
 	public Lekar() {

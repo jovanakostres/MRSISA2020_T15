@@ -6,17 +6,24 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @DiscriminatorValue("MS")
 public class MedicinskaSestra extends Korisnik{
 	
 	@OneToMany(mappedBy = "medicinskaSestra", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Set<Recept> recepti;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "klinikams_id")
+	@JsonBackReference
 	private Klinika klinika;
 
 	public MedicinskaSestra() {

@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name="pregledi")
@@ -48,12 +50,15 @@ public class Pregled {
 	//private Izvestaj izvestaj;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Sala sala;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Lekar lekar;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private ZdravstveniKarton zkPacijenta;
 	
 	public Pregled() {

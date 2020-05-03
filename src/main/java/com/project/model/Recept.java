@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="recepti")
 public class Recept {
@@ -34,6 +36,7 @@ public class Recept {
 	private Set<Lek> lekovi;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private MedicinskaSestra medicinskaSestra;
 
 	public Recept() {
