@@ -7,6 +7,7 @@ insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) valu
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (7,'milosmilosevic@gmail.com','milosm','Milos', 'Milosevic','Adresa 7','0600000006','AKC');
 
 insert into klinike (id,naziv, adresa, opis, ocena) values (1,'Klinika 1','Adresa Klinike 1','Opis1', 4.5);
+insert into klinike (id,naziv, adresa, opis, ocena) values (2,'Klinika 2','Adresa Klinike 2','Opis2', 3.0);
 
 update korisnici set klinika_id = 1 where id = 3;
 insert into klinika_pacijenti (klinika_id,pacijent_id) values (1,1);

@@ -8,8 +8,8 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   		<style>
   		html, body {
-    width: 100%;
-}
+	    	width: 100%;
+		}
 		#tabela {margin: 0 auto;}
 	</style>
   	
@@ -36,6 +36,7 @@
 	</nav>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
 	<div th:replace="pacijent_html/Klinike :: table"></div>
+	<div th:replace="pacijent_html/Lekari :: table"></div>
 </div>
 </body>
 
@@ -64,12 +65,22 @@
 			broj : '',
 			items : [],
 			columns : [],
-			labels : []
+			labels : [],
+			naziv : '',
+			adresa_fil : '',
+			opis : '',
+			pretraga_text : '',
+			minmax : 'max',
+			pratragaLekar_text: '',
+			ime_lek: '',
+			prez_lek: '',
+			broj_lek: ''
 		},
 		methods: {
 			prikazi_profil()
 			{
 				$( "#tabela" ).hide();
+				$("#tabela_lekari").hide();
 				$( "#registracija" ).show();
                 axios({
                 	method : 'get',
@@ -89,6 +100,7 @@
 			prikazi_klinike()
 			{
             	$( "#registracija" ).hide();
+            	$("#tabela_lekari").hide();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -117,6 +129,8 @@
 			prikazi_karton()
 			{
 				$( "#registracija" ).show();
+				$("#tabela_lekari").hide();
+				$("#tabela").hide();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -164,7 +178,84 @@
                 	this.email = "";
                 	this.error_message = "Podaci nisu izmenjeni";
                 });
-            }
+            },
+            filter()
+            {
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/filter_klinika',
+                    data:{naziv:this.naziv,adresa:this.adresa_fil, opis:this.opis, minmax:this.minmax},
+                }).then(function(response){                	
+                	this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
+                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                    this.items = response.data;
+                    if(this.minmax=='max')
+                    	this.minmax = 'min';
+                    else
+                    	this.minmax = 'max';
+                }.bind(this));
+            	$( "#tabela" ).show();
+            },
+            pretraga()
+            {
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/pretraga_klinika',
+                    data:{pretraga_text:this.pretraga_text},
+                }).then(function(response){                	
+                	this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
+                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                    this.items = response.data;
+                }.bind(this));
+            	$( "#tabela" ).show();
+            },
+            lista_lekara(index)
+            {
+            	$( "#registracija" ).hide();
+            	$("#tabela").hide();
+				console.log(index);
+                axios({
+                	method : 'post',
+                	data: {ind:index},
+                    url : 'api/pacijent/lekari',
+                }).then(function(response){
+                    this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                    this.items = response.data;
+                    console.log(this.items[0].naziv);
+                }.bind(this));
+				$( "#tabela_lekari" ).show();
+            },
+            filter_lekar()
+            {
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/filter_lekar',
+                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax},
+                }).then(function(response){                	
+                	this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                    this.items = response.data;
+                    if(this.minmax=='max')
+                    	this.minmax = 'min';
+                    else
+                    	this.minmax = 'max';
+                }.bind(this));
+            	$( "#tabela_lekari" ).show();
+            },
+            pretraga_lekar()
+            {
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/pretraga_lekar',
+                    data:{pretraga_lek:this.pretragaLekar_text},
+                }).then(function(response){                	
+                	this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                    this.items = response.data;
+                }.bind(this));
+            	$( "#tabela_lekari" ).show();
+            },
 		}
 		});
 

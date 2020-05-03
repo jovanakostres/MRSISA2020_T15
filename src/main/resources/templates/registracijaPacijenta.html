@@ -5,11 +5,26 @@
 	<title>Registracija</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<style>
-		body {background-color: ivory;}
-		.forma {display : flex; justify-content: center;}
-		.forma table { margin-left : 20%; margin-right : 20%; width : 60%; table-layout: fixed;}
-		h1   {color: blue;}
-		p    {color: red;}
+		body, html {   
+		    width: 100%;
+		    height: 100%;
+		    margin: 0;
+		    padding: 0;
+		    display:table;
+		}
+		body {
+		    display:table-cell;
+		    vertical-align:middle;
+		    background-image: linear-gradient(#E6E7FA, white);
+		}
+		div {
+		    display:table;/* shrinks to fit content */
+		    margin:auto;
+		    text-align : center;
+		}
+		input {
+			border-radius: 10px;
+		}
 	</style>
 </head>
 <body>
@@ -18,7 +33,7 @@
 		<thead></thead>
 		<tbody>
 			<tr>
-				<th colspan="4" style = "text-align: center; padding-bottom : 5%;"><h4>Registracija novog pacijenta</h4></th>
+				<th colspan="4" style = "text-align: center;"><h4>Registracija novog pacijenta</h4></th>
 			</tr>
 			<tr>
 				<th style = "color: red; text-align : right;">{{ messageIme }}</th>
@@ -29,6 +44,7 @@
 				<th style = "color: red; text-align : right;">{{ messagePrezime }}</th>
 				<th>Unesite prezime: </th>
 				<th><input type = "text" v-model = "prezime"></th>
+				<th></th>
 			</tr>
 			<tr>
 				<th style = "color: red; text-align : right;">{{ messageEmail }}</th>
