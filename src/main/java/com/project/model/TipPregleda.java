@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.project.model;
 
 import java.time.LocalTime;
@@ -57,12 +56,3 @@ public class TipPregleda {
 	
 	
 }
-=======
-package com.project.model;
-
-public enum TipPregleda {
-	OBICAN,
-	UNAPREDDEFINISAN,
-	OPERACIJA
-}
->>>>>>> branch 'master' of https://github.com/jovanakostres/MRSISA2020_T15.git

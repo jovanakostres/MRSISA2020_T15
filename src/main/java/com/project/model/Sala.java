@@ -34,7 +34,7 @@ public class Sala {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
-	private Klinika klinikaS;
+	private Klinika klinika;
 	
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -49,7 +49,7 @@ public class Sala {
 		super();
 		this.id = id;
 		this.naziv = naziv;
-		this.klinikaS = klinikaS;
+		this.klinika = klinikaS;
 		this.pregledi = pregledi;
 	}
 
@@ -71,13 +71,16 @@ public class Sala {
 		this.naziv = naziv;
 	}
 
-	public Klinika getKlinikaS() {
-		return klinikaS;
+	
+	public Klinika getKlinika() {
+		return klinika;
 	}
 
-	public void setKlinikaS(Klinika klinikaS) {
-		this.klinikaS = klinikaS;
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
 	}
+
 
 	public Set<Pregled> getPregledi() {
 		return pregledi;
