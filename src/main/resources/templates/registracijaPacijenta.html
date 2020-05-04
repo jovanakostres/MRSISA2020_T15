@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
@@ -207,3 +208,214 @@
 </script>
 </html>
 
+=======
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>Registracija</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<style>
+		body, html {   
+		    width: 100%;
+		    height: 100%;
+		    margin: 0;
+		    padding: 0;
+		    display:table;
+		}
+		body {
+		    display:table-cell;
+		    vertical-align:middle;
+		    background-image: linear-gradient(#E6E7FA, white);
+		}
+		div {
+		    display:table;/* shrinks to fit content */
+		    margin:auto;
+		    text-align : center;
+		}
+		input {
+			border-radius: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="registracija" class = "forma">
+		<table class = "table table-borderless">
+		<thead></thead>
+		<tbody>
+			<tr>
+				<th colspan="4" style = "text-align: center;"><h4>Registracija novog pacijenta</h4></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageIme }}</th>
+				<th>Unesite ime: </th>
+				<th><input type = "text" v-model = "ime"></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messagePrezime }}</th>
+				<th>Unesite prezime: </th>
+				<th><input type = "text" v-model = "prezime"></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageEmail }}</th>
+				<th>Unesite email: </th>
+				<th><input type = "email" v-model = "email"></th>
+				<th style = "color: red; ">	{{messageNeispMail}} </th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageLozinka }}</th>
+				<th>Unesite lozinku: </th>
+				<th><input type = "password" v-model = "lozinka"></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messagePLozinka }}</th>
+				<th>Ponovite lozinku: </th>
+				<th><input type = "password" v-model = "lozinkaPon"></th>
+				<th style = "color: red; ">	{{messageRazLoz}} </th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageAdresa }}</th>
+				<th>Unesite adresu: </th>
+				<th><input type = "text" v-model = "adresa"></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageTel }}</th>
+				<th>Unesite broj telefona: </th>
+				<th><input type = "text" v-model = "broj"></th>
+			</tr>
+			<tr>
+				<th style = "color: red; text-align : right;">{{ messageLBO }}</th>
+				<th>Unesite LBO: </th>
+				<th><input type = "text" v-model = "lbo"></th>
+			</tr>
+			<tr>
+				<th colspan="4" style = "text-align: center; padding-top : 5%;">
+					<input type="submit" v-on:click="login" value="Registruj se" />
+				</th>
+			</tr>
+			<tr>
+				<th colspan="4" style = "text-align: center; padding-top : 5%; color: red; ">
+					<h5>{{errorMessage}}</h5>
+				</th>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+
+<script>
+
+	var app = new Vue({
+		el: '#registracija',
+		data : {
+			email:'',
+			lozinka:'',
+			lozinkaPon:'',
+			ime:'',
+			prezime:'',
+			adresa:'',
+			broj:'',
+			lbo : '',
+			messageIme: '',
+			messagePrezime: '',
+			messageEmail: '',
+			messageLozinka: '',
+			messagePLozinka: '',
+			messageAdresa: '',
+			messageTel: '',
+			messageNeispMail : '',
+			messageRazLoz : '',
+			messageLBO : '',
+			errorMessage :''
+		},
+		methods: {
+			<!-- Funkcija uzeta sa neta -->
+			validEmail:function(email) {
+			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				return re.test(email);
+			},
+			
+			check(){
+				var s = false;
+				if(this.ime == "") {
+					this.messageIme = "*";
+					s = true;
+				} else this.messageIme = "";
+				
+				if(this.prezime == "") {
+					this.messagePrezime = "*";
+					s = true;
+				} else this.messagePrezime = "";
+				
+				if(this.email == "") {
+					this.messageEmail = "*";
+					s = true;
+				} else {
+					this.messageEmail = "";
+					if(!this.validEmail(this.email)){
+						this.messageNeispMail = "Neispravan email";
+	                    s = true;
+					} else this.messageNeispMail = "";
+				}
+				
+				if(this.lozinka == "") {
+					this.messageLozinka = "*";
+					s = true;
+				} else this.messageLozinka = "";
+				
+				if(this.lozinkaPon == "") {
+					this.messagePLozinka = "*";
+					s = true;
+				} else this.messagePLozinka = "";
+				
+				if(this.adresa == "") {
+					this.messageAdresa = "*";
+					s = true;
+				} else this.messageAdresa = "";
+				
+				if(this.broj == "") {
+					this.messageTel = "*";
+					s = true;
+				} else this.messageTel = "";
+				
+				if(this.lbo == "") {
+					this.messageLBO = "*";
+					s = true;
+				} else this.messageLBO = "";
+				
+				if(this.lozinka !== this.lozinkaPon && this.lozinka != "" && this.lozinkaPon != ""){
+					this.messageRazLoz = "Lozinke se ne poklapaju";
+                    s = true;
+                } else this.messageRazLoz = "";
+				
+				
+				
+				return s;
+			},
+			
+			login(){
+				console.log(this.email);				
+				if(this.check()) return;
+				axios({
+                	method : 'post',
+                    url : 'api/registracija',
+                    data:{email:this.email, lozinka:this.lozinka, ime:this.ime, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
+                }).then(function(response){                	
+                	document.location.replace("/pacijentPocetna");
+                }).catch((error)=>{
+                	this.email = "";
+                	this.errorMessage = "Postoji korisnik sa tim email-om";
+                });
+			}
+			
+			
+		}
+	})
+
+</script>
+</html>
+
+>>>>>>> 1494f90d8123a17211e26cc90e9906eb700f3301

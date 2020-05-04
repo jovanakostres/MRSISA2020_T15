@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
@@ -75,3 +76,82 @@
 
 </html>
 
+=======
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>Klinika</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+		body, html {   
+		    width: 100%;
+		    height: 100%;
+		    margin: 0;
+		    padding: 0;
+		    display:table;
+		}
+		body {
+		    display:table-cell;
+		    vertical-align:middle;
+		    background-image: linear-gradient(#E6E7FA, white);
+		}
+		div {
+		    display:table;/* shrinks to fit content */
+		    margin:auto;
+		    text-align : center;
+		    background-color: #B5B1B2;
+		    padding : 5%;
+		    border-radius : 30px;
+		}
+		input {
+			border-radius: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<form id = "log_elem">
+			<label for="username">Korisnicko ime </label>
+	        <input v-model="username" type="text" id="username"/>
+	        <br><br>
+	        <label for="password">Lozinka </label>
+	        <input v-model="password" type="password" id="password"/>
+	        <br><br>
+	        <input type="submit" v-on:click="login" value="Log in" style = "background-color: #D8D8F6"/>
+	        <br><br>
+	        <p>Nemate nalog? <a href = "/registracijaPacijenta" style = "color: #48576B">Registrujte se.</a></p>
+		</form>
+	</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+
+<script>
+
+	var app = new Vue({
+		el: '#log_elem',
+		data : {
+			username:'',
+			password:'',
+		},
+		methods: {
+			login(){
+				console.log("NESTO")
+				axios({
+                	method : 'post',
+                    url : 'api/loginKor',
+                    data:{username:this.username,password:this.password},
+                }).then(function(response){
+                    alert(response.data);
+                });
+			}
+		}
+	})
+
+</script>
+
+</html>
+
+>>>>>>> 1494f90d8123a17211e26cc90e9906eb700f3301
