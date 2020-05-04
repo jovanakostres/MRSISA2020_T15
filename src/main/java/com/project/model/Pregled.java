@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -56,7 +57,7 @@ public class Pregled {
 	//private Izvestaj izvestaj;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonBackReference
+	@JsonIgnore
 	private Sala sala;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -134,10 +135,6 @@ public class Pregled {
 
 	public void setLekar(Lekar lekar) {
 		this.lekar = lekar;
-	}
-
-	public ZdravstveniKarton getZkPcijenta() {
-		return zkPacijenta;
 	}
 
 	public void setZkPacijenta(ZdravstveniKarton zkPacijenta) {

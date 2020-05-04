@@ -29,7 +29,7 @@ public class ZdravstveniKarton {
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "karton_generator")
 	//@SequenceGenerator(name="karton_generator", sequenceName = "karton_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Long id;
+	private Integer id;
 	
 	@Column(name="visina", unique=false, nullable=false)
 	private Integer visina;
@@ -40,7 +40,6 @@ public class ZdravstveniKarton {
 	@Column(name="krvna_grupa", unique=false, nullable=false)
 	private String krvnaGrupa;
 	
-	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	//@JoinColumn(name = "pacijent_id")
 	@MapsId
@@ -48,17 +47,17 @@ public class ZdravstveniKarton {
 	
 	@OneToMany(mappedBy = "zkPacijenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private Set<Pregled> pregledi = new HashSet<Pregled>();
+	private Set<Pregled> pregledi;
 	
 	public ZdravstveniKarton() {
 		
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -101,6 +100,7 @@ public class ZdravstveniKarton {
 	public void setPregledi(Set<Pregled> pregledi) {
 		this.pregledi = pregledi;
 	}
+	
 	
 	
 }

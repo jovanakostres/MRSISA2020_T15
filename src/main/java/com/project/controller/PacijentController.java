@@ -43,6 +43,7 @@ public class PacijentController {
    
    @GetMapping(value ="/klinike")
    public List<Klinika> getKlinike() {
+	   List <Klinika> k =klinikaService.findAll();
 	   return klinikaService.findAll();
    }
    
