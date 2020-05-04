@@ -1,3 +1,4 @@
+
 package com.project.service;
 
 import java.util.List;
@@ -41,5 +42,4 @@ public class KlinikaService {
 	{
 		return klinikaRepository.getOne(ind).getLekari();
 	}
-
 }

@@ -17,6 +17,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="zdravstveni_kartoni")
 public class ZdravstveniKarton {
@@ -41,7 +46,8 @@ public class ZdravstveniKarton {
 	private Pacijent pacijent;
 	
 	@OneToMany(mappedBy = "zkPacijenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Pregled> pregledi = new HashSet<Pregled>();
+	@JsonManagedReference
+	private Set<Pregled> pregledi;
 	
 	public ZdravstveniKarton() {
 		
@@ -86,6 +92,15 @@ public class ZdravstveniKarton {
 	public void setPacijent(Pacijent pacijent) {
 		this.pacijent = pacijent;
 	}
+
+	public Set<Pregled> getPregledi() {
+		return pregledi;
+	}
+
+	public void setPregledi(Set<Pregled> pregledi) {
+		this.pregledi = pregledi;
+	}
+	
 	
 	
 }

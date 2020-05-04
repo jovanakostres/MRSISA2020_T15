@@ -17,5 +17,10 @@ public interface KlinikaRepository extends JpaRepository<Klinika, Long>{
 	
 	@Query("select s from Klinika s where s.naziv like %?1% or s.adresa like %?1% or s.opis like %?1%")
 	List<Klinika> searchKlinike(String naziv);
+	
+	
+	@Query("select s from Klinika s")
+	List<Klinika> getKlinike();
 
 }
+

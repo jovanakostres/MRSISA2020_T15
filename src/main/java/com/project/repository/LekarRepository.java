@@ -19,3 +19,4 @@ public interface LekarRepository extends JpaRepository<Lekar, Long>{
 	List<Lekar> searchKorisnik(String ime, Long id);
 	
 }
+

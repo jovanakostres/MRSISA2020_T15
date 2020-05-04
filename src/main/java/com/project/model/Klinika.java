@@ -17,6 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+<<<<<<< HEAD
+=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+>>>>>>> branch 'master' of https://github.com/jovanakostres/MRSISA2020_T15.git
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -49,7 +53,11 @@ public class Klinika {
 	@JsonManagedReference
 	private Set<MedicinskaSestra> medicinskeSestre;
 	
+<<<<<<< HEAD
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+=======
+	@OneToMany(mappedBy = "klinikaS", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+>>>>>>> branch 'master' of https://github.com/jovanakostres/MRSISA2020_T15.git
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Set<Sala> sale;
 	
@@ -99,6 +107,14 @@ public class Klinika {
 
 	public void setOpis(String opis) {
 		this.opis = opis;
+	}
+
+	public Set<MedicinskaSestra> getMedicinskeSestre() {
+		return medicinskeSestre;
+	}
+
+	public void setMedicinskeSestre(Set<MedicinskaSestra> medicinskeSestre) {
+		this.medicinskeSestre = medicinskeSestre;
 	}
 
 	public Double getOcena() {

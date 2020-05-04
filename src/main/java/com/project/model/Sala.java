@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -26,28 +27,39 @@ public class Sala {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sala_generator")
 	@SequenceGenerator(name="sala_generator", sequenceName = "sala_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="naziv", unique=true, nullable=false)
 	private String naziv;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
-	private Klinika klinika;
+	private Klinika klinikaS;
 	
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonIgnore
 	private Set<Pregled> pregledi;
 
 	public Sala() {
 		
 	}
 
-	public Integer getId() {
+	
+	public Sala(Long id, String naziv, Klinika klinikaS, Set<Pregled> pregledi) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.klinikaS = klinikaS;
+		this.pregledi = pregledi;
+	}
+
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -59,12 +71,12 @@ public class Sala {
 		this.naziv = naziv;
 	}
 
-	public Klinika getKlinika() {
-		return klinika;
+	public Klinika getKlinikaS() {
+		return klinikaS;
 	}
 
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
+	public void setKlinikaS(Klinika klinikaS) {
+		this.klinikaS = klinikaS;
 	}
 
 	public Set<Pregled> getPregledi() {
@@ -74,6 +86,8 @@ public class Sala {
 	public void setPregledi(Set<Pregled> pregledi) {
 		this.pregledi = pregledi;
 	}
+
+	
 	
 	
 }
