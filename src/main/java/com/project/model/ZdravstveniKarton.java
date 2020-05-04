@@ -17,12 +17,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="zdravstveni_kartoni")
 public class ZdravstveniKarton {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "karton_generator")
-	@SequenceGenerator(name="karton_generator", sequenceName = "karton_seq")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "karton_generator")
+	//@SequenceGenerator(name="karton_generator", sequenceName = "karton_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
@@ -35,12 +40,14 @@ public class ZdravstveniKarton {
 	@Column(name="krvna_grupa", unique=false, nullable=false)
 	private String krvnaGrupa;
 	
+	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	//@JoinColumn(name = "pacijent_id")
 	@MapsId
 	private Pacijent pacijent;
 	
 	@OneToMany(mappedBy = "zkPacijenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
 	public ZdravstveniKarton() {
@@ -85,6 +92,14 @@ public class ZdravstveniKarton {
 
 	public void setPacijent(Pacijent pacijent) {
 		this.pacijent = pacijent;
+	}
+
+	public Set<Pregled> getPregledi() {
+		return pregledi;
+	}
+
+	public void setPregledi(Set<Pregled> pregledi) {
+		this.pregledi = pregledi;
 	}
 	
 	
