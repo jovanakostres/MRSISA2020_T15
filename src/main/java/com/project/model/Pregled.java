@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
@@ -28,8 +30,9 @@ public class Pregled {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pregled_generator")
 	@SequenceGenerator(name="pregled_generator", sequenceName = "pregled_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name="datum", unique=false, nullable=false)
 	private LocalDate datum;
 	
@@ -37,10 +40,13 @@ public class Pregled {
 	private LocalTime vreme;
 	
 	@Column(name="trajanje_pregleda", unique=false, nullable=false)
-	private LocalTime trajanjePregleda;
+	private Double trajanjePregleda;
 	
 	@Column(name="cena", unique=false, nullable=false)
 	private Double cena;
+	
+	@Column(name="izvrsen", unique=false, nullable=false)
+	private Boolean izvrsen;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tip_pregleda", unique=false, nullable=false)
@@ -65,11 +71,11 @@ public class Pregled {
 		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -89,11 +95,11 @@ public class Pregled {
 		this.vreme = vreme;
 	}
 
-	public LocalTime getTrajanjePregleda() {
+	public Double getTrajanjePregleda() {
 		return trajanjePregleda;
 	}
 
-	public void setTrajanjePregleda(LocalTime trajanjePregleda) {
+	public void setTrajanjePregleda(Double trajanjePregleda) {
 		this.trajanjePregleda = trajanjePregleda;
 	}
 
@@ -136,6 +142,18 @@ public class Pregled {
 
 	public void setZkPacijenta(ZdravstveniKarton zkPacijenta) {
 		this.zkPacijenta = zkPacijenta;
+	}
+
+	public Boolean getIzvrsen() {
+		return izvrsen;
+	}
+
+	public void setIzvrsen(Boolean izvrsen) {
+		this.izvrsen = izvrsen;
+	}
+
+	public ZdravstveniKarton getZkPacijenta() {
+		return zkPacijenta;
 	}
 
 	

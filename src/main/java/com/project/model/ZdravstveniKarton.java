@@ -21,10 +21,10 @@ import javax.persistence.Table;
 @Table(name="zdravstveni_kartoni")
 public class ZdravstveniKarton {
 	@Id
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "karton_generator")
-	//@SequenceGenerator(name="karton_generator", sequenceName = "karton_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "karton_generator")
+	@SequenceGenerator(name="karton_generator", sequenceName = "karton_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="visina", unique=false, nullable=false)
 	private Integer visina;
@@ -47,11 +47,11 @@ public class ZdravstveniKarton {
 		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

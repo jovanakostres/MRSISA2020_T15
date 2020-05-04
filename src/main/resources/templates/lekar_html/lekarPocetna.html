@@ -3,14 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Početna strana</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   		<style>
   		html, body {
     width: 100%;
 }
 		#tabela {margin: 0 auto;}
+		
+		#tableModal td, #tableModal th {
+ 		   border: none;
+		}
+		
+		.btn{
+			font-size: 100%;
+		}
 	</style>
   	
   	</head>
@@ -25,8 +33,10 @@
 		<div class="container-fluid">
 	    	<ul class="nav navbar-nav">
 				<li><a class="navbar-brand" v-on:click="prikazi_pacijente">Prikaz pacijenata</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_zpreglede" >Zakazani pregledi</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Radni kalendar</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Godisnji odmor/odsustvo</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zakazi pregled/operaciju</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
 	    	<ul class="nav navbar-nav navbar-right">
@@ -35,6 +45,8 @@
   		</div>
 	</nav>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
+	<div th:replace="lekar_html/ZPregledi :: table"></div>
+	<div th:replace="lekar_html/modalPregled :: modalP"></div>
 	<div th:replace="tabela :: table"></div>
 </div>
 </body>
@@ -64,7 +76,8 @@
 			broj : '',
 			items : [],
 			columns : [],
-			labels : []
+			labels : [],
+			item : {}
 		},
 		methods: {
 			prikazi_profil()
@@ -101,18 +114,20 @@
                 }.bind(this));
 				$( "#tabela" ).show();
             },
-			prikazi_istoriju()
+			prikazi_zpreglede()
 			{		
-            	$( "#registracija" ).show();
+            	$( "#registracija" ).hide();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/pregled/zakazani',
                 }).then(function(response){
-                    this.ime_pl = response.data;
-                    console.log(this.ime_pl);
+                	this.columns = [ 'imeP', 'prezimeP', 'sala', 'datum', 'vreme'];
+                    this.labels = [ 'Ime pacijenta', 'Prezime pacijenta', 'Sala', 'Datum','Vreme'];
+                    this.items = response.data;
+                    
                 }.bind(this));
-				
+				$( "#tabelaZPregledi" ).show();
             },
 			prikazi_karton()
 			{
@@ -150,6 +165,14 @@
 				}
 								
 				return s;
+			},
+			modal_pregled(id){
+				for(pregled of this.items){
+					if(pregled['id'] == id){
+						this.item = pregled;
+					}
+				}
+				$( "#modalZPregledi" ).show();
 			},
 			izmeni_korisnika()
             {
