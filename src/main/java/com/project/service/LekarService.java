@@ -21,16 +21,20 @@ public class LekarService {
 		return lekar.getKlinika().getPacijenti();
 	}
 	
-	public List<Lekar> filter(String ime, String prez, String broj, String minmax) {
+	public List<Lekar> filter(String ime, String prez, String broj, String minmax, Long id) {
 		if(minmax.equalsIgnoreCase("min"))
-			return lekarRepository.filterKorisnikMin(ime, prez, broj);
+			return lekarRepository.filterKorisnikMin(ime, prez, broj, id);
 		else
-			return lekarRepository.filterKorisnikMax(ime, prez, broj);
+			return lekarRepository.filterKorisnikMax(ime, prez, broj, id);
 	}
 
-	public List<Lekar> search(String param) {
+	public Lekar findById(Long id) {
+		return lekarRepository.findById(id).orElseGet(null);
+	}
+	
+	public List<Lekar> search(String param, Long id) {
 		// TODO Auto-generated method stub
-		return lekarRepository.searchKorisnik(param);
+		return lekarRepository.searchKorisnik(param, id);
 	}
 
 }

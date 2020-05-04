@@ -35,6 +35,10 @@ public class Lekar extends Korisnik{
 	@JsonBackReference
 	private Klinika klinika;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private TipPregleda tipPregleda;
+	
 	public Lekar() {
 		
 	}

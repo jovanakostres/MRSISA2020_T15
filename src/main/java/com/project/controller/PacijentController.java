@@ -43,6 +43,7 @@ public class PacijentController {
    
    @GetMapping(value ="/klinike")
    public List<Klinika> getKlinike() {
+	   List <Klinika> k =klinikaService.findAll();
 	   return klinikaService.findAll();
    }
    
@@ -96,16 +97,19 @@ public class PacijentController {
 	   ime = params[0].split(":")[1].replace("\"", "");
 	   prez = params[1].split(":")[1].replace("\"", "");
 	   broj = params[2].split(":")[1].replace("\"", "");
-	   minmax = params[3].split(":")[1].replace("\"","").replace("}", "");
-	   return lekarService.filter(ime, prez, broj, minmax);	   
+	   minmax = params[3].split(":")[1].replace("\"","");
+	   String id = params[4].split(":")[1].replace("\"","").replace("}", "");
+	   return lekarService.filter(ime, prez, broj, minmax, Long.parseLong(id));	   
    }   
    
    //pretraga_klinika
    @RequestMapping(value = "/pretraga_lekar", method = RequestMethod.POST)
-   public List<Lekar> pretraga_lekar(@RequestBody String pacijent) {
-	   String param = pacijent.split(":")[1].replace("\"", "").replace("}", "");
-	   System.out.println("PRETRAGA PARAM : " + param);
-	   return lekarService.search(param);
+   public List<Lekar> pretraga_lekar(@RequestBody String par) {
+	   String[] pacijent = par.split(",");
+	   String param = pacijent[0].split(":")[1].replace("\"", "");
+	   String id = pacijent[1].split(":")[1].replace("\"", "").replace("}", "");
+	   System.out.println("PRETRAGA PARAM : .." + param+ "..");
+	   return lekarService.search(param, Long.parseLong(id));
    }   
    
 }

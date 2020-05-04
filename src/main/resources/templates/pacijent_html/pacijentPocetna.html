@@ -35,7 +35,8 @@
   		</div>
 	</nav>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
-	<div th:replace="pacijent_html/Klinike :: table"></div>
+	<div th:replace="pacijent_html/Klinike :: table"></div>	
+	<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
 	<div th:replace="pacijent_html/Lekari :: table"></div>
 </div>
 </body>
@@ -74,7 +75,8 @@
 			pratragaLekar_text: '',
 			ime_lek: '',
 			prez_lek: '',
-			broj_lek: ''
+			broj_lek: '',
+			klinika_id : '',
 		},
 		methods: {
 			prikazi_profil()
@@ -209,17 +211,26 @@
                 }.bind(this));
             	$( "#tabela" ).show();
             },
-            lista_lekara(index)
+            zakazi(index)
             {
             	$( "#registracija" ).hide();
             	$("#tabela").hide();
-				console.log(index);
+            	this.klinika_id = index;
+            	$("#zakazi").show();
+            	
+            },
+            lista_lekara()
+            {
+            	$( "#registracija" ).hide();
+            	$("#tabela").hide();
+            	$("#zakazi").hide();
+				console.log(this.klinika_id);
                 axios({
                 	method : 'post',
-                	data: {ind:index},
+                	data: {ind:this.klinika_id},
                     url : 'api/pacijent/lekari',
                 }).then(function(response){
-                    this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                    this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
                     this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
@@ -231,9 +242,9 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/filter_lekar',
-                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax},
+                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id},
                 }).then(function(response){                	
-                	this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                	this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
                     this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
                     this.items = response.data;
                     if(this.minmax=='max')
@@ -248,9 +259,9 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/pretraga_lekar',
-                    data:{pretraga_lek:this.pretragaLekar_text},
+                    data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id},
                 }).then(function(response){                	
-                	this.columns = [ 'ime', 'prezime', 'broj', 'ocena'];
+                	this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
                     this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
                     this.items = response.data;
                 }.bind(this));

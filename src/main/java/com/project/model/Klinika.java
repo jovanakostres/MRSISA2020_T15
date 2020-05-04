@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -49,7 +50,7 @@ public class Klinika {
 	private Set<MedicinskaSestra> medicinskeSestre;
 	
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Set<Sala> sale;
 	
     @ManyToMany(cascade=CascadeType.ALL)  

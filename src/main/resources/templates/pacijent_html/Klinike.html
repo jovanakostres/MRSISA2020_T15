@@ -13,7 +13,7 @@
     		</tr>
 		</thead>
 		<tbody v-if="items.length > 0">
-        	<tr v-for="(item, index) in items" :key="index" v-on:click = "lista_lekara(item.id)">
+        	<tr v-for="(item, index) in items" :key="index" v-on:click = "zakazi(item.id)">
             	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
           	</tr>
     	</tbody>
