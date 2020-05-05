@@ -53,6 +53,7 @@ public class Klinika {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Set<Sala> sale;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
     @ManyToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="klinika_pacijenti", joinColumns=@JoinColumn(name="klinika_id", referencedColumnName = "id"), inverseJoinColumns=@JoinColumn(name="pacijent_id", referencedColumnName = "id")) 
 	private Set<Pacijent> pacijenti;

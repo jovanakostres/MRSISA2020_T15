@@ -17,28 +17,33 @@
   	<script>
 	  	$(document).ready( function() {
 			$( "#registracija" ).hide();
+			$( "#tabela" ).hide();
+			$("#nav").show();
+			document.getElementById('datum').valueAsDate  = new Date();
 		});
   	</script>
 <body>
-<div id = "klinika">
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-	    	<ul class="nav navbar-nav">
-				<li><a class="navbar-brand" v-on:click="prikazi_klinike">Prikaz klinika</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
-		    </ul>
-	    	<ul class="nav navbar-nav navbar-right">
-	      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-	    	</ul>
-  		</div>
-	</nav>
-	<div th:replace="pacijent_html/Profil :: regg"></div>
-	<div th:replace="pacijent_html/Klinike :: table"></div>	
-	<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
-	<div th:replace="pacijent_html/Lekari :: table"></div>
-</div>
+	<div id = "klinika">
+		<div id = "nav">
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+		    	<ul class="nav navbar-nav">
+					<li><a class="navbar-brand" v-on:click="prikazi_klinike">Prikaz klinika</a></li>
+			      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
+			      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
+			      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
+			    </ul>
+		    	<ul class="nav navbar-nav navbar-right">
+		      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+		    	</ul>
+	  		</div>
+		</nav>
+		</div>
+		<div th:replace="pacijent_html/Profil :: regg"></div>
+		<div th:replace="pacijent_html/Klinike :: table"></div>	
+		<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
+		<div th:replace="pacijent_html/Lekari :: table"></div>
+	</div>
 </body>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -58,7 +63,7 @@
 			id: '',
 			lbo: '',
 			email : '',
-			ime : '',
+			imee : '',
 			prezime : '',
 			pass : '',
 			pass2 : '',
@@ -67,16 +72,21 @@
 			items : [],
 			columns : [],
 			labels : [],
+			tipovi: [],
 			naziv : '',
 			adresa_fil : '',
 			opis : '',
 			pretraga_text : '',
 			minmax : 'max',
-			pratragaLekar_text: '',
+			pretragaLekar_text: '',
 			ime_lek: '',
 			prez_lek: '',
 			broj_lek: '',
 			klinika_id : '',
+			tip_pregleda : ''
+		},
+		mounted() {
+			//this.pronadji_preglede();
 		},
 		methods: {
 			prikazi_profil()
@@ -99,8 +109,20 @@
                     console.log(response.data);
                 }.bind(this));
             },
+            pronadji_preglede()
+            {
+            	axios({
+                	method : 'get',
+                    url : 'api/pacijent/tipovi_pregleda',
+                }).then(function(response){
+                    this.tipovi = response.data;
+                    console.log(this.tipovi[0].ime);
+                    this.tip_pregleda=this.tipovi[0].id;
+                }.bind(this));
+            },
 			prikazi_klinike()
 			{
+            	this.pronadji_preglede();
             	$( "#registracija" ).hide();
             	$("#tabela_lekari").hide();
 				console.log("Nesto se desilo")
@@ -108,8 +130,8 @@
                 	method : 'get',
                     url : 'api/pacijent/klinike',
                 }).then(function(response){
-                    this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
-                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                    this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
+                    this.labels = [ 'Naziv', 'Adresa', 'Ocena', 'Cena'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
                 }.bind(this));
@@ -149,7 +171,7 @@
             check(){
 				var s = true;
 				
-				if(this.ime == "") this.ime = this.ime_pl;
+				if(this.imee == "") this.imee = this.ime_pl;
 				if(this.prezime == "") this.prezime = this.prez_pl;
 				if(this.adresa == "") this.adresa = this.adr_pl;
 				if(this.broj == "") this.broj = this.br_pl;
@@ -173,7 +195,7 @@
 				axios({
                 	method : 'post',
                     url : 'api/pacijent/izmena_profila',
-                    data:{id:this.id, email:this.email, lozinka:this.new_pass, ime:this.ime, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
+                    data:{id:this.id, email:this.email, lozinka:this.new_pass, ime:this.imee, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
                 }).then(function(response){                	
                 	document.location.replace("/pacijentPocetna");
                 }).catch((error)=>{
@@ -186,10 +208,10 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/filter_klinika',
-                    data:{naziv:this.naziv,adresa:this.adresa_fil, opis:this.opis, minmax:this.minmax},
+                    data:{naziv:this.naziv,adresa:this.adresa_fil, opis:this.opis, minmax:this.minmax, tip:this.tip_pregleda},
                 }).then(function(response){                	
-                	this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
-                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                	this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
+                    this.labels = [ 'Naziv', 'Adresa', 'Ocena', 'Cena'];
                     this.items = response.data;
                     if(this.minmax=='max')
                     	this.minmax = 'min';
@@ -198,29 +220,42 @@
                 }.bind(this));
             	$( "#tabela" ).show();
             },
-            pretraga()
+            pretraga(event)
             {
+            	this.tip_pregleda = event.target.value;            	
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/pretraga_klinika',
-                    data:{pretraga_text:this.pretraga_text},
+                    data:{pretraga_text:this.tip_pregleda},
                 }).then(function(response){                	
-                	this.columns = [ 'naziv', 'adresa', 'opis', 'ocena'];
-                    this.labels = [ 'Naziv', 'Adresa', 'Opis', 'Ocena'];
+                	this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
+                    this.labels = [ 'Naziv', 'Adresa', 'Ocena', 'Cena'];
                     this.items = response.data;
                 }.bind(this));
             	$( "#tabela" ).show();
             },
-            zakazi(index)
+            lista_lekara_tip(id)
             {
             	$( "#registracija" ).hide();
             	$("#tabela").hide();
-            	this.klinika_id = index;
-            	$("#zakazi").show();
-            	
+            	$("#zakazi").hide();
+            	this.klinika_id = id;
+				console.log(this.klinika_id);
+                axios({
+                	method : 'post',
+                	data: {ind:this.klinika_id, tip:this.tip_pregleda},
+                    url : 'api/pacijent/lekari_tip',
+                }).then(function(response){
+                    this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
+                    this.items = response.data;
+                    console.log(this.items[0].naziv);
+                }.bind(this));
+				$( "#tabela_lekari" ).show();
             },
-            lista_lekara()
+            lista_lekara(id)
             {
+            	this.klinika_id = id;
             	$( "#registracija" ).hide();
             	$("#tabela").hide();
             	$("#zakazi").hide();
@@ -230,8 +265,8 @@
                 	data: {ind:this.klinika_id},
                     url : 'api/pacijent/lekari',
                 }).then(function(response){
-                    this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
-                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
                 }.bind(this));
@@ -242,10 +277,10 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/filter_lekar',
-                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id},
+                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id, tip:this.tip_pregleda},
                 }).then(function(response){                	
-                	this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
-                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
                     this.items = response.data;
                     if(this.minmax=='max')
                     	this.minmax = 'min';
@@ -259,14 +294,14 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/pretraga_lekar',
-                    data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id},
+                    data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id, tip:this.tip_pregleda},
                 }).then(function(response){                	
-                	this.columns = [ 'ime', 'prezime', 'broj', 'prosecnaOcena'];
-                    this.labels = [ 'Ime', 'Prezime', 'Broj', 'Ocena'];
+                	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
                     this.items = response.data;
                 }.bind(this));
             	$( "#tabela_lekari" ).show();
-            },
+            }
 		}
 		});
 	

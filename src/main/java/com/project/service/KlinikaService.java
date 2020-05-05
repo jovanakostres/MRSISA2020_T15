@@ -33,11 +33,7 @@ public class KlinikaService {
 			return klinikaRepository.filterKlinikeMax(naziv, adresa, opis);
 	}
 	
-	public List<Klinika> search(String param)
-	{
-		return klinikaRepository.searchKlinike(param);
-	}
-	
+		
 	public Set<Lekar> getLekari(Long ind)
 	{
 		return klinikaRepository.getOne(ind).getLekari();

@@ -15,6 +15,8 @@ insert into klinike (id,naziv, adresa, opis, ocena) values (2,'Klinika 2','Adres
 update korisnici set klinika_id = 1 where id = 3;
 insert into klinika_pacijenti (klinika_id,pacijent_id) values (1,1);
 
+update korisnici set klinika_id = 1 where id = 4;
+
 insert into sale (id,naziv,klinika_id) values (1, 'Sala 1', 1);
 
 insert into zdravstveni_kartoni (visina, tezina, krvna_grupa, pacijent_id) values (180, 70, 'A', 1);
