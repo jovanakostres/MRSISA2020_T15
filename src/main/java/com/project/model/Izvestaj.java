@@ -23,7 +23,7 @@ public class Izvestaj {
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "klinika_generator")
 	//@SequenceGenerator(name="klinika_generator", sequenceName = "klinika_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="informacije", unique=false, nullable=false)
 	private String informacije;
@@ -46,11 +46,11 @@ public class Izvestaj {
 		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

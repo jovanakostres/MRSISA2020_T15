@@ -26,11 +26,12 @@ public class Lek {
 	@Column(name="naziv", unique=false, nullable=false)
 	private String naziv;
 	
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "sifarnik", joinColumns = @JoinColumn(name = "lek_id", referencedColumnName = "id"),
 	        inverseJoinColumns = @JoinColumn(name = "dijagnoza_id", referencedColumnName = "id"))
 	private Set<Dijagnoza> dijagnoze;
-
+*/
 	public Lek() {
 		
 	}
@@ -50,7 +51,7 @@ public class Lek {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-
+/*
 	public Set<Dijagnoza> getDijagnoze() {
 		return dijagnoze;
 	}
@@ -58,6 +59,6 @@ public class Lek {
 	public void setDijagnoze(Set<Dijagnoza> dijagnoze) {
 		this.dijagnoze = dijagnoze;
 	}
-	
+	*/
 	
 }

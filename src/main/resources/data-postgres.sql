@@ -15,9 +15,20 @@ insert into klinike (id,naziv, adresa, opis, ocena) values (2,'Klinika 2','Adres
 update korisnici set klinika_id = 1 where id = 3;
 insert into klinika_pacijenti (klinika_id,pacijent_id) values (1,1);
 
+update korisnici set klinika_id = 1 where id = 4;
+
 insert into sale (id,naziv,klinika_id) values (1, 'Sala 1', 1);
 
 insert into zdravstveni_kartoni (visina, tezina, krvna_grupa, pacijent_id) values (180, 70, 'A', 1);
 
 insert into pregledi (id, datum, vreme, trajanje_pregleda, cena, tip_pregleda_id,izvrsen) values (1, '2020.05.03','10:00',24,5000, 1, 'false');
 update pregledi set lekar_id = 3,sala_id = 1,zk_pacijenta_pacijent_id=1 where id = 1;
+
+insert into dijagnoze(id, naziv) values (1, 'Varicela-ovcije boginje');
+insert into dijagnoze(id, naziv) values (2, 'Pojacana funkcija hipofize');
+insert into lekovi(id, naziv) values (1, 'ACIKLOVIR 25 po 200mg');
+insert into lekovi(id, naziv) values (2, 'SOMATULINE AUTOGEL,injekcija, špric,1 po 120mg');
+
+insert into sifarnik (dijagnoza_id,lek_id) values (1,1);
+insert into sifarnik (dijagnoza_id,lek_id) values (2,2);
+

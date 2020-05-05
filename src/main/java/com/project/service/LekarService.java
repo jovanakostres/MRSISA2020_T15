@@ -37,4 +37,9 @@ public class LekarService {
 		return lekarRepository.searchKorisnik(param, id);
 	}
 
+	public List<Lekar> findAll() {
+		// TODO Auto-generated method stub
+		return lekarRepository.getLekare();
+	}
+
 }

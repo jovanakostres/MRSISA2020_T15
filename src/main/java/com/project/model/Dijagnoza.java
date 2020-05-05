@@ -21,7 +21,7 @@ public class Dijagnoza {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dijagnoza_generator")
 	@SequenceGenerator(name="dijagnoza_generator", sequenceName = "dijagnoza_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="naziv", unique=true, nullable=false)
 	private String naziv;
@@ -35,11 +35,11 @@ public class Dijagnoza {
 		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

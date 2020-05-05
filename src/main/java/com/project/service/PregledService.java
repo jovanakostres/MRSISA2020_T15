@@ -38,4 +38,8 @@ public class PregledService {
 		
 		return zpregledi;
 	}
+	
+	public Pregled findById(Long id) {
+		return pregledRepository.findById(id).orElseGet(null);
+	}
 }

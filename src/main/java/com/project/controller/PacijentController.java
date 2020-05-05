@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.dto.KlinikaPretragaDTO;
+import com.project.dto.LekarDTO;
 import com.project.model.*;
 import com.project.service.*;
 
@@ -30,6 +32,9 @@ public class PacijentController {
 	
 	@Autowired
 	LekarService lekarService;
+	
+	@Autowired
+	TIpPregledaService tipPregledaService;
 /**	
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getProfil() {
@@ -48,10 +53,37 @@ public class PacijentController {
    }
    
    @PostMapping(value ="/lekari")
-   public Set<Lekar> getLekari(@RequestBody String index) {
+   public List<LekarDTO> getLekari(@RequestBody String index) {
 	   String ind = index.split(":")[1].replace("\"","").replace("}", "");
 	   System.out.println("KLINIKA " + ind);
-	   return klinikaService.getLekari(Long.parseLong(ind));
+	   List<LekarDTO> lekari = new ArrayList<LekarDTO>();
+	   Set<Lekar> setLekari = klinikaService.getLekari(Long.parseLong(ind));
+	   for(Lekar l : setLekari)
+	   {
+		   lekari.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+	   }
+	   return lekari;
+   }
+   
+   @PostMapping(value ="/lekari_tip")
+   public List<LekarDTO> getLekariTip(@RequestBody String params) {
+	   String[] index = params.split(",");
+	   String ind = index[0].split(":")[1].replace("\"","");
+	   Long tip = Long.parseLong(index[1].split(":")[1].replace("\"","").replace("}", ""));
+	   //System.out.println("TIP PREGLEDA " + tip);
+	   System.out.println("KLINIKA " + ind);
+	   List<LekarDTO> lekarRet = new ArrayList<LekarDTO>();
+	   Set<Lekar> lekari = klinikaService.getLekari(Long.parseLong(ind));
+	   for(Lekar l:lekari)
+	   {
+		   if(l.getTipPregleda().getId()==tip)
+		   {
+			   System.out.println("TIP PREGLEDA " + tip);
+			   System.out.println("TIP PREGLEDA LEKAR " + l.getTipPregleda().getId());
+			   lekarRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(),l.getTipPregleda().getIme()));
+		   }
+	   }
+	   return lekarRet;
    }
    
    
@@ -70,47 +102,108 @@ public class PacijentController {
    }
    
    @RequestMapping(value = "/filter_klinika", method = RequestMethod.POST)
-   public List<Klinika> filter_klinika(@RequestBody String pacijent) {
+   public List<KlinikaPretragaDTO> filter_klinika(@RequestBody String pacijent) {
 	   String[] params = pacijent.split(",");
 	   String naziv, adresa, opis, minmax;
 	   naziv = params[0].split(":")[1].replace("\"", "");
 	   adresa = params[1].split(":")[1].replace("\"", "");
 	   opis = params[2].split(":")[1].replace("\"", "");
-	   minmax = params[3].split(":")[1].replace("\"","").replace("}", "");
+	   minmax = params[3].split(":")[1].replace("\"","");
+	   Long tip = Long.parseLong(params[4].split(":")[1].replace("\"","").replace("}", ""));
 	   System.out.println("Naziv:  " + naziv + "  Adresa: " + adresa +"  Opis : " + opis);
-	   return klinikaService.filter(naziv, adresa, opis, minmax);	   
+	   List<Lekar> l = lekarService.findAll();
+	   List<KlinikaPretragaDTO> lista = new ArrayList<KlinikaPretragaDTO>();
+	   List<Klinika> k = klinikaService.filter(naziv, adresa, opis, minmax);
+	   System.out.println("KLINIKA SIZE FILTER: " + k.size());
+	   System.out.println("LEKAR SIZE " + l.size());
+	   for(Lekar lekar : l)
+	   {
+		   System.out.println("RADII");
+		   if(lekar.getTipPregleda().getId()==tip)
+		   {
+			   System.out.println("NE RADII");
+			   int index = k.indexOf(lekar.getKlinika());
+			   System.out.println(index);
+			   if(index!=-1)
+			   {
+				   Klinika klinika = k.get(index);
+				   lista.add(new KlinikaPretragaDTO(klinika.getId(),klinika.getNaziv(), klinika.getOcena(), klinika.getAdresa(), lekar.getTipPregleda().getCena()));
+			   }			   
+		   }
+	   }
+	   return lista;	   
    }   
    
    //pretraga_klinika
    @RequestMapping(value = "/pretraga_klinika", method = RequestMethod.POST)
-   public List<Klinika> pretraga_klinika(@RequestBody String pacijent) {
+   public List<KlinikaPretragaDTO> pretraga_klinika(@RequestBody String pacijent) {
 	   String param = pacijent.split(":")[1].replace("\"", "").replace("}", "");
 	   System.out.println("PRETRAGA PARAM : " + param);
-	   return klinikaService.search(param);
+	   List<Lekar> l = lekarService.findAll();
+	   System.out.println("LEAKRI SIZE: "+l.size());
+	   List<Klinika> k = klinikaService.findAll();
+	   System.out.println("KLINIKELISTA SIZE: "+k.size());
+	   List<KlinikaPretragaDTO> klinikeRet = new ArrayList<KlinikaPretragaDTO>();
+	   for(Lekar lekar : l)
+	   {
+		   if(lekar.getTipPregleda().getId()==Long.parseLong(param))
+		   {
+			   int index = k.indexOf(lekar.getKlinika());
+			   if(index!=-1)
+			   {
+				   Klinika klinika = k.get(index);
+				   klinikeRet.add(new KlinikaPretragaDTO(klinika.getId(),klinika.getNaziv(), klinika.getOcena(), klinika.getAdresa(), lekar.getTipPregleda().getCena()));
+			   }			   
+		   }
+	   }
+	   System.out.println("KLINIKE SIZE: "+klinikeRet.size());
+	   return klinikeRet;
    }   
    
    
    @RequestMapping(value = "/filter_lekar", method = RequestMethod.POST)
-   public List<Lekar> filter_lekar(@RequestBody String pacijent) {
+   public List<LekarDTO> filter_lekar(@RequestBody String pacijent) {
 	   String[] params = pacijent.split(",");
 	   String ime, prez, broj, minmax;
 	   ime = params[0].split(":")[1].replace("\"", "");
 	   prez = params[1].split(":")[1].replace("\"", "");
 	   broj = params[2].split(":")[1].replace("\"", "");
 	   minmax = params[3].split(":")[1].replace("\"","");
-	   String id = params[4].split(":")[1].replace("\"","").replace("}", "");
-	   return lekarService.filter(ime, prez, broj, minmax, Long.parseLong(id));	   
+	   String id = params[4].split(":")[1].replace("\"",""); // klinika
+	   Long tip = Long.parseLong(params[5].split(":")[1].replace("\"", "").replace("}", "")); //tip pregleda
+	   List<Lekar> lekari = lekarService.filter(ime, prez, broj, minmax, Long.parseLong(id));
+	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
+	   for(Lekar l : lekari)
+	   {
+		   lekariRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+	   }
+	   return lekariRet;
    }   
    
    //pretraga_klinika
    @RequestMapping(value = "/pretraga_lekar", method = RequestMethod.POST)
-   public List<Lekar> pretraga_lekar(@RequestBody String par) {
+   public List<LekarDTO> pretraga_lekar(@RequestBody String par) {
 	   String[] pacijent = par.split(",");
 	   String param = pacijent[0].split(":")[1].replace("\"", "");
-	   String id = pacijent[1].split(":")[1].replace("\"", "").replace("}", "");
+	   String id = pacijent[1].split(":")[1].replace("\"", "");
+	   Long tip = Long.parseLong(pacijent[2].split(":")[1].replace("\"", "").replace("}", ""));
 	   System.out.println("PRETRAGA PARAM : .." + param+ "..");
-	   return lekarService.search(param, Long.parseLong(id));
-   }   
+	   List<Lekar> lekari =  lekarService.search(param, Long.parseLong(id));
+	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
+	   for(Lekar l : lekari)
+	   {
+		   lekariRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+	   }
+	   return lekariRet;
+	  
+   }  
+   
+   @RequestMapping(value = "/tipovi_pregleda", method = RequestMethod.GET)
+   public List<TipPregleda> tipoviPregleda(){
+	   List<TipPregleda> lista = tipPregledaService.findAll();
+	   System.out.println(lista.size());
+	   return lista;
+   }
    
 }
 

@@ -82,6 +82,14 @@ public class Lekar extends Korisnik{
 	public void setKlinika(Klinika klinika) {
 		this.klinika = klinika;
 	}
+
+	public TipPregleda getTipPregleda() {
+		return tipPregleda;
+	}
+
+	public void setTipPregleda(TipPregleda tipPregleda) {
+		this.tipPregleda = tipPregleda;
+	}
 	
 	
 }

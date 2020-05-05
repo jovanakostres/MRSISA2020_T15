@@ -14,9 +14,7 @@ public interface KlinikaRepository extends JpaRepository<Klinika, Long>{
 	
 	@Query("select s from Klinika s where s.naziv like %?1% and s.adresa like %?2% and s.opis like %?3% order by s.ocena desc")
 	List<Klinika> filterKlinikeMax(String naziv, String adresa, String opis);
-	
-	@Query("select s from Klinika s where s.naziv like %?1% or s.adresa like %?1% or s.opis like %?1%")
-	List<Klinika> searchKlinike(String naziv);
+			//"SELECT t FROM Track t where t.Trackid IN (SELECT pt.Tracks_trackid FROM Playlist_Track pt WHERE pt.Playlist_playlistid = :WhicheverIdWasEntered)"
 	
 	
 	@Query("select s from Klinika s")

@@ -1,5 +1,8 @@
 <div id="tabela" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="table" >
-	<input type = "text" v-model = "pretraga_text" v-on:change = "pretraga">
+	<select id = "tip_pregleda" style = "height: 30px;" v-on:change = "pretraga($event)">
+		<option v-for = "tt in tipovi" :value = "tt.id"> {{tt.ime}} </option>
+	</select>
+	<input type = "date" id = "datum" style = "height: 30px;">
 	<table class = "table table-hover">
 		<thead>
 			<tr>
@@ -9,12 +12,14 @@
 				<th><input type = "button" v-model = "minmax" value = "max" v-on:click = "filter"></th>
 			</tr>
 			<tr >
-        		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>
+        		<th class="col-md-3" v-for="(column, index) in labels" :key="index" v-on:click = "lista_lekara"> {{column}}</th>
     		</tr>
 		</thead>
 		<tbody v-if="items.length > 0">
-        	<tr v-for="(item, index) in items" :key="index" v-on:click = "zakazi(item.id)">
-            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
+        	<tr v-for="(item, index) in items" :key="index" >
+            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn" v-on:click = "lista_lekara(item.id)">{{item[column]}}</td>
+            	<td><input type = "button" value = "Kreiraj pregled" v-on:click = "lista_lekara_tip(item.id)"></td>
+        		<td><input type = "button" value = "Pregledi"></td>
           	</tr>
     	</tbody>
 	</table>
