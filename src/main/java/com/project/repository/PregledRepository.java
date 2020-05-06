@@ -11,4 +11,6 @@ import com.project.model.Pregled;
 public interface PregledRepository extends JpaRepository<Pregled, Long>{
 	
 	List<Pregled> findByLekar(Lekar lekar);
+
+	List<Pregled> findByDefinisan(boolean b);
 }

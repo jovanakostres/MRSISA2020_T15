@@ -35,6 +35,10 @@ public class PacijentController {
 	
 	@Autowired
 	TIpPregledaService tipPregledaService;
+	
+	@Autowired
+	PregledService pregledService;
+	
 /**	
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getProfil() {
@@ -203,6 +207,27 @@ public class PacijentController {
 	   List<TipPregleda> lista = tipPregledaService.findAll();
 	   System.out.println(lista.size());
 	   return lista;
+   }
+   
+   @RequestMapping(value = "/unapred_definisani", method = RequestMethod.POST)
+   public List<Pregled> unapred_definisani(@RequestBody String par)
+   {
+	   return pregledService.findByDefinisan();
+   }
+   
+   @RequestMapping(value = "/unapred_definisani_zakazi", method = RequestMethod.POST)
+   public ResponseEntity unapred_definisani_zakazi(@RequestBody String par)
+   {
+	   System.out.println("ID parametar " + par);
+	   Long id = Long.parseLong(par.split(":")[1].replace("\"", "").replace("}", ""));
+	   try{
+		   pregledService.updateByID(id);
+	   }
+	   catch(Exception ex)
+	   {
+		   System.out.println(ex);
+	   }
+	   return new ResponseEntity(HttpStatus.OK);
    }
    
 }

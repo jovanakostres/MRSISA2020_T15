@@ -49,6 +49,9 @@ public class Pregled {
 	@Column(name="izvrsen", unique=false, nullable=false)
 	private Boolean izvrsen;
 	
+	@Column(name = "definisan", unique = false, nullable = false)
+	private Boolean definisan;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
 	private TipPregleda tipPregleda;
@@ -153,5 +156,13 @@ public class Pregled {
 		return zkPacijenta;
 	}
 
-	
+	public Boolean getDefinisan() {
+		return definisan;
+	}
+
+	public void setDefinisan(Boolean definisan) {
+		this.definisan = definisan;
+	}
+
+		
 }

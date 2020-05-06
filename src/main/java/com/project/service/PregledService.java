@@ -46,4 +46,16 @@ public class PregledService {
 	public Pregled save(Pregled pregled) {
 		return pregledRepository.save(pregled);
 	}
+
+	public List<Pregled> findByDefinisan() {
+		// TODO Auto-generated method stub
+		return pregledRepository.findByDefinisan(true);
+	}
+
+	public Pregled updateByID(Long id) {
+		// TODO Auto-generated method stub
+		Pregled pregled = pregledRepository.findById(id).orElseGet(null);
+		pregled.setDefinisan(false);
+		return pregledRepository.save(pregled);
+	}
 }

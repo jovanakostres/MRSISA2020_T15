@@ -19,7 +19,7 @@
         	<tr v-for="(item, index) in items" :key="index" >
             	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn" v-on:click = "lista_lekara(item.id)">{{item[column]}}</td>
             	<td><input type = "button" value = "Kreiraj pregled" v-on:click = "lista_lekara_tip(item.id)"></td>
-        		<td><input type = "button" value = "Pregledi"></td>
+        		<td><input type = "button" value = "Pregledi" v-on:click = "unapred_definisani_pregledi(item.id)"></td>
           	</tr>
     	</tbody>
 	</table>
