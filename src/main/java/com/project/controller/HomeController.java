@@ -36,7 +36,6 @@ public class HomeController {
 	
 	@GetMapping(value = "/Izvestaj/{id}")
 	public String unosIzvestaja() {
-		System.out.println("lekar");
 		return "lekar_html/unosIzvestaja";
 		
 	}

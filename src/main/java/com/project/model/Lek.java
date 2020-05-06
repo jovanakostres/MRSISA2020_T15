@@ -21,7 +21,7 @@ public class Lek {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lek_generator")
 	@SequenceGenerator(name="lek_generator", sequenceName = "lek_seq")
 	@Column(name="id", unique=true, nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="naziv", unique=false, nullable=false)
 	private String naziv;
@@ -36,11 +36,11 @@ public class Lek {
 		
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

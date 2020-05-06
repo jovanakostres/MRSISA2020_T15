@@ -49,8 +49,8 @@
 	    	</ul>
   		</div>
 	</nav>
-<div style="margin:100px;">
-<form action="#" v-on:submit="sacuvaj" autocomplete="off">
+<div id="glavniDiv" style="margin:100px;display:none;">
+<form  action="/lekarPocetna" v-on:submit="sacuvaj" autocomplete="off">
   <p>
     <span >Ime i prezime pacijenta: <b>{{imeP}}</b> <b>{{prezimeP}}</b></span>
   </p>
@@ -119,6 +119,7 @@ function promena(){
             });
 			this.dobaviInformacije();
 			this.dobaviDijagnoze();
+			$('#glavniDiv').show();
 		},
 		updated() {
 		    // Fired every second, should always be true
@@ -151,31 +152,27 @@ function promena(){
 				for(lek of l){
 					this.odabraniLekovi.push(lek.value);
 				}
-				var json=JSON.stringify(this.odabraniLekovi);
+				//var json=JSON.stringify(this.odabraniLekovi);
 				console.log(this.informacije);
-				this.odabraniLekovi=json;
+				//this.odabraniLekovi=json;
 				axios({
                 	method : 'post',
                     url : '/api/izvestaj/sacuvaj',
-                    data:{pregledId:this.pregledId,informacije:this.infomacije, dijagnozaId:this.odabranaDijagnoza, lekoviIds:this.odabraniLekovi},
+                    data:{pregledId:this.pregledId,informacije:this.informacije, dijagnozaId:this.odabranaDijagnoza, lekoviIds:this.odabraniLekovi},
                 }).then(function(response){
-                    
-                    
+                	console.log('aaa');
+                	//document.location.replace("/lekarPocetna");
+                	//window.location.href = '/lekarPocetna';
                 }.bind(this));	
 			},
 			getRecepti(id){
-				//modal.apppend(m);
 				for(dijagnoza of this.dijagnoze){
 					if (dijagnoza['id'] == id){
 						this.recepti = dijagnoza['lekovi'];
 						break;
 					}
 				}
-				/*this.data = $.map(this.dijagnoze, function (obj) {
-					  obj.text = obj.text || obj.naziv; // replace name with the property used for the text
 
-					  return obj;
-					});*/
 				$('.js-example-basic-multiple').val(null).trigger('change');
 				$('.js-example-basic-multiple').html('').select2({data: [{id: '', text: ''}]});
 				 $('.js-example-basic-multiple' + " option")[0].remove();

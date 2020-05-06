@@ -18,5 +18,9 @@ public class DijagnozaService {
 		// TODO Auto-generated method stub
 		return dijagnozaRepository.findAll();
 	}
-	
+
+	public Dijagnoza findById(Long id) {
+		// TODO Auto-generated method stub
+		return dijagnozaRepository.findById(id).orElseGet(null);
+	}
 }

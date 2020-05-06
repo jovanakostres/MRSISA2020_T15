@@ -82,8 +82,8 @@
 		methods: {
 			prikazi_profil()
 			{
-				$( "#tabela" ).hide();
-				$( "#registracija" ).show();
+				this.sakrij_sve();
+				
                 axios({
                 	method : 'get',
                     url : 'api/pacijent/profil',
@@ -97,11 +97,12 @@
 					this.lbo = response.data.lbo;
 					this.email = response.data.email;
                     console.log(response.data);
+                    $( "#registracija" ).show();
                 }.bind(this));
             },
 			prikazi_pacijente()
 			{
-            	$( "#registracija" ).hide();
+            	this.sakrij_sve();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -110,13 +111,14 @@
                     this.columns = [ 'email', 'ime', 'prezime', 'broj'];
                     this.labels = [ 'Email', 'Ime', 'Prezime', 'Broj'];
                     this.items = response.data;
+                    $( "#tabela" ).show();
                     console.log(this.items[0].naziv);
                 }.bind(this));
-				$( "#tabela" ).show();
+				
             },
 			prikazi_zpreglede()
 			{		
-            	$( "#registracija" ).hide();
+            	this.sakrij_sve();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -125,13 +127,13 @@
                 	this.columns = [ 'imeP', 'prezimeP', 'sala', 'datum', 'vreme'];
                     this.labels = [ 'Ime pacijenta', 'Prezime pacijenta', 'Sala', 'Datum','Vreme'];
                     this.items = response.data;
-                    
+                    $( "#tabelaZPregledi" ).show();
                 }.bind(this));
-				$( "#tabelaZPregledi" ).show();
+				
             },
 			prikazi_karton()
 			{
-				$( "#registracija" ).show();
+            	this.sakrij_sve();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -190,6 +192,13 @@
                 	this.email = "";
                 	this.error_message = "Podaci nisu izmenjeni";
                 });
+            },
+            sakrij_sve(){
+            	$( "#modalZPregledi" ).hide();
+            	$( "#registracija" ).hide();
+            	$( "#tabelaZPregledi" ).hide();
+            	$( "#tabela" ).hide();
+            	
             }
 		}
 		});

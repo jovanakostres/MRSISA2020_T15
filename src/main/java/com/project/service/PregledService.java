@@ -42,4 +42,8 @@ public class PregledService {
 	public Pregled findById(Long id) {
 		return pregledRepository.findById(id).orElseGet(null);
 	}
+	
+	public Pregled save(Pregled pregled) {
+		return pregledRepository.save(pregled);
+	}
 }

@@ -25,7 +25,7 @@ public class Izvestaj {
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
-	@Column(name="informacije", unique=false, nullable=false)
+	@Column(name="informacije", unique=false)
 	private String informacije;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -34,17 +34,26 @@ public class Izvestaj {
 	private Pregled pregled;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//@JoinColumn(name = "recept_id")
-	@MapsId
+	@JoinColumn(name = "recept_id")
 	private Recept recept;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "izvestaj_id")
-	private Set<Dijagnoza> dijagnoza;
+	@OneToOne
+    @JoinColumn(name="dijagnoza_id")
+	private Dijagnoza dijagnoza;
 
 	public Izvestaj() {
 		
 	}
+	
+	public Izvestaj(String informacije, Pregled pregled, Recept recept, Dijagnoza dijagnoza) {
+		super();
+		this.informacije = informacije;
+		this.pregled = pregled;
+		this.recept = recept;
+		this.dijagnoza = dijagnoza;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -78,11 +87,11 @@ public class Izvestaj {
 		this.recept = recept;
 	}
 
-	public Set<Dijagnoza> getDijagnoza() {
+	public Dijagnoza getDijagnoza() {
 		return dijagnoza;
 	}
 
-	public void setDijagnoza(Set<Dijagnoza> dijagnoza) {
+	public void setDijagnoza(Dijagnoza dijagnoza) {
 		this.dijagnoza = dijagnoza;
 	}
 	
