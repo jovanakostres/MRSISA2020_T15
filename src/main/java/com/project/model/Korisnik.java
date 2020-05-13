@@ -21,6 +21,8 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name="type", discriminatorType=STRING)
 public class Korisnik {
 	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "korisnik_generator")
 	@Column(name = "id", updatable = false, nullable = false)

@@ -17,5 +17,8 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long>{
 		//select s from Klinika s where s.naziv like %?1% or s.adresa like %?1% or s.opis like %?1%
 	@Query("select s from Korisnik s where s.ime like %?1% or s.prezime like %?1% or s.broj like %?1%")
 	List<Korisnik> searchKorisnik(String ime);
+	
+	Korisnik findByEmail(String email);
+	Korisnik findByEmailAndLozinka(String email, String lozinka);
 }
 

@@ -59,14 +59,24 @@
 		},
 		methods: {
 			login(){
-				console.log("NESTO")
-				axios({
+				console.log("NESTO");
+				axios.post('api/login', {
+			        email: this.username,
+			        lozinka: this.password
+			      }).then(response => {
+			        /*if (response.data.accessToken) {
+			          localStorage.setItem('user', JSON.stringify(response.data));
+			        }*/
+			
+			        console.log(response.data);
+			      });				
+				/*axios({
                 	method : 'post',
-                    url : 'api/loginKor',
+                    url : 'api/login',
                     data:{username:this.username,password:this.password},
                 }).then(function(response){
                     alert(response.data);
-                });
+                });*/
 			}
 		}
 	})

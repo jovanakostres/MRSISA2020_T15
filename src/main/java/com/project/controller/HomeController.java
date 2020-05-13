@@ -2,6 +2,7 @@ package com.project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
@@ -13,12 +14,11 @@ public class HomeController {
 		
 	}
 	
-	@GetMapping(value = "/login")
-	public String login() {
-		System.out.println("aaaaa");
-		return "login";
-		
-	}
+	
+	@RequestMapping("/login") 
+    public String home(){
+        return "index"; 
+    }
 	
 	@GetMapping(value = "/pacijentPocetna")
 	public String pacijentPocetna() {
