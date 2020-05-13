@@ -15,7 +15,11 @@ import com.project.model.*;
  */
 public class CustomUserDetails implements UserDetails {
 
-    private Collection<? extends GrantedAuthority> authorities;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Collection<? extends GrantedAuthority> authorities;
     private String password;
     private String username;
 

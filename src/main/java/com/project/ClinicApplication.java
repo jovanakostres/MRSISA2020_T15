@@ -22,27 +22,23 @@ public class ClinicApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ClinicApplication.class, args);
 	}
-	
+	/*
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	
 	@Autowired
 	public void authenticationManager(AuthenticationManagerBuilder builder, KorisnikRepository repository, KorisnikService userService) throws Exception {
-		/*if (repository.count()==0)
+		if (repository.count()==0)
 			userService.save(new Korisnik("milos@gmail.com","milosm","Milos", "Milosevic","Adresa 7","0600000006","AKC"));
-			*/
+			
 		builder.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
 		System.out.println("hgdsjhgshfgshfgsk");
 	}
 
-	/**
-	 * We return an istance of our CustomUserDetails.
-	 * @param repository
-	 * @return
-	 */
+	
 	private UserDetailsService userDetailsService(final KorisnikRepository repository) {
 		return username -> new CustomUserDetails(repository.findByEmail(username));
 	}
-	
+	*/
 }

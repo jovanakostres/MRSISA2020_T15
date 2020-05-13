@@ -8,19 +8,27 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.project.repository.KorisnikRepository;
+import com.project.service.KorisnikService;
 
 @Configuration
 @EnableWebSecurity
 //@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
-    
-	/*@Autowired
+   
+	@Autowired
     private UserDetailsService userDetailsService;
     
-    @Autowired
-    private PasswordEncoder userPasswordEncoder;
+	@Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
     
+    @Autowired
+    private KorisnikRepository repository;
     
     @Override
     @Bean
@@ -30,7 +38,15 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    	//auth.userDetailsService(userDetailsService(repository)).passwordEncoder(passwordEncoder);
-        auth.userDetailsService(userDetailsService).passwordEncoder(userPasswordEncoder);
-    }*/
+    	//KorisnikRepository rep;
+    	auth.userDetailsService(userDetailsService(repository)).passwordEncoder(encoder());
+        //auth.userDetailsService(userDetailsService(rep)).passwordEncoder(userPasswordEncoder);
+    	//authenticationManager();
+    }
+    
+    @Bean
+    public UserDetailsService userDetailsService(KorisnikRepository repository) {
+		return username -> new CustomUserDetails(repository.findByEmail(username));
+	}
+   
 }

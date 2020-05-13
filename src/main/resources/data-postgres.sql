@@ -1,7 +1,7 @@
 insert into tip_pregleda (id, ime, cena) values (1,'opsti',100);
 insert into tip_pregleda (id, ime, cena) values (2,'stomatoloski',200);
 
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo) values (1,'markomarkovic@gmail.com','markom','Marko', 'Marković','Adresa 1','0600000000','P' ,'10000');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo) values (1,'markomarkovic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Marko', 'Marković','Adresa 1','0600000000','P' ,'10000');
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo) values (2,'milanmilanovic@gmail.com','milanm','Milan', 'Milanovic','Adresa 2','0600000001', 'P' ,'10001');
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id) values (3,'jovanjovanovic@gmail.com','jovanj','Jovan', 'Jovanovic','Adresa 3','0600000002', 'L' , 4.36, '10:00', '18:00', 1);
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id) values (4,'anaanic@gmail.com','anaa','Ana', 'Anic','Adresa 4','0600000003', 'L' , 4.1, '10:00', '18:00', 2);

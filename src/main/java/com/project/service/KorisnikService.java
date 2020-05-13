@@ -17,10 +17,8 @@ public class KorisnikService {
 	@Autowired
 	KorisnikRepository korisnikRepository;
 	
-	@Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	public List<Korisnik> filter(String ime, String prez, String broj, String minmax) {
 		if(minmax.equalsIgnoreCase("min"))
