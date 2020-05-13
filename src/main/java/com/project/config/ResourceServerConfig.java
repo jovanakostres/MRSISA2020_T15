@@ -17,7 +17,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","/registracijaPacijenta").permitAll()
                 .antMatchers("/api/lekar/**").authenticated()
+                //.antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
         		.antMatchers("/lekarPocetna/**").authenticated();
+        		//.antMatchers("/lekarPocetna/**").hasAuthority("ROLE_L");
                 //.antMatchers("/post").authenticated()
                 //.antMatchers("/post/postComment").authenticated()
                 //.antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");

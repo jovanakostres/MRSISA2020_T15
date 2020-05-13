@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -229,6 +230,19 @@ public class PacijentController {
 	   }
 	   return new ResponseEntity(HttpStatus.OK);
    }
+   
+   @GetMapping(value ="/getUsername")
+   public List<String> getUsername(){
+	   String s = SecurityContextHolder.getContext().getAuthentication().getName();
+	   System.out.println("S : " + s);
+	   String p = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0].toString();
+	   System.out.println("P: " + p);
+	   List<String> retList = new ArrayList<String>();
+	   retList.add(s);
+	   retList.add(p);
+       return retList;
+   }
+	
    
 }
 

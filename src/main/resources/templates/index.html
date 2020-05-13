@@ -32,14 +32,15 @@
 </head>
 <body>
 	<div>
-		<form id = "log_elem">
+		<form id = "log_elem" >
+			<login-component></login-component>
 			<label for="username">Korisnicko ime </label>
 	        <input v-model="username" type="text" id="username"/>
 	        <br><br>
 	        <label for="password">Lozinka </label>
 	        <input v-model="password" type="password" id="password"/>
 	        <br><br>
-	        <input type="submit" v-on:click="login" value="Log in" style = "background-color: #D8D8F6"/>
+	        <input type="button" value="Log in" v-on:click="login" style = "background-color: #D8D8F6"/>
 	        <br><br>
 	        <p>Nemate nalog? <a href = "/registracijaPacijenta" style = "color: #48576B">Registrujte se.</a></p>
 		</form>
@@ -48,35 +49,53 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
 
 <script>
 
 	var app = new Vue({
 		el: '#log_elem',
-		data : {
+		mounted() {
+            Event.$on('logged-in',function(role){
+            	switch(role){
+            	case 'ROLE_P' :
+            		document.location.replace("/pacijentPocetna");
+            		break;
+            	case 'ROLE_L':
+            		document.location.replace("/lekarPocetna");
+            		break;
+            	default: 
+            		document.location.replace("/");        		
+            	}
+            })
+        },
+        data : {
 			username:'',
-			password:'',
+			password:''
 		},
 		methods: {
 			login(){
-				console.log("NESTO");
-				axios.post('api/login', {
-			        email: this.username,
-			        lozinka: this.password
-			      }).then(response => {
-			        /*if (response.data.accessToken) {
-			          localStorage.setItem('user', JSON.stringify(response.data));
-			        }*/
-			
-			        console.log(response.data);
-			      });				
-				/*axios({
+							
+				var params = new URLSearchParams();
+                params.append('grant_type', 'password');
+                params.append('username', this.username);
+                params.append('password',this.password);
+				
+				axios({
                 	method : 'post',
-                    url : 'api/login',
-                    data:{username:this.username,password:this.password},
+                    url : 'oauth/token',
+                    auth:{username:'my-trusted-client',password:'secret'},
+                    headers: {"Content-type": "application/x-www-form-urlencoded; charset=utf-8"},
+                    data:params
                 }).then(function(response){
-                    alert(response.data);
-                });*/
+                	console.log(response.data);
+                	set_cookie("access_token",response.data.access_token);
+                	//document.cookie = "user=" + response.data.access_token;
+                	document.location.replace("/");
+                }).catch((error)=>{
+                	alert(error);
+                });
+				console.log("NESTO");
 			}
 		}
 	})

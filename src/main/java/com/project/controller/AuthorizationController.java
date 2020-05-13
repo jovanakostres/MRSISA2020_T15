@@ -41,16 +41,20 @@ public class AuthorizationController {
     
     
 	@PostMapping("login")
-	public String login(@RequestBody String req){
+	public ResponseEntity login(@RequestBody String req){
 		String ime = req.split(",")[0].split(":")[1].replace("\"", "");
 		String lozinka = req.split(",")[1].split(":")[1].replaceAll("\"|}", "");
 		System.out.println("\n\nKorinsik : " + ime + " lozinka: " + lozinka + "\n\n");
 		
 		Korisnik k = korisnikService.findByEmailAndLozinka(ime, lozinka);
 		
-		System.out.println(k.getClass());
+		if(k!=null)
+		{
+			System.out.println(k.getClass());
+			return new ResponseEntity<>(k, HttpStatus.OK);
+		}
 		
-		return "Uspesno logovanje";
+		return new ResponseEntity(HttpStatus.BAD_REQUEST);
 	}
 	
 	

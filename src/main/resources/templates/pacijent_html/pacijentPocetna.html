@@ -39,6 +39,7 @@
 	  		</div>
 		</nav>
 		</div>
+		<login-component></login-component>
 		<div th:replace="pacijent_html/Profil :: regg"></div>
 		<div th:replace="pacijent_html/Klinike :: table"></div>	
 		<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
@@ -48,6 +49,8 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
+
 
 <script>
 
@@ -90,11 +93,15 @@
 			//this.pronadji_preglede();
 		},
 		methods: {
+			isLoggedIn(){
+                return window.Event.isLoggedIn;
+            },
 			prikazi_profil()
 			{
 				$( "#tabela" ).hide();
 				$("#tabela_lekari").hide();
 				$( "#registracija" ).show();
+				alert(document.cookie);
                 axios({
                 	method : 'get',
                     url : 'api/pacijent/profil',

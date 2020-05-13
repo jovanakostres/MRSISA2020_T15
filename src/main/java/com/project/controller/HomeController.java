@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +15,6 @@ public class HomeController {
 		
 	}
 	
-	
-	@RequestMapping("/login") 
-    public String home(){
-        return "index"; 
-    }
 	
 	@GetMapping(value = "/pacijentPocetna")
 	public String pacijentPocetna() {
@@ -39,5 +35,6 @@ public class HomeController {
 		return "lekar_html/unosIzvestaja";
 		
 	}
+	
 	
 }
