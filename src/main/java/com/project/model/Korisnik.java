@@ -61,6 +61,17 @@ public class Korisnik {
 		this.broj = broj;
 	}
 
+	
+
+	public Korisnik(String email, String lozinka, String ime, String prezime, String adresa, String broj) {
+		super();
+		this.email = email;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.adresa = adresa;
+		this.broj = broj;
+	}
 
 	public Long getId() {
 		return id;

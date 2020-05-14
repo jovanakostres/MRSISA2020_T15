@@ -23,7 +23,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/api/lekar/**").authenticated()
                 .antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
         		.antMatchers("/api/akc/**").authenticated()
-        		.antMatchers("/api/akc/**").hasAuthority("ROLE_AKC");
+        		.antMatchers("/api/akc/**").hasAuthority("ROLE_AKC")
+        		.antMatchers("/api/potvrdiRegistraciju").authenticated()
+        		.antMatchers("/api/potvrdiRegistraciju").hasAuthority("ROLE_AKC")
+        		.antMatchers("/api/odbijRegistraciju").authenticated()
+        		.antMatchers("/api/odbijRegistraciju").hasAuthority("ROLE_AKC");
         		//antMatchers("/lekarPocetna/**").authenticated();
         		//.antMatchers("/lekarPocetna/**").hasAuthority("ROLE_L");
                 //.antMatchers("/post").authenticated()

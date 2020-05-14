@@ -15,6 +15,8 @@ public class ZahtevZaRegistracijuDto {
 	private LocalDate datum;
 	
 	private LocalTime vreme;
+	
+	private String obrazlozenje;
 
 	public ZahtevZaRegistracijuDto(Long id, String emailP, String imeP, String prezimeP, LocalDate datum,
 			LocalTime vreme) {
@@ -25,6 +27,23 @@ public class ZahtevZaRegistracijuDto {
 		this.prezimeP = prezimeP;
 		this.datum = datum;
 		this.vreme = vreme;
+		this.obrazlozenje = "";
+	}
+
+	public ZahtevZaRegistracijuDto(Long id, String emailP, String imeP, String prezimeP, LocalDate datum,
+			LocalTime vreme, String obrazlozenje) {
+		super();
+		this.id = id;
+		this.emailP = emailP;
+		this.imeP = imeP;
+		this.prezimeP = prezimeP;
+		this.datum = datum;
+		this.vreme = vreme;
+		this.obrazlozenje = obrazlozenje;
+	}
+
+	public ZahtevZaRegistracijuDto() {
+		
 	}
 
 	public Long getId() {
@@ -74,6 +93,15 @@ public class ZahtevZaRegistracijuDto {
 	public void setVreme(LocalTime vreme) {
 		this.vreme = vreme;
 	}
+
+	public String getObrazlozenje() {
+		return obrazlozenje;
+	}
+
+	public void setObrazlozenje(String obrazlozenje) {
+		this.obrazlozenje = obrazlozenje;
+	}
+	
 	
 	
 }

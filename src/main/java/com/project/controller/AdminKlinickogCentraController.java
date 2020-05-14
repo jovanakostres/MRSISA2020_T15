@@ -33,7 +33,7 @@ public class AdminKlinickogCentraController {
 		   Set<ZahtevZaRegistracijuDto> zahtevi = new HashSet<ZahtevZaRegistracijuDto>();
 		 
 		   for (ZahtevZaRegistraciju zh : zahtevZaRegistracijuService.findAll()) {
-			   zahtevi.add(new ZahtevZaRegistracijuDto(zh.getId(),zh.getPacijent().getEmail(),zh.getPacijent().getIme(),zh.getPacijent().getPrezime(),zh.getDatum(),zh.getVreme()));
+			   zahtevi.add(new ZahtevZaRegistracijuDto(zh.getId(),zh.getEmail(),zh.getIme(),zh.getPrezime(),zh.getDatum(),zh.getVreme()));
 		}
 		   return zahtevi;
 	   }

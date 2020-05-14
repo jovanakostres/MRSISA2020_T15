@@ -43,8 +43,9 @@
   		</div>
 	</nav>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
-	<div th:replace="lekar_html/ZPregledi :: table"></div>
-	<div th:replace="lekar_html/modalPregled :: modalP"></div>
+	<div th:replace="akc_html/RZahtevi :: table"></div>
+	<div th:replace="akc_html/modalZahtev :: modalP"></div>
+	<div th:replace="akc_html/modalOdbijanje :: modalO"></div>
 	<div th:replace="tabela :: table"></div>
 </div>
 </body>
@@ -68,11 +69,13 @@
 			lbo: '',
 			email : '',
 			ime : '',
+			imee:'',
 			prezime : '',
 			pass : '',
 			pass2 : '',
 			adresa : '',
 			broj : '',
+			obrazlozenje: '',
 			items : [],
 			columns : [],
 			labels : [],
@@ -107,10 +110,10 @@
                 	method : 'get',
                     url : 'api/akc/zahteviZaReg' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
-                    this.columns = [ 'emailP', 'imeP', 'prezimeP}', 'datum', 'vreme'];
+                    this.columns = [ 'emailP', 'imeP', 'prezimeP', 'datum', 'vreme'];
                     this.labels = [ 'Email', 'Ime', 'Prezime', 'Datum', 'Vreme'];
                     this.items = response.data;
-                    $( "#tabela" ).show();
+                    $( "#tabelaRZahtevi" ).show();
                     console.log(this.items[0].naziv);
                 }.bind(this));
 				
@@ -167,16 +170,37 @@
 								
 				return s;
 			},
-			modal_pregled(id){
-				for(pregled of this.items){
-					if(pregled['id'] == id){
-						this.item = pregled;
+			modal_zahtev(id){
+				for(zahtev of this.items){
+					if(zahtev['id'] == id){
+						this.item = zahtev;
 					}
 				}
-				$( "#modalZPregledi" ).show();
+				$( "#modalRZahtevi" ).show();
 			},
-			zapocni_pregled(){
-				document.location.replace("/Izvestaj/" + this.item['id']);
+			prihvati_reg(){
+				console.log(this.item)
+				axios({
+                	method : 'post',
+                    url : "/api/potvrdiRegistraciju" + '?access_token=' + getCookie("access_token"),
+                    data:this.item
+                }).then(function(response){                	
+                	document.location.replace("/akcPocetna");
+                });
+			},
+			odbij_reg(){
+				$( "#modalRZahtevi" ).hide();
+				$( "#modalOdbijanje" ).show();
+			},
+			zavrsi_odbijanje(){
+				this.item['obrazlozenje'] = this.obrazlozenje;
+				axios({
+                	method : 'post',
+                    url : "/api/odbijRegistraciju" + '?access_token=' + getCookie("access_token"),
+                    data:this.item
+                }).then(function(response){                	
+                	document.location.replace("/akcPocetna");
+                });
 			},
 			izmeni_korisnika()
             {
@@ -193,9 +217,10 @@
                 });
             },
             sakrij_sve(){
-            	$( "#modalZPregledi" ).hide();
+            	$( "#modalRZahtevi" ).hide();
+            	$( "#modalOdbijanje" ).hide();
             	$( "#registracija" ).hide();
-            	$( "#tabelaZPregledi" ).hide();
+            	$( "#tabelaRZahtevi" ).hide();
             	$( "#tabela" ).hide();
             	
             }

@@ -47,16 +47,16 @@ public class EmailService {
 	}
 
 	@Async
-	public void sendOdbijanjeReg(Korisnik user) throws MailException, InterruptedException {
+	public void sendOdbijanjeReg(String email, String obrazlozenje) throws MailException, InterruptedException {
 
 		//Simulacija duze aktivnosti da bi se uocila razlika
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
+		mail.setTo(email);
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Registracija");
-		mail.setText("Nazalost vasa registracija je odbijena. ");
+		mail.setText("Nazalost vasa registracija je odbijena. \n\n" + "Razlog: " + obrazlozenje);
 		javaMailSender.send(mail);
 
 		System.out.println("Email poslat!");
@@ -77,5 +77,6 @@ public class EmailService {
 
 		System.out.println("Email poslat!");
 	}
+
 
 }

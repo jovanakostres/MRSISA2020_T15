@@ -1,0 +1,51 @@
+<!--
+<div id="modalZPregledi" div class="imgcontainer" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="modal" >
+	<span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+      <h1 style="text-align:center">Informacije o pregledu</h1></div>
+		<div class="container">
+		<br>
+		<table class = "table table-hover">
+		<thead>	</thead>
+			<tbody>
+        	<tr v-for="(column, indexColumn) in columns" :key="indexColumn">
+        		<td>{{column}}</td>
+        	  	<td>{{item[column]}}</td>
+        	</tr>
+        	</tbody>
+      	</table>
+      	<div class="container">
+      		<button type="button" class="btn btn-default">Default</button>
+      		<btn @click="open1=false">Nazad</btn>
+      		<button type="button" class="btn btn-primary">Zapocni pregled</button>
+      	</div>
+</div>
+-->
+<div id="modalRZahtevi" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalP">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalRZahtevi').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Informacije o zahtevu za registraciju</h4>
+      </div>
+      <div class="modal-body">
+        <table class = "table" id="tableModal">
+		<thead>	</thead>
+			<tbody>
+        	<tr v-for="(column, indexColumn) in columns" :key="indexColumn" >
+        		<td>{{labels[indexColumn]}}</td>
+        	  	<td>{{item[column]}}</td>
+        	</tr>
+        	</tbody>
+      	</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="document.getElementById('modalZPregledi').style.display='none'">Nazad</button>
+        <button type="button" class="btn btn-danger" v-on:click="odbij_reg()">Odbij</button>
+        <button type="button" class="btn btn-primary" v-on:click="prihvati_reg()">Prihvati</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

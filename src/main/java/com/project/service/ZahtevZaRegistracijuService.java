@@ -25,4 +25,9 @@ public class ZahtevZaRegistracijuService {
 	public List<ZahtevZaRegistraciju> findAll() {
 		return zahtevZaRegistracijuRepository.findAll();
 	}
+
+	public ZahtevZaRegistraciju findById(Long id) {
+		// TODO Auto-generated method stub
+		return zahtevZaRegistracijuRepository.findById(id).orElseGet(null);
+	}
 }
