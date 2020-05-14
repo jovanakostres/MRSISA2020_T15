@@ -154,9 +154,13 @@ public class ZahtevZaRegistraciju {
 		this.lbo = lbo;
 	}
 
+	@Override
+	public String toString() {
+		return "ZahtevZaRegistraciju [email=" + email + ", ime=" + ime + ", prezime=" + prezime + ", adresa=" + adresa
+				+ ", broj=" + broj + ", lbo=" + lbo + "]";
+	}
+
 	
-
-
 
 
 	

@@ -9,6 +9,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.project.model.Korisnik;
+import com.project.model.Pregled;
+import com.project.model.ZahtevZaPregled;
+import com.project.model.ZahtevZaRegistraciju;
 
 
 
@@ -62,21 +65,67 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	}
 	
-	public void sendNotificaitionSync(Korisnik user) throws MailException, InterruptedException {
+	public void sendNotificaitionSync(ZahtevZaRegistraciju user) throws MailException, InterruptedException {
 
 		//Simulacija duze aktivnosti da bi se uocila razlika
-		Thread.sleep(10000);
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
+		mail.setTo("sara98.mik@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
-		mail.setSubject("Primer slanja emaila pomocu asinhronog Spring taska");
-		mail.setText("Pozdrav " + user.getIme() + ",\n\nhvala što pratiš ISA.");
+		mail.setSubject("Zahtev za registraciju");
+		mail.setText(user.toString());
+		javaMailSender.send(mail);
+
+		System.out.println("Email poslat!");
+	}
+	
+	public void sendZahtevZaPregled(ZahtevZaPregled pregled) throws MailException, InterruptedException {
+
+		//Simulacija duze aktivnosti da bi se uocila razlika
+		System.out.println("Slanje emaila...");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("sara98.mik@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zahtev za pregled");
+		mail.setText(pregled.toString());
 		javaMailSender.send(mail);
 
 		System.out.println("Email poslat!");
 	}
 
+	
+	@Async
+	public void sendPrihvatanjePregleda(ZahtevZaPregled pregled) throws MailException, InterruptedException {
+
+		//Simulacija duze aktivnosti da bi se uocila razlika
+		System.out.println("Slanje emaila...");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("sara98.mik@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Pregled prihvacen");
+		mail.setText(pregled.toString());
+		javaMailSender.send(mail);
+
+		System.out.println("Email poslat!");
+	}
+
+	@Async
+	public void sendOdbijanjePregleda() throws MailException, InterruptedException {
+
+		//Simulacija duze aktivnosti da bi se uocila razlika
+		System.out.println("Slanje emaila...");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("sara98.mik@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Odbijen pregled");
+		mail.setText("Nazalost vas pregled je odbijen");
+		javaMailSender.send(mail);
+
+		System.out.println("Email poslat!");
+	}
 
 }

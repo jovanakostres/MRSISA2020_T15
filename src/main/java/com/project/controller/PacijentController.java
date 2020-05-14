@@ -18,8 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.dto.KlinikaPretragaDTO;
 import com.project.dto.LekarDTO;
-import com.project.model.*;
-import com.project.service.*;
+import com.project.model.Klinika;
+import com.project.model.Lekar;
+import com.project.model.Pacijent;
+import com.project.model.Pregled;
+import com.project.model.TipPregleda;
+import com.project.model.ZahtevZaPregled;
+import com.project.service.EmailService;
+import com.project.service.KlinikaService;
+import com.project.service.LekarService;
+import com.project.service.PacijentService;
+import com.project.service.PregledService;
+import com.project.service.TIpPregledaService;
+import com.project.service.ZahtevZaPregledService;
 
 @RestController
 @RequestMapping("/api/pacijent")
@@ -39,6 +50,12 @@ public class PacijentController {
 	
 	@Autowired
 	PregledService pregledService;
+	
+	@Autowired
+	EmailService emailService;
+	
+	@Autowired
+	ZahtevZaPregledService zzpService;
 	
 /**	
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -221,8 +238,11 @@ public class PacijentController {
    {
 	   System.out.println("ID parametar " + par);
 	   Long id = Long.parseLong(par.split(":")[1].replace("\"", "").replace("}", ""));
+	   Pregled p = pregledService.findById(id);
+	   ZahtevZaPregled pregled = new ZahtevZaPregled(p);
+	   zzpService.save(pregled);
 	   try{
-		   pregledService.updateByID(id);
+		   emailService.sendZahtevZaPregled(pregled);
 	   }
 	   catch(Exception ex)
 	   {

@@ -35,17 +35,20 @@ public class AuthorizationController {
     ZahtevZaRegistracijuService zahtevZaRegistracijuService;
     
     @RequestMapping(value = "/registracija", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody Pacijent pacijent) {
+    public ResponseEntity register(@RequestBody ZahtevZaRegistraciju pacijent) {
     	System.out.println(pacijent);
+    	
         try {
             System.out.println("asdasdasdasdsd");
             //pacijent.setConfirmed(false);
             //pacijent = pacijentService.save(pacijent);
+            
             if(pacijentService.findByEmail(pacijent.getEmail()) != null) {
             	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }else {
                 ZahtevZaRegistraciju zahtev = new ZahtevZaRegistraciju(pacijent.getEmail(),pacijent.getLozinka(),pacijent.getIme(),pacijent.getPrezime(),pacijent.getAdresa(),pacijent.getBroj(),pacijent.getLbo());
                 zahtevZaRegistracijuService.save(zahtev);
+                emailService.sendNotificaitionSync(pacijent);
             }
             
             return new ResponseEntity<>(pacijent, HttpStatus.OK);
