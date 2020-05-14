@@ -23,7 +23,6 @@ public class LekarController {
     LekarService lekarService;
 	
 	   @GetMapping(value ="/pacijentiklinike")
-	   @PreAuthorize("hasAuthority('ROLE_L')")
 	   public Set<Pacijent> getPacijenti() {
 		   /*
 		   Pacijent k = new Pacijent("aaa@email.com", "aaa", "aaa", "aaa", "aaa", "aaa","aaa");

@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.model.Korisnik;
 import com.project.model.Pacijent;
+import com.project.model.ZahtevZaRegistraciju;
+import com.project.service.EmailService;
 import com.project.service.KorisnikService;
 import com.project.service.PacijentService;
+import com.project.service.ZahtevZaRegistracijuService;
 
 @RestController
 @RequestMapping("/api")
@@ -24,21 +27,59 @@ public class AuthorizationController {
     @Autowired
     KorisnikService korisnikService;
     
+    @Autowired
+    EmailService emailService;
 	
+    @Autowired
+    ZahtevZaRegistracijuService zahtevZaRegistracijuService;
+    
     @RequestMapping(value = "/registracija", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody Pacijent pacijent) {
     	System.out.println(pacijent);
         try {
             System.out.println("asdasdasdasdsd");
             //pacijent.setConfirmed(false);
-            pacijent = pacijentService.save(pacijent);            
+            //pacijent = pacijentService.save(pacijent);
+            if(pacijentService.findByEmail(pacijent.getEmail()) != null) {
+            	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }else {
+                ZahtevZaRegistraciju zahtev = new ZahtevZaRegistraciju(pacijent);
+                zahtevZaRegistracijuService.save(zahtev);
+            }
+            
             return new ResponseEntity<>(pacijent, HttpStatus.OK);
         } catch (Exception e) {
             //e.printStackTrace();
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     
+    @RequestMapping(value="/potvrdiRegistraciju", method= RequestMethod.POST)
+    public ResponseEntity confirmUserAccount(ZahtevZaRegistraciju zahtev)
+    {
+        try {
+        	zahtevZaRegistracijuService.delete(zahtev);
+        	pacijentService.save(zahtev.getPacijent());
+        	emailService.sendPrihvatanjeReg(zahtev.getPacijent());
+        	return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e) {
+            //e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value="/odbijRegistraciju", method= RequestMethod.POST)
+    public ResponseEntity disproveUserAccount(ZahtevZaRegistraciju zahtev)
+    {
+        try {
+        	zahtevZaRegistracijuService.delete(zahtev);
+        	emailService.sendOdbijanjeReg(zahtev.getPacijent());
+        	return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e) {
+            //e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
     
 	@PostMapping("login")
 	public ResponseEntity login(@RequestBody String req){

@@ -44,6 +44,7 @@
 	    	</ul>
   		</div>
 	</nav>
+	<login-component></login-component>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
 	<div th:replace="lekar_html/ZPregledi :: table"></div>
 	<div th:replace="lekar_html/modalPregled :: modalP"></div>
@@ -53,6 +54,7 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
 
 <script>
 
@@ -69,6 +71,7 @@
 			lbo: '',
 			email : '',
 			ime : '',
+			imee: '',
 			prezime : '',
 			pass : '',
 			pass2 : '',
@@ -80,6 +83,9 @@
 			item : {}
 		},
 		methods: {
+			isLoggedIn(){
+                return window.Event.isLoggedIn;
+            },
 			prikazi_profil()
 			{
 				this.sakrij_sve();
@@ -106,7 +112,7 @@
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/lekar/pacijentiklinike',
+                    url : 'api/lekar/pacijentiklinike' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.columns = [ 'email', 'ime', 'prezime', 'broj'];
                     this.labels = [ 'Email', 'Ime', 'Prezime', 'Broj'];

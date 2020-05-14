@@ -7,7 +7,7 @@ insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, pros
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id) values (4,'anaanic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Ana', 'Anic','Adresa 4','0600000003', 'L' , 4.1, '10:00', '18:00', 2);
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (5,'majamajic@gmail.com','majam','Maja', 'Majic','Adresa 5','0600000004','MS');
 insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (6,'peraperic@gmail.com','perap','Pera', 'Peric','Adresa 6','0600000005','AK');
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (7,'milosmilosevic@gmail.com','milosm','Milos', 'Milosevic','Adresa 7','0600000006','AKC');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (7,'milosmilosevic@gmail.com','$2y$10$GyEn7ZWk2YSiQJt2Uzvu.emIBgwvuqNmU7ho9IRUxo.DnNnXvDVUG','Milos', 'Milosevic','Adresa 7','0600000006','AKC');
 
 insert into klinike (id,naziv, adresa, opis, ocena) values (1,'Klinika 1','Adresa Klinike 1','Opis1', 4.5);
 insert into klinike (id,naziv, adresa, opis, ocena) values (2,'Klinika 2','Adresa Klinike 2','Opis2', 3.0);

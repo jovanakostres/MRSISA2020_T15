@@ -18,11 +18,15 @@ public class PacijentService {
 		return pacijentRepository.save(pacijent);
 	}
 	
-	public Optional<Pacijent> findById() {
-		return pacijentRepository.findById(1L);
+	public Optional<Pacijent> findById(Long id) {
+		return pacijentRepository.findById(id);
 	}
 	
 	public Pacijent updateById(Pacijent p) {
 		return pacijentRepository.save(p);
+	}
+	
+	public Pacijent findByEmail(String email) {
+		return pacijentRepository.findByEmail(email);
 	}
 }

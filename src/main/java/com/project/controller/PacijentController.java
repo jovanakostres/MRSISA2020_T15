@@ -48,7 +48,7 @@ public class PacijentController {
     **/
    @GetMapping(value ="/profil")
    public Optional<Pacijent> getProfil() {
-	   return pacijentService.findById();
+	   return pacijentService.findById(1L);
    }
    
    @GetMapping(value ="/klinike")

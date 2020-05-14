@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Početna strana</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  		<style>
+  		html, body {
+    width: 100%;
+}
+		#tabela {margin: 0 auto;}
+		
+		#tableModal td, #tableModal th {
+ 		   border: none;
+		}
+		
+		.btn{
+			font-size: 100%;
+		}
+	</style>
+  	
+  	</head>
+  	<script>
+	  	$(document).ready( function() {
+			$( "#registracija" ).hide();
+		});
+  	</script>
+<body>
+<div id = "klinika">
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+	    	<ul class="nav navbar-nav">
+				<li><a class="navbar-brand" v-on:click="prikazi_zahteve">Zahtevi za registraciju</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_zpreglede" >Registrovanje klinika</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Šifrarnik</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
+		    </ul>
+	    	<ul class="nav navbar-nav navbar-right">
+	      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+	    	</ul>
+  		</div>
+	</nav>
+	<div th:replace="pacijent_html/Profil :: regg"></div>
+	<div th:replace="lekar_html/ZPregledi :: table"></div>
+	<div th:replace="lekar_html/modalPregled :: modalP"></div>
+	<div th:replace="tabela :: table"></div>
+</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
+
+<script>
+
+	var app = new Vue({
+		el: '#klinika',
+		data: {
+			ime_pl : '',
+			prez_pl : '',
+			adr_pl : '',
+			br_pl : '',
+			new_pass : '' ,
+			error_message: '',
+			id: '',
+			lbo: '',
+			email : '',
+			ime : '',
+			prezime : '',
+			pass : '',
+			pass2 : '',
+			adresa : '',
+			broj : '',
+			items : [],
+			columns : [],
+			labels : [],
+			item : {}
+		},
+		methods: {
+			prikazi_profil()
+			{
+				this.sakrij_sve();
+				
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/profil',
+                }).then(function(response){
+                    this.ime_pl = response.data.ime;
+					this.prez_pl = response.data.prezime;
+					this.adr_pl = response.data.adresa;
+					this.br_pl = response.data.broj;
+					this.new_pass = response.data.lozinka;
+					this.id = response.data.id;
+					this.lbo = response.data.lbo;
+					this.email = response.data.email;
+                    console.log(response.data);
+                    $( "#registracija" ).show();
+                }.bind(this));
+            },
+			prikazi_zahteve()
+			{
+            	this.sakrij_sve();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/akc/zahteviZaReg' + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                    this.columns = [ 'emailP', 'imeP', 'prezimeP}', 'datum', 'vreme'];
+                    this.labels = [ 'Email', 'Ime', 'Prezime', 'Datum', 'Vreme'];
+                    this.items = response.data;
+                    $( "#tabela" ).show();
+                    console.log(this.items[0].naziv);
+                }.bind(this));
+				
+            },
+			prikazi_zpreglede()
+			{		
+            	this.sakrij_sve();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/pregled/zakazani',
+                }).then(function(response){
+                	this.columns = [ 'imeP', 'prezimeP', 'sala', 'datum', 'vreme'];
+                    this.labels = [ 'Ime pacijenta', 'Prezime pacijenta', 'Sala', 'Datum','Vreme'];
+                    this.items = response.data;
+                    $( "#tabelaZPregledi" ).show();
+                }.bind(this));
+				
+            },
+			prikazi_karton()
+			{
+            	this.sakrij_sve();
+				console.log("Nesto se desilo")
+                axios({
+                	method : 'get',
+                    url : 'api/pacijent/klinike',
+                }).then(function(response){
+                    this.ime_pl = response.data;
+                    console.log(this.ime_pl);
+                }.bind(this));
+            },
+            validEmail:function(email) {
+			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				return re.test(email);
+			},
+            check(){
+				var s = true;
+				
+				if(this.ime == "") this.ime = this.ime_pl;
+				if(this.prezime == "") this.prezime = this.prez_pl;
+				if(this.adresa == "") this.adresa = this.adr_pl;
+				if(this.broj == "") this.broj = this.br_pl;
+				
+				if(this.pass != "" && this.pass2 != "") 
+					if(this.pass != this.pass2){
+						this.error_message = "Lozinke se razlikuju";
+						s = false;
+					} else new_pass = this.pass;
+				
+				if(this.pass != "" && this.pass2 == ""){
+					this.error_message = "Morate ponoviti lozinku";
+					s = false;
+				}
+								
+				return s;
+			},
+			modal_pregled(id){
+				for(pregled of this.items){
+					if(pregled['id'] == id){
+						this.item = pregled;
+					}
+				}
+				$( "#modalZPregledi" ).show();
+			},
+			zapocni_pregled(){
+				document.location.replace("/Izvestaj/" + this.item['id']);
+			},
+			izmeni_korisnika()
+            {
+            	if(!this.check()) return;
+				axios({
+                	method : 'post',
+                    url : 'api/pacijent/izmena_profila',
+                    data:{id:this.id, email:this.email, lozinka:this.new_pass, ime:this.ime, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
+                }).then(function(response){                	
+                	document.location.replace("/pacijentPocetna");
+                }).catch((error)=>{
+                	this.email = "";
+                	this.error_message = "Podaci nisu izmenjeni";
+                });
+            },
+            sakrij_sve(){
+            	$( "#modalZPregledi" ).hide();
+            	$( "#registracija" ).hide();
+            	$( "#tabelaZPregledi" ).hide();
+            	$( "#tabela" ).hide();
+            	
+            }
+		}
+		});
+
+</script>
+
+</html>

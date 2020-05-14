@@ -30,6 +30,13 @@ public class HomeController {
 		
 	}
 	
+	@GetMapping(value = "/akcPocetna")
+	public String akcPocetna() {
+		System.out.println("lekar");
+		return "akc_html/akcPocetna";
+		
+	}
+	
 	@GetMapping(value = "/Izvestaj/{id}")
 	public String unosIzvestaja() {
 		return "lekar_html/unosIzvestaja";

@@ -1,7 +1,15 @@
 function getCookie(name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
+    if (parts.length == 2) {
+    	var s = parts.pop();
+    	if(s.includes(";")){
+    		return s.split(";").shift();
+    	}else{
+    		return s;
+    	}
+    }
+    
 }
 
 function set_cookie(name, value) {

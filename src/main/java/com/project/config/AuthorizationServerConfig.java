@@ -41,7 +41,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory().
                 withClient("my-trusted-client")
                 .authorizedGrantTypes("client_credentials", "password")
-                .authorities("ROLE_P","ROLE_L").scopes("read","write","trust")
+                .authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT").scopes("read","write","trust")
                 .resourceIds("oauth2-resource").accessTokenValiditySeconds(5000).secret(passwordEncoder.encode("secret"));
     }
 
