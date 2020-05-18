@@ -38,11 +38,11 @@ public class Pregled {
 	@Column(name="datum", unique=false, nullable=false)
 	private LocalDate datum;
 	
-	@Column(name="vreme", unique=false, nullable=false)
-	private LocalTime vreme;
+	@Column(name="vreme_od", unique=false, nullable=false)
+	private LocalTime vremeOd;
 	
-	@Column(name="trajanje_pregleda", unique=false, nullable=false)
-	private Double trajanjePregleda;
+	@Column(name="vreme_do", unique=false, nullable=false)
+	private LocalTime vremeDo;
 	
 	@Column(name="cena", unique=false, nullable=false)
 	private Double cena;	
@@ -92,20 +92,20 @@ public class Pregled {
 		this.datum = datum;
 	}
 
-	public LocalTime getVreme() {
-		return vreme;
+	public LocalTime getVremeOd() {
+		return vremeOd;
 	}
 
-	public void setVreme(LocalTime vreme) {
-		this.vreme = vreme;
+	public void setVremeOd(LocalTime vremeOd) {
+		this.vremeOd = vremeOd;
 	}
 
-	public Double getTrajanjePregleda() {
-		return trajanjePregleda;
+	public LocalTime getVremeDo() {
+		return vremeDo;
 	}
 
-	public void setTrajanjePregleda(Double trajanjePregleda) {
-		this.trajanjePregleda = trajanjePregleda;
+	public void setVremeDo(LocalTime vremeDo) {
+		this.vremeDo = vremeDo;
 	}
 
 	public Double getCena() {
@@ -167,7 +167,7 @@ public class Pregled {
 
 	@Override
 	public String toString() {
-		return "Pregled [datum=" + datum + ", vreme=" + vreme + ", tipPregleda=" + tipPregleda.getIme() + ", lekar=" + lekar.getIme() 
+		return "Pregled [datum=" + datum + ", vreme pocetka=" + vremeOd + ", vreme zavrsetka=" + vremeDo + ", tipPregleda=" + tipPregleda.getIme() + ", lekar=" + lekar.getIme() 
 		+ " " + lekar.getPrezime() + ", zkPacijenta=" + zkPacijenta.getPacijent().getLbo() + "]";
 	}
 	

@@ -39,6 +39,9 @@ public class Lekar extends Korisnik{
 	@JsonBackReference
 	private TipPregleda tipPregleda;
 	
+	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<ZauzetoVreme> zauzetoVreme;
+	
 	public Lekar() {
 		
 	}
@@ -90,6 +93,14 @@ public class Lekar extends Korisnik{
 	public void setTipPregleda(TipPregleda tipPregleda) {
 		this.tipPregleda = tipPregleda;
 	}
-	
+
+	public Set<ZauzetoVreme> getZauzetoVreme() {
+		return zauzetoVreme;
+	}
+
+	public void setZauzetoVreme(Set<ZauzetoVreme> zauzetoVreme) {
+		this.zauzetoVreme = zauzetoVreme;
+	}
+
 	
 }

@@ -31,11 +31,11 @@ public class ZahtevZaPregled {
 	@Column(name="datum", unique=false, nullable=false)
 	private LocalDate datum;
 	
-	@Column(name="vreme", unique=false, nullable=false)
-	private LocalTime vreme;
+	@Column(name="vremeOd", unique=false, nullable=false)
+	private LocalTime vremeOd;
 	
-	@Column(name="trajanje_pregleda", unique=false, nullable=false)
-	private Double trajanjePregleda;
+	@Column(name="vremeDo", unique=false, nullable=false)
+	private LocalTime vremeDo;
 	
 	@Column(name="cena", unique=false, nullable=false)
 	private Double cena;	
@@ -59,12 +59,12 @@ public class ZahtevZaPregled {
 	@JsonBackReference
 	private ZdravstveniKarton zkPacijenta;
 
-	public ZahtevZaPregled(LocalDate datum, LocalTime vreme, Double trajanjePregleda, Double cena,
+	public ZahtevZaPregled(LocalDate datum, LocalTime vremeOd, LocalTime vremeDo, Double cena,
 			TipPregleda tipPregleda, Sala sala, Lekar lekar, ZdravstveniKarton zkPacijenta) {
 		super();
 		this.datum = datum;
-		this.vreme = vreme;
-		this.trajanjePregleda = trajanjePregleda;
+		this.vremeOd = vremeOd;
+		this.vremeDo = vremeDo;
 		this.cena = cena;
 		this.tipPregleda = tipPregleda;
 		this.sala = sala;
@@ -77,8 +77,8 @@ public class ZahtevZaPregled {
 	public ZahtevZaPregled(Pregled p) {
 		// TODO Auto-generated constructor stub
 		this.datum = p.getDatum();
-		this.vreme = p.getVreme();
-		this.trajanjePregleda = p.getTrajanjePregleda();
+		this.vremeOd = p.getVremeOd();
+		this.vremeDo = p.getVremeDo();
 		this.cena = p.getCena();
 		this.tipPregleda = p.getTipPregleda();
 		this.sala = p.getSala();
@@ -102,20 +102,20 @@ public class ZahtevZaPregled {
 		this.datum = datum;
 	}
 
-	public LocalTime getVreme() {
-		return vreme;
+	public LocalTime getVremeOd() {
+		return vremeOd;
 	}
 
-	public void setVreme(LocalTime vreme) {
-		this.vreme = vreme;
+	public void setVremeOd(LocalTime vremeOd) {
+		this.vremeOd = vremeOd;
 	}
 
-	public Double getTrajanjePregleda() {
-		return trajanjePregleda;
+	public LocalTime getVremeDo() {
+		return vremeDo;
 	}
 
-	public void setTrajanjePregleda(Double trajanjePregleda) {
-		this.trajanjePregleda = trajanjePregleda;
+	public void setVremeDo(LocalTime vremeDo) {
+		this.vremeDo = vremeDo;
 	}
 
 	public Double getCena() {
@@ -160,8 +160,7 @@ public class ZahtevZaPregled {
 
 	@Override
 	public String toString() {
-		return "ZahtevZaPregled [id=" + id + ", datum=" + datum + ", vreme=" + vreme + ", trajanjePregleda="
-				+ trajanjePregleda + ", cena=" + cena + ", tipPregleda=" + tipPregleda.getIme() + ", sala=" + sala.getNaziv() + ", lekar="
+		return "ZahtevZaPregled [id=" + id + ", datum=" + datum + ", vreme pocetka=" + vremeOd + ", vreme zavrsetka=" + vremeDo + ", cena=" + cena + ", tipPregleda=" + tipPregleda.getIme() + ", sala=" + sala.getNaziv() + ", lekar="
 				+ lekar.getIme() + " " + lekar.getPrezime() + ", zkPacijenta=" + zkPacijenta.getPacijent().getLbo() + "]";
 	}
 	

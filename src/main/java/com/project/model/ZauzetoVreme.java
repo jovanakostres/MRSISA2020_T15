@@ -5,11 +5,17 @@ import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="zauzeto_vreme")
@@ -26,12 +32,12 @@ public class ZauzetoVreme {
 	@Column(name="datum_do", unique=false, nullable=false)
 	private LocalDate datumDo;
 	
-	@Column(name="vreme_od", unique=false, nullable=false)
-	private LocalTime vremeOd;
+    @Enumerated(EnumType.STRING)
+    private TipZauzetosti tipZauzetosti;
 	
-	@Column(name="vreme_do", unique=false, nullable=false)
-	private LocalTime vremeDo;
-	
+    @ManyToOne(fetch = FetchType.LAZY)
+	private Lekar lekar;
+    
 	public ZauzetoVreme() {
 		
 	}
@@ -60,21 +66,14 @@ public class ZauzetoVreme {
 		this.datumDo = datumDo;
 	}
 
-	public LocalTime getVremeOd() {
-		return vremeOd;
+	public TipZauzetosti getTipZauzetosti() {
+		return tipZauzetosti;
 	}
 
-	public void setVremeOd(LocalTime vremeOd) {
-		this.vremeOd = vremeOd;
+	public void setTipZauzetosti(TipZauzetosti tipZauzetosti) {
+		this.tipZauzetosti = tipZauzetosti;
 	}
 
-	public LocalTime getVremeDo() {
-		return vremeDo;
-	}
-
-	public void setVremeDo(LocalTime vremeDo) {
-		this.vremeDo = vremeDo;
-	}
 	
 	
 	

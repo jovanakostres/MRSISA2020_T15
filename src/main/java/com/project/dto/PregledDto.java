@@ -15,24 +15,26 @@ public class PregledDto {
 	
 	private LocalDate datum;
 	
-	private LocalTime vreme;
+	private LocalTime vremeOd;
 	
-	private Double trajanje;
+	private LocalTime vremeDo;
 	
 	private Double cena;
 
+	private boolean izvrsen;
 	
 	public PregledDto(Long id, String imeP, String prezimeP, String sala, LocalDate datum, LocalTime vreme,
-			Double trajanje, Double cena) {
+			LocalTime trajanje, Double cena, boolean izvrsen) {
 		super();
 		this.id = id;
 		this.imeP = imeP;
 		this.prezimeP = prezimeP;
 		this.sala = sala;
 		this.datum = datum;
-		this.vreme = vreme;
-		this.trajanje = trajanje;
+		this.vremeOd = vreme;
+		this.vremeDo = trajanje;
 		this.cena = cena;
+		this.izvrsen = izvrsen;
 	}
 
 	public Long getId() {
@@ -67,20 +69,20 @@ public class PregledDto {
 		this.datum = datum;
 	}
 
-	public LocalTime getVreme() {
-		return vreme;
+	public LocalTime getVremeOd() {
+		return vremeOd;
 	}
 
-	public void setVreme(LocalTime vreme) {
-		this.vreme = vreme;
+	public void setVremeOd(LocalTime vremeOd) {
+		this.vremeOd = vremeOd;
 	}
 
-	public Double getTrajanje() {
-		return trajanje;
+	public LocalTime getVremeDo() {
+		return vremeDo;
 	}
 
-	public void setTrajanje(Double trajanje) {
-		this.trajanje = trajanje;
+	public void setVremeDo(LocalTime vremeDo) {
+		this.vremeDo = vremeDo;
 	}
 
 	public String getSala() {
@@ -98,6 +100,15 @@ public class PregledDto {
 	public void setCena(Double cena) {
 		this.cena = cena;
 	}
+
+	public boolean isIzvrsen() {
+		return izvrsen;
+	}
+
+	public void setIzvrsen(boolean izvrsen) {
+		this.izvrsen = izvrsen;
+	}
+	
 	
 	
 	

@@ -21,7 +21,7 @@ insert into sale (id,naziv,klinika_id) values (1, 'Sala 1', 1);
 
 insert into zdravstveni_kartoni (visina, tezina, krvna_grupa, pacijent_id) values (180, 70, 'A', 1);
 
-insert into pregledi (id, datum, vreme, trajanje_pregleda, cena, tip_pregleda_id,izvrsen, definisan) values (1, '2020.05.03','10:00',24,5000, 1, 'false', 'true');
+insert into pregledi (id, datum, vreme_od, vreme_do, cena, tip_pregleda_id,izvrsen, definisan) values (1, '2020.05.03','10:00','11:00',5000, 1, 'false', 'true');
 update pregledi set lekar_id = 3,sala_id = 1,zk_pacijenta_pacijent_id=1 where id = 1;
 
 insert into dijagnoze(id, naziv) values (1, 'Varicela-ovcije boginje');

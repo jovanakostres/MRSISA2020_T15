@@ -29,7 +29,7 @@ public class PregledService {
 		
 		for (Pregled pregled : pregledi) {
 			if (pregled.getIzvrsen() == false) {
-				vr = LocalDateTime.of(pregled.getDatum(),pregled.getVreme());
+				vr = LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd());
 				if(vr.isBefore(LocalDateTime.now())) {
 					zpregledi.add(pregled);
 				}
@@ -57,5 +57,10 @@ public class PregledService {
 		Pregled pregled = pregledRepository.findById(id).orElseGet(null);
 		pregled.setDefinisan(false);
 		return pregledRepository.save(pregled);
+	}
+
+	public List<Pregled> findAll() {
+		// TODO Auto-generated method stub
+		return pregledRepository.findAll();
 	}
 }
