@@ -58,10 +58,9 @@ public class AuthorizationController {
             }else {
                 ZahtevZaRegistraciju zahtev = new ZahtevZaRegistraciju(pacijent.getEmail(),pacijent.getLozinka(),pacijent.getIme(),pacijent.getPrezime(),pacijent.getAdresa(),pacijent.getBroj(),pacijent.getLbo());
                 zahtevZaRegistracijuService.save(zahtev);
-                emailService.sendNotificaitionSync(pacijent);
             }
             
-            return new ResponseEntity<>(pacijent, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             //e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
