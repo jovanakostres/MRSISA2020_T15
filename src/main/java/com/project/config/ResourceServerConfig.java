@@ -18,16 +18,24 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
         		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/","/registracijaPacijenta","/registracijaPacijenta").permitAll()
-        		//.antMatchers(HttpMethod.GET,"/api/lekar/**").hasAuthority("ROLE_L");
-                .antMatchers("/api/lekar/**").authenticated()
+                .antMatchers("/","/registracijaPacijenta","/lekarPocetna","/pacijentPocetna","/akcPocetna","/Izvestaj/**").permitAll()
+                /*.antMatchers("/api/lekar/**").authenticated()
                 .antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
         		.antMatchers("/api/akc/**").authenticated()
         		.antMatchers("/api/akc/**").hasAuthority("ROLE_AKC")
         		.antMatchers("/api/potvrdiRegistraciju").authenticated()
         		.antMatchers("/api/potvrdiRegistraciju").hasAuthority("ROLE_AKC")
         		.antMatchers("/api/odbijRegistraciju").authenticated()
-        		.antMatchers("/api/odbijRegistraciju").hasAuthority("ROLE_AKC");
+        		.antMatchers("/api/odbijRegistraciju").hasAuthority("ROLE_AKC")*/
+                .antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
+                .antMatchers("/api/akc/**").hasAuthority("ROLE_AKC")
+                .antMatchers("/api/potvrdiRegistraciju").hasAuthority("ROLE_AKC")
+                .antMatchers("/api/pregled/**").hasAuthority("ROLE_L")
+                .antMatchers("/api/dijagnoza/**").hasAuthority("ROLE_L")
+                .antMatchers("/api/izvestaj/**").hasAuthority("ROLE_L")
+                .antMatchers("/api/pacijent/**").hasAuthority("ROLE_P")
+        		.anyRequest()
+        		.authenticated();
         		//antMatchers("/lekarPocetna/**").authenticated();
         		//.antMatchers("/lekarPocetna/**").hasAuthority("ROLE_L");
                 //.antMatchers("/post").authenticated()

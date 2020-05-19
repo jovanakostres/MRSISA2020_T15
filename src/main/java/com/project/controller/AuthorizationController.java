@@ -1,12 +1,19 @@
 package com.project.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.dto.ZahtevZaRegistracijuDto;
@@ -33,6 +40,9 @@ public class AuthorizationController {
 	
     @Autowired
     ZahtevZaRegistracijuService zahtevZaRegistracijuService;
+    
+    @Autowired
+    TokenStore tokenStore;
     
     @RequestMapping(value = "/registracija", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody ZahtevZaRegistraciju pacijent) {
@@ -105,5 +115,20 @@ public class AuthorizationController {
 		return new ResponseEntity(HttpStatus.BAD_REQUEST);
 	}
 	
+	@GetMapping(value ="/getUsername")
+	   public List<String> getUsername(){
+		   String s = SecurityContextHolder.getContext().getAuthentication().getName();
+		   System.out.println("S : " + s);
+		   String p = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0].toString();
+		   System.out.println("P: " + p);
+		   List<String> retList = new ArrayList<String>();
+		   retList.add(s);
+		   retList.add(p);
+	       return retList;
+	   }
 	
+	 @GetMapping(value = "/logouts")
+	    public void logout(@RequestParam (value = "access_token") String accessToken){
+	        tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken));
+	 }
 }

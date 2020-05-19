@@ -42,4 +42,9 @@ public class LekarService {
 		return lekarRepository.getLekare();
 	}
 
+	public Lekar findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return lekarRepository.findByEmail(email);
+	}
+
 }

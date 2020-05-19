@@ -31,7 +31,7 @@ Vue.component('login-component',{
     },
     mounted(){
         if(getCookie("access_token")){
-            axios.get("/api/pacijent/getUsername?access_token=" + getCookie("access_token"))
+            axios.get("/api/getUsername?access_token=" + getCookie("access_token"))
                 .then(function(response){
                     //this.logged_in_msg = "Welcome back , " + response.data;
                 	this.role = response.data[1];                	
@@ -43,14 +43,20 @@ Vue.component('login-component',{
                     return error;
                 });
         }
+        
+        this.$root.$on('logged-out', () => {
+            // your code goes here
+            this.logOut()
+        });
     },
     methods : {
         logOut(){
-            axios.get("/logouts?access_token="+getCookie("access_token"))
+            axios.get("/api/logouts?access_token="+getCookie("access_token"))
                 .then(function(response){
                     window.Event.isLoggedIn = false;
                     //this.logged_in_msg  = "Successfully logged out";
                     delete_cookie("access_token")
+                    document.location.replace("/");
                 }.bind(this))
         },
         isLoggedIn(){

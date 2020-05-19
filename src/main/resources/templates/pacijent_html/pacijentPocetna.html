@@ -121,7 +121,7 @@
             {
             	axios({
                 	method : 'get',
-                    url : 'api/pacijent/tipovi_pregleda',
+                    url : 'api/pacijent/tipovi_pregleda' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.tipovi = response.data;
                     console.log(this.tipovi[0].ime);
@@ -136,7 +136,7 @@
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/pacijent/klinike' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
                     this.labels = [ 'Naziv', 'Adresa', 'Ocena', 'Cena'];

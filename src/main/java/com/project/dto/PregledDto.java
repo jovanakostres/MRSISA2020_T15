@@ -23,8 +23,10 @@ public class PregledDto {
 
 	private boolean izvrsen;
 	
+	private String tipOp;
+	
 	public PregledDto(Long id, String imeP, String prezimeP, String sala, LocalDate datum, LocalTime vreme,
-			LocalTime trajanje, Double cena, boolean izvrsen) {
+			LocalTime trajanje, Double cena, boolean izvrsen, String tip_op) {
 		super();
 		this.id = id;
 		this.imeP = imeP;
@@ -35,6 +37,7 @@ public class PregledDto {
 		this.vremeDo = trajanje;
 		this.cena = cena;
 		this.izvrsen = izvrsen;
+		this.tipOp = tip_op;
 	}
 
 	public Long getId() {
@@ -108,8 +111,14 @@ public class PregledDto {
 	public void setIzvrsen(boolean izvrsen) {
 		this.izvrsen = izvrsen;
 	}
-	
-	
-	
+
+	public String getTipOp() {
+		return tipOp;
+	}
+
+	public void setTipOp(String tipOp) {
+		this.tipOp = tipOp;
+	}
+		
 	
 }

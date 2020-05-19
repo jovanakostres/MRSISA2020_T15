@@ -21,5 +21,7 @@ public interface LekarRepository extends JpaRepository<Lekar, Long>{
 	@Query("select l from Lekar l")
 	List<Lekar> getLekare();
 	
+	Lekar findByEmail(String email);
+	
 }
 

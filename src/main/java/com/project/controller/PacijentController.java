@@ -251,17 +251,6 @@ public class PacijentController {
 	   return new ResponseEntity(HttpStatus.OK);
    }
    
-   @GetMapping(value ="/getUsername")
-   public List<String> getUsername(){
-	   String s = SecurityContextHolder.getContext().getAuthentication().getName();
-	   System.out.println("S : " + s);
-	   String p = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0].toString();
-	   System.out.println("P: " + p);
-	   List<String> retList = new ArrayList<String>();
-	   retList.add(s);
-	   retList.add(p);
-       return retList;
-   }
 	
    
 }

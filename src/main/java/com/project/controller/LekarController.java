@@ -52,7 +52,12 @@ public class LekarController {
 		   LocalTime lt = LocalTime.of(00,00,00);
 		   
 		   for (Pregled pregled : pregledService.findAll()) {
-			   kalendar.add(new KalendarDto("Pregled " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
+			   if(pregled.getOperacija()) {
+				   kalendar.add(new KalendarDto("Operacija " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
+			   }else {
+				   kalendar.add(new KalendarDto("Pregled " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
+			   }
+			   
 		}
 		   
 		   for (ZauzetoVreme zv : zauzetoVremeService.findAll()) {
