@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class PregledController {
 	LekarService lekarService;
 	
 	@GetMapping(value ="/zakazani")
-	   public Set<PregledDto> getLekari() {
+	   public Set<PregledDto> getZakazaniPregledi() {
 		   Lekar l = lekarService.findById(3L);
 		   Set <PregledDto> pregledi = new HashSet<PregledDto>();
 		   
@@ -40,10 +41,11 @@ public class PregledController {
 	   }
 	
 	@GetMapping(value="/pregledIzvestaj/{id}")
-	   public PregledDto getLekari(@PathVariable Long id) {
+	   public PregledDto getPregled(@PathVariable Long id) {
 		   Pregled pr = pregledService.findById(id);
 		   PregledDto pregled = new PregledDto(pr.getId(),pr.getZkPacijenta().getPacijent().getIme(),pr.getZkPacijenta().getPacijent().getPrezime(),pr.getSala().getNaziv(),pr.getDatum(),pr.getVremeOd(),pr.getVremeDo(),pr.getCena(),pr.getIzvrsen());
 		   
 		   return pregled;
 	   }
+	
 }

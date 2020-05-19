@@ -208,12 +208,16 @@
 								
 				return s;
 			},
-			modal_pregled(id){
+			modal_pregled(id,it){
+				if (it == null){
 				for(pregled of this.items){
 					if(pregled['id'] == id){
-						this.izvrsen = pregled['izvrsen'];
+						this.izvrsen = !pregled['izvrsen'];
 						this.item = pregled;
 					}
+				}
+				}else{
+					this.item = it;
 				}
 				$( "#modalZPregledi" ).show();
 			},
@@ -237,12 +241,11 @@
             getZPreglede(id){
             	axios({
                 	method : 'get',
-                    url : 'api/pregled/zakazani',
+                    url : "/api/pregled/pregledIzvestaj/" + id + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                 	this.columns = [ 'imeP', 'prezimeP', 'sala', 'datum', 'vremeOd', 'vremeDo'];
                     this.labels = [ 'Ime pacijenta', 'Prezime pacijenta', 'Sala', 'Datum','Vreme Pocetka', 'Vreme Zavrsetka'];
-                	this.items = response.data;
-                	this.modal_pregled(id);
+                	this.modal_pregled(id,response.data);
                 }.bind(this));
             },
             parseText(text){
