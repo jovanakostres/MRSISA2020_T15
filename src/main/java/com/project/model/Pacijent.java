@@ -48,7 +48,6 @@ public class Pacijent extends Korisnik{
 	public ZdravstveniKarton getZdravstveniKarton() {
 		return zdravstveniKarton;
 	}
-
 	public void setZdravstveniKarton(ZdravstveniKarton zdravstveniKarton) {
 		this.zdravstveniKarton = zdravstveniKarton;
 	}
