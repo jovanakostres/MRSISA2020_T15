@@ -12,7 +12,7 @@
 				<th><input type = "button" v-model = "minmax" value = "max" v-on:click = "filter"></th>
 			</tr>
 			<tr >
-        		<th class="col-md-3" v-for="(column, index) in labels" :key="index" v-on:click = "lista_lekara"> {{column}}</th>
+        		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>
     		</tr>
 		</thead>
 		<tbody v-if="items.length > 0">

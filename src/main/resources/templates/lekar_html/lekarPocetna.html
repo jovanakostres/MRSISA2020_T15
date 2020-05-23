@@ -116,7 +116,7 @@
 				
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/profil',
+                    url : 'api/profil'+ '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.ime_pl = response.data.ime;
 					this.prez_pl = response.data.prezime;

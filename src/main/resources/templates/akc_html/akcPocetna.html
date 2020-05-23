@@ -38,7 +38,7 @@
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
 	    	<ul class="nav navbar-nav navbar-right">
-	      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+	      		<li><a v-on:click="log_out_k"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 	    	</ul>
   		</div>
 	</nav>
@@ -88,7 +88,7 @@
 				
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/profil',
+                    url : 'api/profil' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.ime_pl = response.data.ime;
 					this.prez_pl = response.data.prezime;
@@ -223,6 +223,10 @@
             	$( "#tabelaRZahtevi" ).hide();
             	$( "#tabela" ).hide();
             	
+            },
+            log_out_k(){
+            	this.$root.$emit('logged-out')
+            	//Event.$emit('logged-out');
             }
 		}
 		});

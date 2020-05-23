@@ -160,8 +160,8 @@ public class ZahtevZaPregled {
 
 	@Override
 	public String toString() {
-		return "ZahtevZaPregled [id=" + id + ", datum=" + datum + ", vreme pocetka=" + vremeOd + ", vreme zavrsetka=" + vremeDo + ", cena=" + cena + ", tipPregleda=" + tipPregleda.getIme() + ", sala=" + sala.getNaziv() + ", lekar="
-				+ lekar.getIme() + " " + lekar.getPrezime() + ", zkPacijenta=" + zkPacijenta.getPacijent().getLbo() + "]";
+		return "ZahtevZaPregled [id=" + id + ", datum=" + datum + ", vreme pocetka=" + vremeOd + ", vreme zavrsetka=" + vremeDo + ", cena=" + cena + ", tipPregleda=" + tipPregleda.getIme()  + ", lekar="
+				+ lekar.getIme() + " " + lekar.getPrezime() + "]";
 	}
 	
 	

@@ -15,7 +15,12 @@
 		<tbody v-if="items.length > 0">
         	<tr v-for="(item, index) in items" :key="index">
             	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
-            	<td><input type="button" value = "Zakazi pregled"></td>
+            	<td>
+            		<select style = "height: 30px;" id = "termin" v-model = "selected">
+            			<option v-for = "tt in item['slobodniTermini']" v-bind:value = "tt"> {{tt}} </option>
+					</select>
+				</td>
+            	<td><input type="button" value = "Zakazi pregled" v-on:click = "zakaziPregled(item)"></td>
           	</tr>
     	</tbody>
 	</table>

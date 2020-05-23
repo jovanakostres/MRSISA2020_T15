@@ -34,7 +34,7 @@
 			      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 			    </ul>
 		    	<ul class="nav navbar-nav navbar-right">
-		      		<li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+		      		<li><a v-on:click="log_out_k"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 		    	</ul>
 	  		</div>
 		</nav>
@@ -87,7 +87,9 @@
 			broj_lek: '',
 			klinika_id : '',
 			tip_pregleda : '',
-			definisani_pregledi: []
+			datum : '',
+			definisani_pregledi: [],
+			selected : ''
 		},
 		mounted() {
 			//this.pronadji_preglede();
@@ -104,7 +106,7 @@
 				alert(document.cookie);
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/profil',
+                    url : 'api/profil'+ '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.ime_pl = response.data.ime;
 					this.prez_pl = response.data.prezime;
@@ -177,7 +179,7 @@
             	$("#tabela").hide();
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/unapred_definisani',
+                    url : 'api/pacijent/unapred_definisani'+ '?access_token=' + getCookie("access_token"),
                     data : {klinika:this.klinika_id}
                 }).then(function(response){
                 	this.columns = [ 'cena', 'datum', 'vreme'];
@@ -190,8 +192,19 @@
             {
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/unapred_definisani_zakazi',
+                    url : 'api/pacijent/unapred_definisani_zakazi'+ '?access_token=' + getCookie("access_token"),
                     data : {pregled:id}
+                }).then(function(response){
+                	document.location.replace("/pacijentPocetna");
+                });
+            },
+            zakaziPregled(lekar)
+            {
+            	alert(this.selected);
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),
+                    data : {klinika: this.klinika_id, l:lekar.id, termin: this.selected, datum: this.datum}
                 }).then(function(response){
                 	document.location.replace("/pacijentPocetna");
                 });
@@ -226,7 +239,7 @@
             	if(!this.check()) return;
 				axios({
                 	method : 'post',
-                    url : 'api/pacijent/izmena_profila',
+                    url : 'api/pacijent/izmena_profila'+ '?access_token=' + getCookie("access_token"),
                     data:{id:this.id, email:this.email, lozinka:this.new_pass, ime:this.imee, prezime:this.prezime, adresa:this.adresa, broj:this.broj, lbo:this.lbo},
                 }).then(function(response){                	
                 	document.location.replace("/pacijentPocetna");
@@ -239,7 +252,7 @@
             {
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/filter_klinika',
+                    url : 'api/pacijent/filter_klinika'+ '?access_token=' + getCookie("access_token"),
                     data:{naziv:this.naziv,adresa:this.adresa_fil, opis:this.opis, minmax:this.minmax, tip:this.tip_pregleda},
                 }).then(function(response){                	
                 	this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
@@ -257,7 +270,7 @@
             	this.tip_pregleda = event.target.value;            	
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/pretraga_klinika',
+                    url : 'api/pacijent/pretraga_klinika'+ '?access_token=' + getCookie("access_token"),
                     data:{pretraga_text:this.tip_pregleda},
                 }).then(function(response){                	
                 	this.columns = [ 'naziv', 'adresa', 'ocena', 'cena'];
@@ -273,13 +286,14 @@
             	$("#zakazi").hide();
             	this.klinika_id = id;
 				console.log(this.klinika_id);
+				this.datum = $("#datum").val();
                 axios({
                 	method : 'post',
-                	data: {ind:this.klinika_id, tip:this.tip_pregleda},
-                    url : 'api/pacijent/lekari_tip',
+                	data: {ind:this.klinika_id, tip:this.tip_pregleda, date:this.datum},
+                    url : 'api/pacijent/lekari_tip' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                     this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
-                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda', 'Slobodni termini'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
                 }.bind(this));
@@ -292,13 +306,14 @@
             	$("#tabela").hide();
             	$("#zakazi").hide();
 				console.log(this.klinika_id);
+				this.datum = $("#datum").val();
                 axios({
                 	method : 'post',
-                	data: {ind:this.klinika_id},
-                    url : 'api/pacijent/lekari',
+                	data: {ind:this.klinika_id, date:this.datum},
+                    url : 'api/pacijent/lekari' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
                 	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
-                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda', 'Slobodni termini'];
                     this.items = response.data;
                     console.log(this.items[0].naziv);
                 }.bind(this));
@@ -308,7 +323,7 @@
             {
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/filter_lekar',
+                    url : 'api/pacijent/filter_lekar' + '?access_token=' + getCookie("access_token"),
                     data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id, tip:this.tip_pregleda},
                 }).then(function(response){                	
                 	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
@@ -325,7 +340,7 @@
             {
             	axios({
                 	method : 'post',
-                    url : 'api/pacijent/pretraga_lekar',
+                    url : 'api/pacijent/pretraga_lekar' + '?access_token=' + getCookie("access_token"),
                     data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id, tip:this.tip_pregleda},
                 }).then(function(response){                	
                 	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
@@ -333,6 +348,10 @@
                     this.items = response.data;
                 }.bind(this));
             	$( "#tabela_lekari" ).show();
+            },
+            log_out_k(){
+            	this.$root.$emit('logged-out')
+            	//Event.$emit('logged-out');
             }
 		}
 		});

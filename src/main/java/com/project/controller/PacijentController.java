@@ -1,36 +1,46 @@
 package com.project.controller;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.config.CustomUserDetails;
 import com.project.dto.KlinikaPretragaDTO;
 import com.project.dto.LekarDTO;
 import com.project.model.Klinika;
+import com.project.model.Korisnik;
 import com.project.model.Lekar;
 import com.project.model.Pacijent;
 import com.project.model.Pregled;
 import com.project.model.TipPregleda;
 import com.project.model.ZahtevZaPregled;
+import com.project.model.ZdravstveniKarton;
 import com.project.service.EmailService;
 import com.project.service.KlinikaService;
+import com.project.service.KorisnikService;
 import com.project.service.LekarService;
 import com.project.service.PacijentService;
 import com.project.service.PregledService;
 import com.project.service.TIpPregledaService;
 import com.project.service.ZahtevZaPregledService;
+import com.project.service.ZdravstveniKartonService;
 
 @RestController
 @RequestMapping("/api/pacijent")
@@ -57,16 +67,22 @@ public class PacijentController {
 	@Autowired
 	ZahtevZaPregledService zzpService;
 	
+	@Autowired
+    TokenStore tokenStore;
+	
+	@Autowired
+	ZdravstveniKartonService zkService;
+	
+	@Autowired 
+	KorisnikService korisnikService;
+	
 /**	
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getProfil() {
     	return "";
     }
     **/
-   @GetMapping(value ="/profil")
-   public Optional<Pacijent> getProfil() {
-	   return pacijentService.findById(1L);
-   }
+   
    
    @GetMapping(value ="/klinike")
    public List<Klinika> getKlinike() {
@@ -75,23 +91,62 @@ public class PacijentController {
    }
    
    @PostMapping(value ="/lekari")
-   public List<LekarDTO> getLekari(@RequestBody String index) {
-	   String ind = index.split(":")[1].replace("\"","").replace("}", "");
+   public List<LekarDTO> getLekari(@RequestBody String params) throws ParseException {
+	   String[] index = params.split(",");
+	   String ind = index[0].split(":")[1].replace("\"","").replace("}", "");
+	   String datum = index[1].split(":")[1].replace("\"", "").replace("}", "");
+	   System.out.println(datum);
+	   LocalDate date = LocalDate.parse(datum);
+	   System.out.println(date + " datum sa posta"); 
 	   System.out.println("KLINIKA " + ind);
 	   List<LekarDTO> lekari = new ArrayList<LekarDTO>();
 	   Set<Lekar> setLekari = klinikaService.getLekari(Long.parseLong(ind));
 	   for(Lekar l : setLekari)
 	   {
-		   lekari.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+		   LekarDTO lekar = new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme());
+		   lekar.setSlobodniTermini(kreirajTermine(date, l));
+		   lekari.add(lekar);
+		  
 	   }
 	   return lekari;
    }
    
+   private List<LocalTime> kreirajTermine(LocalDate date, Lekar l) {
+	// TODO Auto-generated method stub
+	   List<LocalTime> datumi = new ArrayList<LocalTime>();
+	   LocalTime vremeOd = l.getPocetakRada();
+	   LocalTime vremeDo = l.getKrajRada();
+	   LocalTime vreme = vremeOd;
+	   while(true)
+	   {
+		   boolean ind = true;
+		   for(Pregled p : l.getPregledi())
+		   {
+			   System.out.println("Moj datum: " + date + " njihov datum: " + p.getDatum());
+			   System.out.println("Moje vreme: " + vreme + " njihovo vreme: " + p.getVremeOd());
+			   if(p.getDatum().equals(date)&& p.getVremeOd().equals(vreme))
+				   ind = false;
+		   }
+		   if(ind)
+			   datumi.add(vreme);
+		   vreme = vreme.plusHours(1);
+		   System.out.println("NOVO VREME: " + vreme);
+		   if(vreme.isAfter(vremeDo) || vreme.equals(vremeDo))
+			   break;
+	   }
+	   for(LocalTime tt : datumi)
+		   System.out.println(tt);
+	   return datumi;
+   }
+
    @PostMapping(value ="/lekari_tip")
    public List<LekarDTO> getLekariTip(@RequestBody String params) {
 	   String[] index = params.split(",");
 	   String ind = index[0].split(":")[1].replace("\"","");
-	   Long tip = Long.parseLong(index[1].split(":")[1].replace("\"","").replace("}", ""));
+	   Long tip = Long.parseLong(index[1].split(":")[1].replace("\"",""));
+	   String datum = index[2].split(":")[1].replace("\"", "").replace("}", "");
+	   System.out.println(datum);
+	   LocalDate date = LocalDate.parse(datum);
 	   //System.out.println("TIP PREGLEDA " + tip);
 	   System.out.println("KLINIKA " + ind);
 	   List<LekarDTO> lekarRet = new ArrayList<LekarDTO>();
@@ -102,7 +157,9 @@ public class PacijentController {
 		   {
 			   System.out.println("TIP PREGLEDA " + tip);
 			   System.out.println("TIP PREGLEDA LEKAR " + l.getTipPregleda().getId());
-			   lekarRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(),l.getTipPregleda().getIme()));
+			   LekarDTO lekar = new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(),l.getTipPregleda().getIme());
+			   lekar.setSlobodniTermini(kreirajTermine(date, l));
+			   lekarRet.add(lekar);
 		   }
 	   }
 	   return lekarRet;
@@ -197,7 +254,7 @@ public class PacijentController {
 	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
 	   for(Lekar l : lekari)
 	   {
-		   lekariRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+		   lekariRet.add(new LekarDTO(l.getId(),l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
 	   }
 	   return lekariRet;
    }   
@@ -214,7 +271,7 @@ public class PacijentController {
 	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
 	   for(Lekar l : lekari)
 	   {
-		   lekariRet.add(new LekarDTO(l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+		   lekariRet.add(new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
 	   }
 	   return lekariRet;
 	  
@@ -251,7 +308,43 @@ public class PacijentController {
 	   return new ResponseEntity(HttpStatus.OK);
    }
    
-	
+   @RequestMapping(value = "/zakazi_pregled", method = RequestMethod.POST)
+   public ResponseEntity zakaziPregled(@RequestBody String par, @RequestParam (value = "access_token") String accessToken)
+   {
+	   System.out.println(accessToken);
+	   System.out.println(par);
+	   String[] pregled = par.split(",");
+	   String klinika_id = pregled[0].split(":")[1].replace("\"", "");
+	   Long lekar_id = Long.parseLong(pregled[1].split(":")[1].replace("\"", ""));
+	   String termin = pregled[2].split("\":")[1].replace("\"", "");
+	   String datum = pregled[3].split(":")[1].replace("\"", "").replace("}", "");
+	   LocalTime t = LocalTime.parse(termin);
+	   LocalDate date = LocalDate.parse(datum);
+	   Lekar lekar = lekarService.findById(lekar_id);
+	   
+	   System.out.println("ddd");
+	   
+	   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       
+	   Pacijent p = pacijentService.findByEmail(userDetails.getUsername());
+	   
+	   ZdravstveniKarton zk = zkService.fingByPacijent(p.getId());
+	   
+	   System.out.println(zk == null);
+	   
+	   ZahtevZaPregled zzp = new ZahtevZaPregled(date, t, t.plusHours(1L), 100.0, lekar.getTipPregleda(), null, lekar, zk) ;
+	   
+	   zzpService.save(zzp);
+	   
+	   try {
+			emailService.sendZahtevZaPregled(zzp);
+		} catch (MailException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+	   
+	   return new ResponseEntity(HttpStatus.OK);
+   }
    
 }
 

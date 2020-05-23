@@ -6,4 +6,6 @@ import com.project.model.ZdravstveniKarton;
 
 public interface ZdrvastveniKartonRepository extends JpaRepository<ZdravstveniKarton, Long>{
 
+	ZdravstveniKarton findByPacijentId(Long id);
+
 }

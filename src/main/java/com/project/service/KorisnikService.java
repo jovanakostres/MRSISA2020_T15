@@ -35,4 +35,9 @@ public class KorisnikService {
 	public Korisnik findByEmailAndLozinka(String email, String lozinka) {
 		return korisnikRepository.findByEmailAndLozinka(email, lozinka);
 	}
+
+	public Korisnik findByEmail(String username) {
+		// TODO Auto-generated method stub
+		return korisnikRepository.findByEmail(username);
+	}
 }

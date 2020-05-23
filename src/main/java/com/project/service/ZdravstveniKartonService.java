@@ -21,4 +21,9 @@ public class ZdravstveniKartonService {
 	public ZdravstveniKarton save(ZdravstveniKarton zdravstveniKarton) {
 		return zdravstveniKartonRepository.save(zdravstveniKarton);
 	}
+
+	public ZdravstveniKarton fingByPacijent(Long id) {
+		// TODO Auto-generated method stub
+		return zdravstveniKartonRepository.findByPacijentId(id);
+	}
 }

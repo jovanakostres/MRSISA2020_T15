@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.config.CustomUserDetails;
 import com.project.dto.ZahtevZaRegistracijuDto;
 import com.project.model.Korisnik;
 import com.project.model.Pacijent;
@@ -130,4 +131,17 @@ public class AuthorizationController {
 	    public void logout(@RequestParam (value = "access_token") String accessToken){
 	        tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken));
 	 }
+	 
+	 @GetMapping(value ="/profil")
+	   public Korisnik getProfil() {
+		   
+		   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	       
+		   Korisnik p = korisnikService.findByEmail(userDetails.getUsername());
+		   System.out.println(p.getIme() + " " +p.getPrezime());
+		   
+		   System.out.println(p == null);
+		   
+		   return p;
+	   }
 }
