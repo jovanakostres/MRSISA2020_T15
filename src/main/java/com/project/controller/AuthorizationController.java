@@ -140,7 +140,7 @@ public class AuthorizationController {
 		   Korisnik p = korisnikService.findByEmail(userDetails.getUsername());
 		   System.out.println(p.getIme() + " " +p.getPrezime());
 		   
-		   System.out.println(p == null);
+		   
 		   
 		   return p;
 	   }
