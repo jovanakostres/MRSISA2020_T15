@@ -21,10 +21,12 @@ import com.project.dto.ZahtevZaRegistracijuDto;
 import com.project.model.Korisnik;
 import com.project.model.Pacijent;
 import com.project.model.ZahtevZaRegistraciju;
+import com.project.model.ZdravstveniKarton;
 import com.project.service.EmailService;
 import com.project.service.KorisnikService;
 import com.project.service.PacijentService;
 import com.project.service.ZahtevZaRegistracijuService;
+import com.project.service.ZdravstveniKartonService;
 
 @RestController
 @RequestMapping("/api")
@@ -38,6 +40,9 @@ public class AuthorizationController {
     
     @Autowired
     EmailService emailService;
+    
+    @Autowired
+    ZdravstveniKartonService zdravstveniKartonService;
 	
     @Autowired
     ZahtevZaRegistracijuService zahtevZaRegistracijuService;
@@ -75,11 +80,13 @@ public class AuthorizationController {
         	ZahtevZaRegistraciju zahtev = zahtevZaRegistracijuService.findById(zahtevDto.getId());
         	zahtevZaRegistracijuService.delete(zahtev);
         	Pacijent pacijent = new Pacijent(zahtev.getEmail(),zahtev.getLozinka(),zahtev.getIme(),zahtev.getPrezime(),zahtev.getAdresa(),zahtev.getBroj(),zahtev.getLbo());
-        	pacijentService.save(pacijent);
+        	ZdravstveniKarton zk = new ZdravstveniKarton(pacijentService.save(pacijent));
+        	//pacijentService.save(pacijent);
+        	zdravstveniKartonService.save(zk);
         	emailService.sendPrihvatanjeReg(pacijent);
         	return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

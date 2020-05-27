@@ -6,4 +6,8 @@ import com.project.model.Dijagnoza;
 
 public interface DijagnozaRepository extends JpaRepository<Dijagnoza, Long>{
 
+	boolean existsByNaziv(String naziv);
+
+	Dijagnoza findByNaziv(String imeD);
+
 }

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Klinika {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "klinika_generator")
-	@SequenceGenerator(name="klinika_generator", sequenceName = "klinika_seq")
+	@SequenceGenerator(name="klinika_generator",initialValue = 3, sequenceName = "klinika_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	

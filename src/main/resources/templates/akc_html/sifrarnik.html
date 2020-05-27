@@ -1,0 +1,64 @@
+<div id="tabelaSifrarnik" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="tableS" >
+	
+	<form class="form-inline" action="" style = "margin: 25px 0px 0px 0px;">
+	  <h2 >Sifrarnik</h2>
+		<div class="pull-right">
+			<button type="button" class="btn btn-primary" v-on:click="modal_dodaj_stavku">Dodaj novu stavku</button>
+			<button type="button" class="btn btn-primary" v-on:click="modal_dodaj_dijagnozu">Dodaj novu dijagnozu</button>
+			<button type="button" class="btn btn-primary" v-on:click="modal_dodaj_lek">Dodaj novi lek</button>
+		</div>
+	</form>
+	
+	<ul class="nav nav-tabs">
+  		<li class="active"><a data-toggle="tab" href="#sif">&#352;ifarnik</a></li>
+  		<li><a data-toggle="tab" href="#dij">Dijagnoze</a></li>
+  		<li><a data-toggle="tab" href="#leko">Lekovi</a></li>
+  	</ul>
+  	
+  	<div class="tab-content">
+  	<div id="sif" class="tab-pane fade in active">
+	<table class="table table-bordered">
+		<thead>
+			<tr >
+        		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>
+    		</tr>
+		</thead>
+		<tbody v-if="sifrarnik.length > 0">
+        	<tr v-for="(item, index) in sifrarnik" :key="index">
+            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
+          	</tr>
+    	</tbody>
+	</table>
+	</div>
+	
+	<div id="dij" class="tab-pane fade">
+	<table class="table table-bordered">
+		<thead>
+			<tr >
+        		<th class="col-md-3" > Naziv dijagnoze</th>
+    		</tr>
+		</thead>
+		<tbody v-if="dijagnoze.length > 0">
+        	<tr v-for="(item, index) in dijagnoze" :key="index">
+            	<td class="col-md-3">{{item}}</td>
+          	</tr>
+    	</tbody>
+	</table>
+	</div>
+	
+	<div id="leko" class="tab-pane fade">
+	<table class="table table-bordered">
+		<thead>
+			<tr >
+        		<th class="col-md-3"> Naziv leka</th>
+    		</tr>
+		</thead>
+		<tbody v-if="lekovi.length > 0">
+        	<tr v-for="(item, index) in lekovi" :key="index">
+            	<td class="col-md-3">{{item}}</td>
+          	</tr>
+    	</tbody>
+	</table>
+	</div>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+<div id="modalLek" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalL">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalLek').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Dodavanje novog leka</h4>
+      </div>
+      <div class="modal-body">
+       	<div class="form-group" style="margin:10px 10px 10px 10px;">
+        	<label for="opis">Naziv:</label>
+    		<input type="text" class="form-control" v-model="lek" id="lek"></textarea>
+    	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="document.getElementById('modalLek').style.display='none'">Nazad</button>
+        <button type="button" class="btn btn-success" v-on:click="dodaj_lek">Dodaj lek</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

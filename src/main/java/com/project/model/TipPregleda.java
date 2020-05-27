@@ -21,7 +21,7 @@ public class TipPregleda {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tip_pregleda_generator")
-	@SequenceGenerator(name="tip_pregleda_generator", sequenceName = "tip_pregleda_seq")
+	@SequenceGenerator(name="tip_pregleda_generator",initialValue = 3, sequenceName = "tip_pregleda_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	

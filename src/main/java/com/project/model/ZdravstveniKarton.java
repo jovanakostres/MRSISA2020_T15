@@ -31,13 +31,13 @@ public class ZdravstveniKarton {
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
-	@Column(name="visina", unique=false, nullable=false)
+	@Column(name="visina", unique=false, nullable=true)
 	private Integer visina;
 	
-	@Column(name="tezina", unique=false, nullable=false)
+	@Column(name="tezina", unique=false, nullable=true)
 	private Integer tezina;
 	
-	@Column(name="krvna_grupa", unique=false, nullable=false)
+	@Column(name="krvna_grupa", unique=false, nullable=true)
 	private String krvnaGrupa;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -52,6 +52,13 @@ public class ZdravstveniKarton {
 	public ZdravstveniKarton() {
 		
 	}
+
+	
+	public ZdravstveniKarton(Pacijent pacijent) {
+		super();
+		this.pacijent = pacijent;
+	}
+
 
 	public Long getId() {
 		return id;

@@ -9,10 +9,12 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.config.CustomUserDetails;
 import com.project.dto.KalendarDto;
 import com.project.model.Pacijent;
 import com.project.model.Pregled;
@@ -36,6 +38,7 @@ public class LekarController {
 	
 	   @GetMapping(value ="/pacijentiklinike")
 	   public Set<Pacijent> getPacijenti() {
+		   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		   /*
 		   Pacijent k = new Pacijent("aaa@email.com", "aaa", "aaa", "aaa", "aaa", "aaa","aaa");
 		   Set<Pacijent> lista = new HashSet<Pacijent>();
@@ -43,15 +46,16 @@ public class LekarController {
 		   lista.add(k);
 		   return lista;
 		   */
-		   return lekarService.getPacijentiKlinike(3L);
+		   return lekarService.getPacijentiKlinike(lekarService.findByEmail(userDetails.getUsername()).getId());
 	   }
 	   
 	   @GetMapping(value ="/radnikalendar")
 	   public Set<KalendarDto> getRadKal() {
 		   Set<KalendarDto> kalendar = new HashSet<KalendarDto>();
 		   LocalTime lt = LocalTime.of(00,00,00);
+		   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		   
-		   for (Pregled pregled : pregledService.findAll()) {
+		   for (Pregled pregled : lekarService.findByEmail(userDetails.getUsername()).getPregledi()) {
 			   if(pregled.getOperacija()) {
 				   kalendar.add(new KalendarDto("Operacija " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
 			   }else {
@@ -60,7 +64,7 @@ public class LekarController {
 			   
 		}
 		   
-		   for (ZauzetoVreme zv : zauzetoVremeService.findAll()) {
+		   for (ZauzetoVreme zv : lekarService.findByEmail(userDetails.getUsername()).getZauzetoVreme()) {
 			   kalendar.add(new KalendarDto(zv.getTipZauzetosti().toString(), LocalDateTime.of(zv.getDatumOd(),lt),LocalDateTime.of(zv.getDatumDo(),lt)));
 		}
 		   

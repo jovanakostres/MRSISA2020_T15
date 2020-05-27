@@ -6,4 +6,8 @@ import com.project.model.Lek;
 
 public interface LekRepository extends JpaRepository<Lek, Long>{
 
+	boolean existsByNaziv(String nazivLeka);
+
+	Lek findByNaziv(String imeL);
+
 }

@@ -30,7 +30,7 @@ public class Pregled {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pregled_generator")
-	@SequenceGenerator(name="pregled_generator", sequenceName = "pregled_seq")
+	@SequenceGenerator(name="pregled_generator",initialValue = 2, sequenceName = "pregled_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	

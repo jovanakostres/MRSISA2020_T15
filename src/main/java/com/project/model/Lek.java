@@ -19,11 +19,11 @@ import javax.persistence.Table;
 public class Lek {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lek_generator")
-	@SequenceGenerator(name="lek_generator", sequenceName = "lek_seq")
+	@SequenceGenerator(name="lek_generator",initialValue = 3, sequenceName = "lek_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
-	@Column(name="naziv", unique=false, nullable=false)
+	@Column(name="naziv", unique=true, nullable=false)
 	private String naziv;
 	
 	/*
@@ -35,6 +35,15 @@ public class Lek {
 	public Lek() {
 		
 	}
+	
+	
+
+	public Lek(String naziv) {
+		super();
+		this.naziv = naziv;
+	}
+
+
 
 	public Long getId() {
 		return id;

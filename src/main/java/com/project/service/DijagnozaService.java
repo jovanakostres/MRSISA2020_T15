@@ -23,4 +23,18 @@ public class DijagnozaService {
 		// TODO Auto-generated method stub
 		return dijagnozaRepository.findById(id).orElseGet(null);
 	}
+
+	public void save(Dijagnoza dijagnoza) {
+		dijagnozaRepository.save(dijagnoza);
+	}
+
+	public boolean existsByNaziv(String naziv) {
+		// TODO Auto-generated method stub
+		return dijagnozaRepository.existsByNaziv(naziv);
+	}
+
+	public Dijagnoza findByNaziv(String imeD) {
+		// TODO Auto-generated method stub
+		return dijagnozaRepository.findByNaziv(imeD);
+	}
 }

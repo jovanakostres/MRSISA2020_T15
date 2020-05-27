@@ -1,0 +1,23 @@
+<div id="modalDijagnoza" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalD">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalDijagnoza').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Dodavanje nove dijagnoze</h4>
+      </div>
+      <div class="modal-body">
+       	<div class="form-group" style="margin:10px 10px 10px 10px;">
+        	<label for="opis">Naziv:</label>
+    		<input type="text" class="form-control" v-model="dijag" id="dijag"></textarea>
+    	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="document.getElementById('modalDijagnoza').style.display='none'">Nazad</button>
+        <button type="button" class="btn btn-success" v-on:click="dodaj_dijagnozu">Dodaj dijagnozu</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

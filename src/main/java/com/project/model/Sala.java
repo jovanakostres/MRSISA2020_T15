@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Sala {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sala_generator")
-	@SequenceGenerator(name="sala_generator", sequenceName = "sala_seq")
+	@SequenceGenerator(name="sala_generator",initialValue = 2, sequenceName = "sala_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	

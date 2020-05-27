@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class ZauzetoVreme {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "zauzeto_generator")
-	@SequenceGenerator(name="zauzeto_generator", sequenceName = "zauzeto_seq")
+	@SequenceGenerator(name="zauzeto_generator",initialValue = 2, sequenceName = "zauzeto_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Integer id;
 	

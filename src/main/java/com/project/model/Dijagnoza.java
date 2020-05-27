@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Dijagnoza {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dijagnoza_generator")
-	@SequenceGenerator(name="dijagnoza_generator", sequenceName = "dijagnoza_seq")
+	@SequenceGenerator(name="dijagnoza_generator",initialValue = 3 ,sequenceName = "dijagnoza_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
@@ -33,6 +33,12 @@ public class Dijagnoza {
 
 	public Dijagnoza() {
 		
+	}
+	
+	
+	public Dijagnoza(String naziv) {
+		super();
+		this.naziv = naziv;
 	}
 
 	public Long getId() {

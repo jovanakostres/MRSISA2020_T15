@@ -2,10 +2,12 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Početna strana</title>
+	<title>Admin</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
   		<style>
   		html, body {
     width: 100%;
@@ -34,7 +36,7 @@
 	    	<ul class="nav navbar-nav">
 				<li><a class="navbar-brand" v-on:click="prikazi_zahteve">Zahtevi za registraciju</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_zpreglede" >Registrovanje klinika</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Šifrarnik</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_sifrarnik" >Šifarnik</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
 	    	<ul class="nav navbar-nav navbar-right">
@@ -42,10 +44,15 @@
 	    	</ul>
   		</div>
 	</nav>
+	<login-component></login-component>
 	<div th:replace="pacijent_html/Profil :: regg"></div>
 	<div th:replace="akc_html/RZahtevi :: table"></div>
 	<div th:replace="akc_html/modalZahtev :: modalP"></div>
 	<div th:replace="akc_html/modalOdbijanje :: modalO"></div>
+	<div th:replace="akc_html/modalDijagnoza :: modalD"></div>
+	<div th:replace="akc_html/modalSifrarnik :: modalSif"></div>
+	<div th:replace="akc_html/modalLek :: modalL"></div>
+	<div th:replace="akc_html/sifrarnik :: tableS"></div>
 	<div th:replace="tabela :: table"></div>
 </div>
 </body>
@@ -76,10 +83,24 @@
 			adresa : '',
 			broj : '',
 			obrazlozenje: '',
+			dijag: '',
+			lek: '',
 			items : [],
 			columns : [],
 			labels : [],
+			sifrarnik : [],
+			dijagnoze : [],
+			lekovi : [],
 			item : {}
+		},
+		mounted() {
+			$('#dijagnozaSelect').select2({
+                placeholder: "Izaberi dijagnozu..."
+            });
+			
+			$('#lekSelect').select2({
+                placeholder: "Izaberi lek..."
+            });
 		},
 		methods: {
 			prikazi_profil()
@@ -114,7 +135,7 @@
                     this.labels = [ 'Email', 'Ime', 'Prezime', 'Datum', 'Vreme'];
                     this.items = response.data;
                     $( "#tabelaRZahtevi" ).show();
-                    console.log(this.items[0].naziv);
+                    //console.log(this.items[0].naziv);
                 }.bind(this));
 				
             },
@@ -133,16 +154,36 @@
                 }.bind(this));
 				
             },
-			prikazi_karton()
+			prikazi_sifrarnik()
 			{
             	this.sakrij_sve();
-				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/akc/sifrarnik' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
-                    this.ime_pl = response.data;
-                    console.log(this.ime_pl);
+                	this.columns = [ 'imeD', 'imeL'];
+                    this.labels = [ 'Naziv dijagnoze', 'Naziv leka'];
+                    this.sifrarnik = response.data;
+                    
+                    $('.js-example-basic-single').val(null).trigger('change');
+    				$('.js-example-basic-single').html('').select2({data: [{id: '', text: ''}]});
+                    
+                    for(stavka of this.sifrarnik){
+                    	if(!this.dijagnoze.includes(stavka['imeD'])){
+                    		this.dijagnoze.push(stavka['imeD']);
+                    		var newOption = new Option(stavka['imeD'], stavka['imeD'], false, false);
+        					$('#dijagnozaSelect').append(newOption).trigger('change');
+                    	}
+                    	if(!this.lekovi.includes(stavka['imeL'])){
+                    		this.lekovi.push(stavka['imeL']);
+                    		var newOption = new Option(stavka['imeL'], stavka['imeL'], false, false);
+        					$('#lekSelect').append(newOption).trigger('change');
+                    	}
+                    }
+                    
+                    $('.js-example-basic-single' + " option")[0].remove();
+                    
+                    $( "#tabelaSifrarnik" ).show();
                 }.bind(this));
             },
             validEmail:function(email) {
@@ -202,6 +243,62 @@
                 	document.location.replace("/akcPocetna");
                 });
 			},
+			modal_dodaj_dijagnozu(){
+				$( "#modalDijagnoza" ).show();
+			},
+			modal_dodaj_lek(){
+				$( "#modalLek" ).show();
+			},
+			modal_dodaj_stavku(){
+				$( "#modalSifrarnik" ).show();
+			},
+			dodaj_dijagnozu(){
+				axios({
+                	method : 'post',
+                    url : "/api/dijagnoza/dodaj_dijagnozu" + '?access_token=' + getCookie("access_token"),
+                    data: {nazivDijagnoze:this.dijag}
+                }).then(function(response){      
+                	this.dijagnoze.push(this.dijag);
+                	var newOption = new Option(this.dijag, this.dijag, false, false);
+					$('#dijagnozaSelect').append(newOption).trigger('change');
+					
+                	$( "#modalDijagnoza" ).hide(); 	
+                }.bind(this)).catch((error)=>{
+                	console.log(error);
+                	alert("Postoji dijagnoza sa tim nazivom");
+                });
+			},
+			dodaj_lek(){
+				axios({
+                	method : 'post',
+                    url : "/api/lek/dodaj_lek" + '?access_token=' + getCookie("access_token"),
+                    data: {nazivLeka:this.lek}
+                }).then(function(response){ 
+                	this.lekovi.push(this.lek);
+                	var newOption = new Option(this.lek, this.lek, false, false);
+					$('#lekSelect').append(newOption).trigger('change');
+                	$( "#modalLek" ).hide();
+                }.bind(this)).catch((error)=>{
+                	alert("Postoji lek sa tim nazivom");
+                });
+			},
+			dodaj_u_sifarnik(){
+				var d = $('#dijagnozaSelect').find(':selected')[0];
+				var l = $('#lekSelect').find(':selected')[0];
+				
+				axios({
+                	method : 'post',
+                    url : "/api/akc/dodaj_u_sifarnik" + '?access_token=' + getCookie("access_token"),
+                    data: {imeL:l.text,imeD:d.text}
+                }).then(function(response){ 
+                	if(response.data == "")
+                		throw "Stavka vec postoji";
+                	this.sifrarnik.push(response.data);
+                	$( "#modalSifrarnik" ).hide();
+                }.bind(this)).catch((error)=>{
+                	alert(error);
+                });
+			},
 			izmeni_korisnika()
             {
             	if(!this.check()) return;
@@ -221,6 +318,7 @@
             	$( "#modalOdbijanje" ).hide();
             	$( "#registracija" ).hide();
             	$( "#tabelaRZahtevi" ).hide();
+            	$( "#tabelaSifrarnik" ).hide();
             	$( "#tabela" ).hide();
             	
             },
