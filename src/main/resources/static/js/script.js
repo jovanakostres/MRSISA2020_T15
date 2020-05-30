@@ -29,7 +29,7 @@ Vue.component('login-component',{
     */
 	template: '<div style="display:none;"></div>',
 	data: function(){
-        return {role : ""},
+        return {role : ""};
     },
     mounted(){
         if(getCookie("access_token")){

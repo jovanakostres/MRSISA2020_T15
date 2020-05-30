@@ -44,6 +44,7 @@
 		<div th:replace="pacijent_html/Klinike :: table"></div>	
 		<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
 		<div th:replace="pacijent_html/Lekari :: table"></div>
+		<div th:replace="pacijent_html/ZKarton :: zk"></div>
 	</div>
 </body>
 
@@ -89,7 +90,10 @@
 			tip_pregleda : '',
 			datum : '',
 			definisani_pregledi: [],
-			selected : ''
+			selected : '',
+			krvna_grupa : '',
+			visina : '',
+			tezina : ''
 		},
 		mounted() {
 			//this.pronadji_preglede();
@@ -100,9 +104,7 @@
             },
 			prikazi_profil()
 			{
-				$( "#tabela" ).hide();
-				$("#tabela_lekari").hide();
-				$( "#registracija" ).show();
+				this.hideAll();
 				alert(document.cookie);
                 axios({
                 	method : 'get',
@@ -133,8 +135,7 @@
 			prikazi_klinike()
 			{
             	this.pronadji_preglede();
-            	$( "#registracija" ).hide();
-            	$("#tabela_lekari").hide();
+            	this.hideAll();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
@@ -162,21 +163,24 @@
             },
 			prikazi_karton()
 			{
-				$( "#registracija" ).show();
-				$("#tabela_lekari").hide();
-				$("#tabela").hide();
+				this.hideAll();
 				console.log("Nesto se desilo")
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/pacijent/zKarton' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
-                    this.ime_pl = response.data;
-                    console.log(this.ime_pl);
+                    this.visina = response.data.visina;
+                    this.tezina = response.data.tezina;
+                    this.krvna_grupa = response.data.krvnaGrupa;
+                    this.columns = [ 'cena', 'datum', 'vremeOd', 'imeP', 'prezimeP', 'sala', 'tipOp'];
+                    this.labels = [ 'Cena', 'Datum', 'Vreme', 'Lekar', '', 'Sala', 'Tip pregleda'];
+                    this.items = response.data.pregledi;
+                    $("#zkarton").show();
                 }.bind(this));
             },
             unapred_definisani_pregledi(klinika_id)
             {
-            	$("#tabela").hide();
+            	this.hideAll();
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/unapred_definisani'+ '?access_token=' + getCookie("access_token"),
@@ -281,9 +285,7 @@
             },
             lista_lekara_tip(id)
             {
-            	$( "#registracija" ).hide();
-            	$("#tabela").hide();
-            	$("#zakazi").hide();
+            	this.hideAll();
             	this.klinika_id = id;
 				console.log(this.klinika_id);
 				this.datum = $("#datum").val();
@@ -302,9 +304,7 @@
             lista_lekara(id)
             {
             	this.klinika_id = id;
-            	$( "#registracija" ).hide();
-            	$("#tabela").hide();
-            	$("#zakazi").hide();
+            	this.hideAll();
 				console.log(this.klinika_id);
 				this.datum = $("#datum").val();
                 axios({
@@ -352,6 +352,13 @@
             log_out_k(){
             	this.$root.$emit('logged-out')
             	//Event.$emit('logged-out');
+            },
+            hideAll(){
+            	$( "#zkarton" ).hide();
+            	$( "#tabela" ).hide();
+            	$( "#tabela_lekari" ).hide();
+            	$( "#registracija" ).hide();
+            	$( "#unapred_definisani" ).hide();
             }
 		}
 		});

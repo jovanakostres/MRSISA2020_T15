@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.config.CustomUserDetails;
 import com.project.dto.KlinikaPretragaDTO;
 import com.project.dto.LekarDTO;
+import com.project.dto.ZdravstveniKartonDTO;
 import com.project.model.Klinika;
-import com.project.model.Korisnik;
 import com.project.model.Lekar;
 import com.project.model.Pacijent;
 import com.project.model.Pregled;
@@ -344,6 +344,20 @@ public class PacijentController {
 		}
 	   
 	   return new ResponseEntity(HttpStatus.OK);
+   }
+   
+   @RequestMapping(value = "/zKarton", method = RequestMethod.GET)
+   public ZdravstveniKartonDTO zdravstveniKarton()
+   {
+	   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       
+	   Pacijent p = pacijentService.findByEmail(userDetails.getUsername());
+	   
+	   ZdravstveniKarton zk = zkService.fingByPacijent(p.getId());
+	   
+	   ZdravstveniKartonDTO zkdto = new ZdravstveniKartonDTO(zk);
+	   
+	   return zkdto;
    }
    
 }

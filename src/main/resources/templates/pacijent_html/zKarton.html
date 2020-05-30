@@ -1,26 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>Zdravstveni karton</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script></head>
-<body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-	    	<ul class="nav navbar-nav">
-				<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Klinike.html">Prikaz klinika</a></li>
-		      	<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Istorija.html">Istorija</a></li>
-		      	<li class="active"><a class="navbar-brand" >Zdravstveni karton</a></li>
-		      	<li><a class="navbar-brand" href="http://localhost:8080/pacijent_html/Profil.html">Profil</a></li>
-		    </ul>
-	    	<ul class="nav navbar-nav navbar-right">
-	      		<li><a href="http://localhost:8080/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-	    	</ul>
-  		</div>
-	</nav>
-</body>
-
-
-</html>
+<div id="zkarton" class = "forma" style = "display:none; width: 30%; margin: auto;" th:fragment="zk">
+	<table class = "table table-borderless">
+		<thead></thead>
+		<tbody>
+			<tr>
+				<th>Krvna grupa: </th>
+				<th><label> {{ krvna_grupa }} </label></th>
+			</tr>
+			<tr>
+				<th>Tezina </th>
+				<th><label> {{ tezina }} </label></th>
+			</tr>
+			<tr>
+				<th>Visina </th>
+				<th><label> {{ visina }} </label></th>
+			</tr>
+		</tbody>
+	</table>
+	<h4>Pregledi:</h4>
+	<table class = "table table-borderless">
+		<thead>
+			<tr >
+        		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>
+    		</tr>
+		</thead>
+		<tbody v-if="items.length > 0">
+        	<tr v-for="(item, index) in items" :key="index">
+            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
+          	</tr>
+    	</tbody>
+	</table>
+</div>
