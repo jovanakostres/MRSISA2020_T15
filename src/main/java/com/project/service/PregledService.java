@@ -63,4 +63,9 @@ public class PregledService {
 		// TODO Auto-generated method stub
 		return pregledRepository.findAll();
 	}
+
+	public List<Pregled> findByLekarPacijent(Long id, Long id2) {
+		// TODO Auto-generated method stub
+		return pregledRepository.findByLekarPacijent(id,id2);
+	}
 }

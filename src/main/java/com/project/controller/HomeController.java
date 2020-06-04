@@ -42,6 +42,11 @@ public class HomeController {
 		return "lekar_html/unosIzvestaja";
 		
 	}
-	
+
+	@GetMapping(value = "/izmena_izvestaja/{id}")
+	public String izmenaIzvestaja() {
+		return "lekar_html/izmenaIzvestaja";
+		
+	}
 	
 }

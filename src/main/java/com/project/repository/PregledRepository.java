@@ -13,4 +13,7 @@ public interface PregledRepository extends JpaRepository<Pregled, Long>{
 	List<Pregled> findByLekar(Lekar lekar);
 
 	List<Pregled> findByDefinisan(boolean b);
+	
+	@Query("select s from Pregled s where s.lekar.id = ?1 and s.zkPacijenta.id = ?2")
+	List<Pregled> findByLekarPacijent(Long id, Long id2);
 }

@@ -78,8 +78,11 @@
   	</select>
   </div>
   <button type="submit" class="btn btn-success">Zavrsi izvestaj</button>
+  <button type="button" class="btn btn-primary active" v-on:click="prikazi_zk">Zdravstveni karton pacijenta</button>
 </form>
 </div>
+	<login-component></login-component>
+	<div th:replace="lekar_html/modalZdravstveniKarton :: modalZK"></div>
 </div>
 </body>
 
@@ -110,6 +113,10 @@ function promena(){
 			informacije:'',
 			pregledId:'',
 			odabranaDijagnoza:'',
+			visinaZK: '',
+			tezinaZK: '',
+			selected: '',
+			idZK: '',
 			odabraniLekovi:[],
 			key: ""
 		},
@@ -120,6 +127,7 @@ function promena(){
             });
 			this.dobaviInformacije();
 			this.dobaviDijagnoze();
+			this.dobaviZdravstveniKarton();
 			$('#glavniDiv').show();
 		},
 		updated() {
@@ -145,6 +153,21 @@ function promena(){
 				//$("#dijagnozaSelect").addClass("flexselect");
 				//$("select.flexselect").flexselect();
 			},
+			dobaviZdravstveniKarton(){
+				axios({
+                	method : 'get',
+                    url : '/api/pregled/zdravstveni_karton/'  + this.getPregledId() + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                	this.idZK = response.data.id;
+                	this.visinaZK = response.data.visina;
+                	this.tezinaZK = response.data.tezina;
+                    this.selected = response.data.krvnaGrupa;
+                    
+                }.bind(this));	
+			},
+			prikazi_zk(){
+				$("#modalZKarton").show();
+			},
 			sacuvaj(){
 				var s = document.getElementById("dijagnozaSelect");
 				this.odabranaDijagnoza = s.options[s.selectedIndex].value;
@@ -165,6 +188,15 @@ function promena(){
                 	//document.location.replace("/lekarPocetna");
                 	//window.location.href = '/lekarPocetna';
                 }.bind(this));	
+			},
+			sacuvaj_zk(){
+				axios({
+                	method : 'post',
+                    url : '/api/zdravstveni_karton/sacuvaj' + '?access_token=' + getCookie("access_token"),
+                    data:{id:this.idZK,visina:this.visinaZK,tezina:this.tezinaZK,krvnaGrupa:this.selected},
+                }).then(function(response){
+                	$("#modalZKarton").hide();
+                }.bind(this));		
 			},
 			getRecepti(id){
 				for(dijagnoza of this.dijagnoze){

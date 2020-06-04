@@ -26,4 +26,5 @@ public class ZdravstveniKartonService {
 		// TODO Auto-generated method stub
 		return zdravstveniKartonRepository.findByPacijentId(id);
 	}
+
 }

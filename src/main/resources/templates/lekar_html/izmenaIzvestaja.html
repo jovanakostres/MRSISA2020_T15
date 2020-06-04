@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Izmena izveštaja</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel='stylesheet' th:href="@{/css/flexselect.css}" />
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+  		<style>
+  		html, body {
+    width: 100%;
+}
+		span{font-size:150%;margin:0px 0px 15px 0px;}
+		.btn{font-size:110%;}
+		.select2-container {
+    	font-size:15px;
+}
+		.select2-selection
+  		{font-size: 15px}
+		
+		.select2-results__option { 
+  font-size: 15px;
+}
+		.select2-selection__choice { 
+  		height: 30px;}
+  		
+	</style>
+
+  	</head>
+
+<body>
+<div id = "izvestaj">
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+	    	<ul class="nav navbar-nav">
+				<li class="disabled"><a class="navbar-brand" >Prikaz pacijenata</a></li>
+		      	<li class="disabled"><a class="navbar-brand"  >Zakazani pregledi</a></li>
+		      	<li class="disabled"><a class="navbar-brand" >Radni kalendar</a></li>
+		      	<li class="disabled"><a class="navbar-brand" >Godisnji odmor/odsustvo</a></li>
+		      	<li class="disabled"><a class="navbar-brand" >Zakazi pregled/operaciju</a></li>
+		      	<li class="disabled"><a class="navbar-brand" >Profil</a></li>
+		    </ul>
+	    	<ul class="nav navbar-nav navbar-right">
+	      		<li class="disabled"><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+	    	</ul>
+  		</div>
+	</nav>
+<div id="glavniDiv" style="margin:100px;display:none;">
+<form  action="/lekarPocetna" v-on:submit="sacuvaj" autocomplete="off">
+  <p>
+    <span >Sifra izvestaja: <b>{{idI}}</b> </span></br>
+    <span >Ime i prezime pacijenta: <b>{{imeP}}</b> <b>{{prezimeP}}</b></span>
+  </p>
+  <div class="form-group">
+    <label for="opis">Informacije o pregledu:</label>
+    <textarea class="form-control" v-model="informacijeI" rows="10" id="opis"></textarea>
+  </div>
+  <div class="form-group">
+  	<label for="dijagnozaSelect">Dijagnoza:</label>
+  	<br>
+  	<select id="dijagnozaSelect" class="flexselect" style="width:400px;font-size: 16px;
+	font-family: sans-serif;
+	font-weight: 700;
+	color: #444;border: 1px solid #aaa;
+	box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+	border-radius: .5em;padding: .6em 1.4em .5em .8em;">
+  		<option v-for="dijagnoza in dijagnoze" data-placeholder="Izaberi..."  :value="dijagnoza.id">{{ dijagnoza.naziv }}</option>
+  	</select>
+  </div>
+  <div class="form-group">
+  	<label for="receptSelect">Recepti:</label>
+  	<br>
+  	<select id="receptSelect" class="js-example-basic-multiple" multiple="multiple" placeholder="Izaberi opciju..." style="width:400px;height: 50px;">
+  		<!--  <option v-for="recept in recepti" :value="recept.id">{{ recept.naziv }}</option>-->
+  	</select>
+  </div>
+  <button type="submit" class="btn btn-success">Sacuvaj izmene izvestaja</button>
+  <button type="button" class="btn btn-primary active" v-on:click="nazad_pocetna">Nazad</button>
+</form>
+</div>
+	<login-component></login-component>
+</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+<script src= "/js/liquidmetal.js"></script>
+<script src="/js/jquery.flexselect.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
+
+<script>
+
+function promena(){
+	console.log("Desila se promena");
+	var s = document.getElementById("dijagnozaSelect");
+	var value = s.options[s.selectedIndex].value;
+	app.getRecepti(value);
+}
+
+
+	var app = new Vue({
+		el: '#izvestaj',
+		data: {
+			imeP:'',
+			prezimeP:'',
+			lekoviI:'',
+			informacijeI:'',
+			idI:'',
+			dijagnozaI:'',
+			izvestaj:{},
+			dijagnoze:[],
+			recepti:[],
+			data: [],
+			informacije:'',
+			i : 0,
+			odabranaDijagnoza:'',
+			odabraniLekovi:[]
+		},
+		mounted() {
+			$('#receptSelect').select2({
+                multiple: true,
+                placeholder: "Izaberi opciju..."
+            });
+			this.dobaviInformacije();
+			this.dobaviIzvestaj();
+			this.dobaviDijagnoze();
+
+			$('#glavniDiv').show();
+		},
+		updated() {
+		    // Fired every second, should always be true
+		    $("select.flexselect").flexselect();
+		    if(this.dijagnoze.length > 0 && this.dijagnozaI != 0 && this.i == 0){
+		    	$('#dijagnozaSelect')[0].value =  this.dijagnozaI ;
+		    	var s = document.getElementById("dijagnozaSelect");
+                document.getElementById("dijagnozaSelect_flexselect").value = s.options[s.selectedIndex].text;
+                this.getRecepti(s.options[s.selectedIndex].value);
+                this.i += 1;
+		    }
+		    //$('select.flexselect').change(function() { this.getRecepti(this) });
+		},
+		methods: {
+			dobaviInformacije(){
+				axios.get("/api/pregled/pregledIzvestaj/" + this.getIzvestajId() + '?access_token=' + getCookie("access_token")).then(function(response){
+                    this.imeP = response.data.imeP;
+                    this.prezimeP = response.data.prezimeP;
+                }.bind(this));
+			},
+			dobaviIzvestaj(){
+				axios.get("/api/izvestaj/izvestaj_izmena/" + this.getIzvestajId() + '?access_token=' + getCookie("access_token")).then(function(response){
+                    this.lekoviI = response.data.lekoviIds;
+                    this.dijagnozaI = response.data.dijagnozaId;
+                    this.informacijeI = response.data.informacije;
+                    this.idI = response.data.id;
+                    this.izvestaj = response.data;
+                }.bind(this));
+			},
+			dobaviDijagnoze(){
+				axios({
+                	method : 'get',
+                    url : '/api/dijagnoza/dijagnoze' + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                    this.dijagnoze = response.data;
+                }.bind(this));		
+				//$("#dijagnozaSelect").addClass("flexselect");
+				//$("select.flexselect").flexselect();
+			},
+			nazad_pocetna(){
+				document.location.replace("/lekarPocetna");
+			},
+			sacuvaj(){
+				var s = document.getElementById("dijagnozaSelect");
+				this.odabranaDijagnoza = s.options[s.selectedIndex].value;
+				
+				var l = $('.js-example-basic-multiple').find(':selected');
+				for(lek of l){
+					this.odabraniLekovi.push(lek.value);
+				}
+				//var json=JSON.stringify(this.odabraniLekovi);
+				console.log(this.informacije);
+				//this.odabraniLekovi=json;
+				axios({
+                	method : 'post',
+                    url : '/api/izvestaj/sacuvaj_izmene' + '?access_token=' + getCookie("access_token"),
+                    data:{id:this.idI,informacije:this.informacijeI, dijagnozaId:this.odabranaDijagnoza, lekoviIds:this.odabraniLekovi},
+                }).then(function(response){
+                	console.log('aaa');
+                	//document.location.replace("/lekarPocetna");
+                	//window.location.href = '/lekarPocetna';
+                }.bind(this));	
+			},
+			getRecepti(id){
+				for(dijagnoza of this.dijagnoze){
+					if (dijagnoza['id'] == id){
+						this.recepti = dijagnoza['lekovi'];
+						break;
+					}
+				}
+
+				$('.js-example-basic-multiple').val(null).trigger('change');
+				$('.js-example-basic-multiple').html('').select2({data: [{id: '', text: ''}]});
+				 $('.js-example-basic-multiple' + " option")[0].remove();
+				 
+				for (recept of this.recepti){
+					if(this.lekoviI.includes(recept['id'].toString())){
+						var newOption = new Option(recept.naziv, recept.id, true, true);
+					}else{
+						var newOption = new Option(recept.naziv, recept.id, false, false);
+					}
+					$('.js-example-basic-multiple').append(newOption).trigger('change');
+				}
+				
+            },
+			getIzvestajId(){
+                var splitted = window.location.href.split('/');
+                this.pregledId = splitted[splitted.length-1];
+                return splitted[splitted.length-1];
+            }
+		}
+		});
+
+</script>
+
+</html>

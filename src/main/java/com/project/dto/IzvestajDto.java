@@ -1,6 +1,7 @@
 package com.project.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -18,6 +19,12 @@ public class IzvestajDto {
 	private String informacije;
 	
 	private String dijagnozaId ;
+	
+	private LocalDate datumP;
+	
+	private LocalTime vremeP ;
+	
+	private LocalTime vremeZ ;
 	
 	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private List<String> lekoviIds;
@@ -37,6 +44,18 @@ public class IzvestajDto {
 		this.informacije = informacije;
 		this.dijagnozaId = dijagnozaId;
 		this.lekoviIds = lekoviIds;
+	}
+	
+	public IzvestajDto(String id, String pregledId, String informacije, String dijagnozaId, LocalDate datumP,
+			LocalTime vremeP, LocalTime vremeZ) {
+		super();
+		this.id = id;
+		this.pregledId = pregledId;
+		this.informacije = informacije;
+		this.dijagnozaId = dijagnozaId;
+		this.datumP = datumP;
+		this.vremeP = vremeP;
+		this.vremeZ = vremeZ;
 	}
 
 	public IzvestajDto() {
@@ -82,6 +101,33 @@ public class IzvestajDto {
 	public void setLekoviIds(List<String> lekoviIds) {
 		this.lekoviIds = lekoviIds;
 	}
+
+	public LocalDate getDatumP() {
+		return datumP;
+	}
+
+	public void setDatumP(LocalDate datumP) {
+		this.datumP = datumP;
+	}
+
+	public LocalTime getVremeP() {
+		return vremeP;
+	}
+
+	public void setVremeP(LocalTime vremeP) {
+		this.vremeP = vremeP;
+	}
+
+	public LocalTime getVremeZ() {
+		return vremeZ;
+	}
+
+	public void setVremeZ(LocalTime vremeZ) {
+		this.vremeZ = vremeZ;
+	}
+
+
+	
 
 	
 }

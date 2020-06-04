@@ -52,8 +52,9 @@
 	<div th:replace="pacijent_html/Profil :: regg"></div>
 	<div th:replace="lekar_html/ZPregledi :: table"></div>
 	<div th:replace="lekar_html/modalPregled :: modalP"></div>
+	<div th:replace="lekar_html/modalIzvestaj :: modalI"></div>
 	<div th:replace="lekar_html/radniKalendar :: calendar"></div>
-	<div th:replace="tabela :: table"></div>
+	<div th:replace="lekar_html/Pacijenti :: tableP"></div>
 </div>
 </body>
 
@@ -86,6 +87,7 @@
 			items : [],
 			columns : [],
 			labels : [],
+			izvestaji : [],
 			item : {}
 		},
 		mounted(){
@@ -141,7 +143,7 @@
                     this.columns = [ 'email', 'ime', 'prezime', 'broj'];
                     this.labels = [ 'Email', 'Ime', 'Prezime', 'Broj'];
                     this.items = response.data;
-                    $( "#tabela" ).show();
+                    $( "#tabelaPacijenti" ).show();
                     console.log(this.items[0].naziv);
                 }.bind(this));
 				
@@ -185,6 +187,19 @@
                 	scheduler.parse(response.data,"json");
                 }.bind(this));
             	$( "#scheduler_here" ).show();
+            },
+            prikazi_izvestaje(id){
+            	axios({
+                	method : 'get',
+                    url : '/api/izvestaj/izvestaji_lekar/'  + id + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                	this.izvestaji = response.data;
+                	$( "#modalIzvestaj" ).show();
+                }.bind(this));	
+            	
+            },
+            izmeni_izvestaj(id){
+            	document.location.replace("/izmena_izvestaja/" + id);
             },
             validEmail:function(email) {
 			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -274,7 +289,7 @@
             	$( "#modalZPregledi" ).hide();
             	$( "#registracija" ).hide();
             	$( "#tabelaZPregledi" ).hide();
-            	$( "#tabela" ).hide();
+            	$( "#tabelaPacijenti" ).hide();
             	$( "#scheduler_here" ).hide();
             }
 		}
