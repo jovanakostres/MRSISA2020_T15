@@ -37,6 +37,12 @@ public class HomeController {
 		
 	}
 	
+	@GetMapping(value = "akPocetna")
+	public String akPocetna() {
+		System.out.println("admin klinike");
+		return "adm_klinike_html/akPocetna";
+	}
+	
 	@GetMapping(value = "/Izvestaj/{id}")
 	public String unosIzvestaja() {
 		return "lekar_html/unosIzvestaja";

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Početna strana</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  		<style>
+  		html, body {
+	    	width: 100%;
+		}
+		#tabela {margin: 0 auto;}
+	</style>
+  	
+  	</head>
+<body>
+	<div id = "admin">
+		<div id = "nav">
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+		    	<ul class="nav navbar-nav">
+					<li><a class="navbar-brand" v-on:click="pregledi">Nezakazani pregledi</a></li>			      	
+			    </ul>
+		    	<ul class="nav navbar-nav navbar-right">
+		      		<li><a v-on:click="log_out_k"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+		    	</ul>
+	  		</div>
+		</nav>
+		</div>
+		<login-component></login-component>
+		<div th:replace="adm_klinike_html/NezakazaniPregledi :: nezakazani"></div>
+	</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
+
+
+<script>
+
+	var app = new Vue({
+		el: '#admin',
+		data: {
+			npregledi:[],
+			columns: [],
+			labels: []
+		},
+		mounted() {
+			//this.pronadji_preglede();
+		},
+		methods: {
+			isLoggedIn(){
+                return window.Event.isLoggedIn;
+            },
+            log_out_k(){
+            	this.$root.$emit('logged-out')
+            	//Event.$emit('logged-out');
+            },
+            pregledi(){
+            	this.hideAll();
+            	axios({
+                	method : 'get',
+                    url : 'api/adminKlinike/pregledi' + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                    this.npregledi = response.data;
+                    this.columns = [ 'datum', 'imeP', 'prezimeP', 'tipOp', 'vremeOd'];
+                    this.labels = [ 'Datum', 'Lekar', '','Tip', 'Vreme'];
+                    console.log(this.npregledi[0]);
+                    $( "#nezakazani" ).show();
+                }.bind(this));
+            },
+            hideAll(){
+            	$( "#nezakazani" ).hide();
+            }
+		}
+		});
+	
+	</script>
+</html>

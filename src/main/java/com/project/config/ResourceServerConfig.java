@@ -18,7 +18,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
         		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/","/favicon.ico","/api/registracija","/registracijaPacijenta","/lekarPocetna","/pacijentPocetna","/akcPocetna","/Izvestaj/**","/izmena_izvestaja/**").permitAll()
+                .antMatchers("/","/favicon.ico","/api/registracija","/registracijaPacijenta","/lekarPocetna","/pacijentPocetna","/akcPocetna","/Izvestaj/**","/izmena_izvestaja/**", "/akPocetna").permitAll()
                 .antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
                 .antMatchers("/api/akc/**").hasAuthority("ROLE_AKC")
                 .antMatchers("/api/potvrdiRegistraciju").hasAuthority("ROLE_AKC")
@@ -28,6 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/api/lek/**").hasAuthority("ROLE_AKC")
                 .antMatchers("/api/izvestaj/**").hasAuthority("ROLE_L")
                 .antMatchers("/api/pacijent/**").hasAuthority("ROLE_P")
+                .antMatchers("/api/adminKlinike/**").hasAuthority("ROLE_AK")
         		.anyRequest()
         		.authenticated();
         		//antMatchers("/lekarPocetna/**").authenticated();
