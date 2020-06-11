@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,9 @@ public class AuthorizationController {
     @Autowired
     TokenStore tokenStore;
     
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    
     @RequestMapping(value = "/registracija", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody ZahtevZaRegistraciju pacijent) {
     	System.out.println(pacijent);
@@ -63,6 +67,7 @@ public class AuthorizationController {
             	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }else {
                 ZahtevZaRegistraciju zahtev = new ZahtevZaRegistraciju(pacijent.getEmail(),pacijent.getLozinka(),pacijent.getIme(),pacijent.getPrezime(),pacijent.getAdresa(),pacijent.getBroj(),pacijent.getLbo());
+                zahtev.setLozinka(passwordEncoder.encode(pacijent.getLozinka()));
                 zahtevZaRegistracijuService.save(zahtev);
             }
             
@@ -129,8 +134,10 @@ public class AuthorizationController {
 		   String p = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0].toString();
 		   System.out.println("P: " + p);
 		   List<String> retList = new ArrayList<String>();
+		   Korisnik k = korisnikService.findByEmail(s);
 		   retList.add(s);
 		   retList.add(p);
+		   retList.add(Boolean.toString(k.isPromenaLozinke()));
 	       return retList;
 	   }
 	
@@ -150,5 +157,23 @@ public class AuthorizationController {
 		   
 		   
 		   return p;
+	   }
+	 
+	 @PostMapping(value ="/promena_lozinke_login")
+	   public ResponseEntity promenaLozinke (@RequestBody String loz) {
+		   try {
+			   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		       
+			   Korisnik p = korisnikService.findByEmail(userDetails.getUsername());
+			   p.setLozinka(passwordEncoder.encode(loz));
+			   p.setPromenaLozinke(false);
+			   
+			   korisnikService.save(p);
+			   
+			   return new ResponseEntity<>(HttpStatus.OK);
+	        }catch (Exception e) {
+	            //e.printStackTrace();
+	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	        }
 	   }
 }

@@ -2,13 +2,13 @@ insert into tip_pregleda (id, ime, cena) values (1,'opsti',100);
 insert into tip_pregleda (id, ime, cena) values (2,'stomatoloski',200);
 insert into zauzeto_vreme (id, datum_od, datum_do, tip_zauzetosti) values (1,'2020.05.25','2020.05.30', 'GODISNJIODMOR');
 
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo) values (1,'markomarkovic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Marko', 'Markovic','Adresa 1','0600000000','P' ,'10000');
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo) values (2,'milanmilanovic@gmail.com','milanm','Milan', 'Milanovic','Adresa 2','0600000001', 'P' ,'10001');
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id) values (3,'jovanjovanovic@gmail.com','$2y$10$//fKrjX9u4wIu.Ql3EaJuev5BSNzziTYkq7mhonRydmXCMdWdhy0i','Jovan', 'Jovanovic','Adresa 3','0600000002', 'L' , 4.36, '10:00', '18:00', 1);
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id) values (4,'anaanic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Ana', 'Anic','Adresa 4','0600000003', 'L' , 4.1, '10:00', '18:00', 2);
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (5,'majamajic@gmail.com','majam','Maja', 'Majic','Adresa 5','0600000004','MS');
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (6,'peraperic@gmail.com','$2y$10$GyEn7ZWk2YSiQJt2Uzvu.emIBgwvuqNmU7ho9IRUxo.DnNnXvDVUG','Pera', 'Peric','Adresa 6','0600000005','AK');
-insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type) values (7,'milosmilosevic@gmail.com','$2y$10$GyEn7ZWk2YSiQJt2Uzvu.emIBgwvuqNmU7ho9IRUxo.DnNnXvDVUG','Milos', 'Milosevic','Adresa 7','0600000006','AKC');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo, promena_lozinke) values (1,'markomarkovic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Marko', 'Markovic','Adresa 1','0600000000','P' ,'10000','false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, lbo, promena_lozinke) values (2,'milanmilanovic@gmail.com','milanm','Milan', 'Milanovic','Adresa 2','0600000001', 'P' ,'10001','false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id, promena_lozinke) values (3,'jovanjovanovic@gmail.com','$2y$10$//fKrjX9u4wIu.Ql3EaJuev5BSNzziTYkq7mhonRydmXCMdWdhy0i','Jovan', 'Jovanovic','Adresa 3','0600000002', 'L' , 4.36, '10:00', '18:00', 1,'false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, prosecna_ocena, pocetak_rada, kraj_rada, tip_pregleda_id, promena_lozinke) values (4,'anaanic@gmail.com','$2y$10$PlcypQuCmM65W7MikuEIW.vBAMLar2o9UQroEu/fpCN/r06BltbOO','Ana', 'Anic','Adresa 4','0600000003', 'L' , 4.1, '10:00', '18:00', 2,'false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, promena_lozinke) values (5,'majamajic@gmail.com','majam','Maja', 'Majic','Adresa 5','0600000004','MS','false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, type, promena_lozinke) values (6,'peraperic@gmail.com','$2y$10$36aBCJZ3FP0tvemsTOLGAuznxAqP2AC9Eap4IWgrPrvRAukwgKUBO','Pera', 'Peric','Adresa 6','0600000005','AK','false');
+insert into korisnici (id,email, lozinka, ime, prezime, adresa, broj, predefinisan, type, promena_lozinke) values (7,'milosmilosevic@gmail.com','$2y$10$GyEn7ZWk2YSiQJt2Uzvu.emIBgwvuqNmU7ho9IRUxo.DnNnXvDVUG','Milos', 'Milosevic','Adresa 7','0600000006','true','AKC','false');
 
 update zauzeto_vreme set lekar_id = 3 where id = 1;
 

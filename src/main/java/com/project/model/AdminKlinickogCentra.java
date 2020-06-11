@@ -21,9 +21,31 @@ public class AdminKlinickogCentra extends Korisnik{
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "akc_id")
 	private Set<Klinika> klinike;
-
+	
+	@Column(name = "predefinisan", unique = false, nullable = true)
+	private boolean predefinisan;
+	
 	public AdminKlinickogCentra() {
 		
+	}
+	
+	public AdminKlinickogCentra(String email, String lozinka, String ime, String prezime, String adresa, String broj,boolean predefinisan) {
+		super(email,lozinka,ime,prezime,adresa,broj);
+		this.predefinisan = predefinisan;
+	}
+	
+	public AdminKlinickogCentra(String email, String lozinka, String ime, String prezime, String adresa, String broj,boolean promenaLozinke,boolean predefinisan) {
+		super(email,lozinka,ime,prezime,adresa,broj,promenaLozinke);
+		this.predefinisan = predefinisan;
+	}
+
+
+	public boolean isPredefinisan() {
+		return predefinisan;
+	}
+
+	public void setPredefinisan(boolean predefinisan) {
+		this.predefinisan = predefinisan;
 	}
 
 	public Set<Klinika> getKlinike() {

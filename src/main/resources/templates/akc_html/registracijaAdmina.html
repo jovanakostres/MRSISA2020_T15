@@ -1,0 +1,75 @@
+<div id="formaRA" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="formaRA" >
+	
+	<form class="form-inline" action="" style = "margin: 25px 0px 0px 0px;">
+	  <h2 >Registracija admina</h2>
+	</form>
+  	
+  	<div id="god" >
+		<form class="form-horizontal" action="" >
+		<p style = "margin: 0px 0px 0px 3px;">Odaberite tip admina(Napomena - možda nemate prava da registrujete novog admina kliničkog centra):</p>
+		<div class="form-group">	
+    	<div class="col-sm-offset-2 col-sm-10">	  
+		  <label class="radio-inline"><input type="radio" v-model="tipR" v-bind:value="'akc'" v-on:change="promeni_select" name="optradio" >Admin kliničkog centra</label>
+		  <label class="radio-inline"><input type="radio" v-model="tipR" v-bind:value="'ak'" v-on:change="promeni_select" name="optradio">Admin klinike</label>
+		</div>
+		</div>  
+		  <div class="form-group" >
+		    <label class="control-label col-sm-2" for="emailReg">Email:</label>
+		    <div class="col-sm-10">
+		    <input type="email" class="form-control" id="emailReg" v-model="emailR" >
+		    <p id="greskaRA1" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje email-a je obavezno</p>
+		  	</div>
+		  </div>
+		 
+		  <div class="form-group" >
+		    <label class="control-label col-sm-2" for="imeReg">Ime:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" id="imeReg" v-model="imeR" >
+		    <p id="greskaRA2" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje imena je obavezno</p>
+		  	</div>
+		  </div>
+			
+		  <div class="form-group" >
+		    <label class="control-label col-sm-2" for="prezimeReg">Prezime:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" id="prezimeReg" v-model="prezimeR" >
+		    <p id="greskaRA3" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje prezimena je obavezno</p>
+		  	</div>
+		  </div>
+		  
+		  <div class="form-group" >
+		    <label class="control-label col-sm-2" for="adresaReg">Adresa:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" id="adresaReg" v-model="adresaR" >
+		    <p id="greskaRA4" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje adrese je obavezno</p>
+		  	</div>
+		  </div>
+		  
+		  <div class="form-group" >
+		    <label class="control-label col-sm-2" for="brojReg">Broj:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" id="brojReg" v-model="brojR" >
+		    <p id="greskaRA5" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje broja je obavezno</p>
+		  	</div>
+		  </div>
+		  
+		  <div class="form-group" >
+        	<label class="control-label col-sm-2" for="klinikaSelect">Klinika:</label>
+        	<div class="col-sm-10">
+    		<select id="klinikaSelect" class="js-example-basic-single" style="width:400px;height: 50px;" disabled></select>
+    	  	</div>
+    	  </div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		  <button type="button" class="btn btn-success" v-on:click="registruj_admina">Završi unos</button>
+			</div>
+		</div>
+		<div id="greskaRA6" style = "display:none;margin:10px 0px 10px 0px;" class="alert alert-danger">
+		  <strong>Greška!</strong> Nemate prava na registraciju novog admina kliničkog centra!
+		</div>
+		<div id="greskaRA7" style = "display:none;margin:10px 0px 10px 0px;" class="alert alert-danger">
+		  <strong>Greška!</strong> Uneli ste već postojeći mejl!
+		</div>
+		</form>
+	</div>
+</div>

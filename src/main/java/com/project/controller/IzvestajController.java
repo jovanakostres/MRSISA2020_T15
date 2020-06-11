@@ -68,6 +68,8 @@ public class IzvestajController {
 		try {
 			System.out.println("PROSAOOO");
 			// System.out.println(izvestajDto.getPregledId());
+			Dijagnoza dijagnoza;
+			Izvestaj izvestaj;
 			Pregled pregled = pregledService.findById(Long.parseLong(izvestajDto.getPregledId()));
 			// System.out.println(pregled.getId());
 			MedicinskaSestra medSestra = medicinskaSestraService.findById(5L);
@@ -77,18 +79,23 @@ public class IzvestajController {
 				recept.getLekovi().add(l);
 			}
 			recept.setMedicinskaSestra(medSestra);
-
-			Dijagnoza dijagnoza = dijagnozaService.findById(Long.parseLong(izvestajDto.getDijagnozaId()));
-
-			Izvestaj izvestaj = new Izvestaj(izvestajDto.getInformacije(), pregled, recept, dijagnoza);
-			recept.setIzvestaj(izvestaj);
+			
+			if(izvestajDto.getDijagnozaId() != "") {
+				dijagnoza = dijagnozaService.findById(Long.parseLong(izvestajDto.getDijagnozaId()));
+				izvestaj = new Izvestaj(izvestajDto.getInformacije(), pregled, recept, dijagnoza);
+				recept.setIzvestaj(izvestaj);
+				receptService.save(recept);
+			}else {
+				izvestaj = new Izvestaj(izvestajDto.getInformacije(), pregled);
+			}
+			
 			pregled.setIzvrsen(true);
-
 			pregledService.save(pregled);
-			receptService.save(recept);
+			
 			izvestajService.save(izvestaj);
 			return new ResponseEntity(HttpStatus.OK);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 	}

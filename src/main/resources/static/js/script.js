@@ -29,16 +29,17 @@ Vue.component('login-component',{
     */
 	template: '<div style="display:none;"></div>',
 	data: function(){
-        return {role : ""};
+        return {role : "", promenaLozinke: ""};
     },
     mounted(){
         if(getCookie("access_token")){
             axios.get("/api/getUsername?access_token=" + getCookie("access_token"))
                 .then(function(response){
                     //this.logged_in_msg = "Welcome back , " + response.data;
-                	this.role = response.data[1];                	
+                	this.role = response.data[1];  
+                	this.promenaLozinke = response.data[2];
                     window.Event.isLoggedIn = true;
-                    Event.$emit('logged-in', this.role);
+                    Event.$emit('logged-in', this.role, this.promenaLozinke);
                 }.bind(this))
                 .catch(function(error){
                     delete_cookie("access_token");

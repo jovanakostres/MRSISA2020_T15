@@ -24,6 +24,28 @@ public class AdminKlinike extends Korisnik{
 		
 	}
 
+	public AdminKlinike(String email, String lozinka, String ime, String prezime, String adresa, String broj, Klinika klinika) {
+		// TODO Auto-generated constructor stub
+		super(email,lozinka,ime,prezime,adresa,broj);
+		this.klinika = klinika;
+	}
+	
+	public AdminKlinike(String email, String lozinka, String ime, String prezime, String adresa, String broj) {
+		// TODO Auto-generated constructor stub
+		super(email,lozinka,ime,prezime,adresa,broj);
+	}
+	
+	public AdminKlinike(String email, String lozinka, String ime, String prezime, String adresa, String broj,boolean promenaLozinke, Klinika klinika) {
+		// TODO Auto-generated constructor stub
+		super(email,lozinka,ime,prezime,adresa,broj,promenaLozinke);
+		this.klinika = klinika;
+	}
+	
+	public AdminKlinike(String email, String lozinka, String ime, String prezime, String adresa, String broj,boolean promenaLozinke) {
+		// TODO Auto-generated constructor stub
+		super(email,lozinka,ime,prezime,adresa,broj,promenaLozinke);
+	}
+
 	public Klinika getKlinika() {
 		return klinika;
 	}

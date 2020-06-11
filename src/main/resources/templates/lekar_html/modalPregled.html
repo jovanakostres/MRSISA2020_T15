@@ -20,6 +20,9 @@
       	</div>
 </div>
 -->
+<head>
+	<meta charset="UTF-8">
+</head>
 <div id="modalZPregledi" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalP">
   <div class="modal-dialog">
   
@@ -41,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" onclick="document.getElementById('modalZPregledi').style.display='none'">Nazad</button>
-        <button v-if="izvrsen" type="button" class="btn btn-primary" v-on:click="zapocni_pregled()">Zapocni pregled</button>
+        <button v-if="izvrsen" type="button" class="btn btn-primary" v-on:click="zapocni_pregled()">Započni pregled</button>
       </div>
     </div>
 

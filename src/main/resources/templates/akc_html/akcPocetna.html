@@ -35,7 +35,8 @@
 		<div class="container-fluid">
 	    	<ul class="nav navbar-nav">
 				<li><a class="navbar-brand" v-on:click="prikazi_zahteve">Zahtevi za registraciju</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_zpreglede" >Registrovanje klinika</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_registracija" >Registrovanje klinika</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_registracija_admin" >Registrovanje admina</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_sifrarnik" >Šifarnik</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
@@ -53,6 +54,8 @@
 	<div th:replace="akc_html/modalSifrarnik :: modalSif"></div>
 	<div th:replace="akc_html/modalLek :: modalL"></div>
 	<div th:replace="akc_html/sifrarnik :: tableS"></div>
+	<div th:replace="akc_html/formaKlinika :: formaK"></div>
+	<div th:replace="akc_html/registracijaAdmina :: formaRA"></div>
 	<div th:replace="tabela :: table"></div>
 </div>
 </body>
@@ -85,6 +88,15 @@
 			obrazlozenje: '',
 			dijag: '',
 			lek: '',
+			nazivK:'',
+			adresaK: '',
+			opisK: '',
+			tipR:'akc',
+			emailR:'',
+			imeR:'',
+			prezimeR:'',
+			adresaR:'',
+			brojR:'',
 			items : [],
 			columns : [],
 			labels : [],
@@ -100,6 +112,14 @@
 			
 			$('#lekSelect').select2({
                 placeholder: "Izaberi lek..."
+            });
+			
+			$('#adminKSelect').select2({
+                placeholder: "Izaberi admina/e..."
+            });
+			
+			$('#klinikaSelect').select2({
+                placeholder: "Izaberi kliniku..."
             });
 		},
 		methods: {
@@ -181,10 +201,99 @@
                     	}
                     }
                     
-                    $('.js-example-basic-single' + " option")[0].remove();
+                    //$('.js-example-basic-single' + " option")[0].remove();
+                    $('#lekSelect' + " option")[0].remove();
+                    $('#dijagnozaSelect' + " option")[0].remove();
                     
                     $( "#tabelaSifrarnik" ).show();
                 }.bind(this));
+            },
+            prikazi_registracija(){
+            	this.sakrij_sve();
+            	axios.get("/api/akc/adminiklinike/" + '?access_token=' + getCookie("access_token")).then(function(response){
+            		
+            		$('.js-example-basic-multiple').val(null).trigger('change');
+    				$('.js-example-basic-multiple').html('').select2({data: [{id: '', text: ''}]});
+    				 $('.js-example-basic-multiple' + " option")[0].remove();
+    				 
+    				for (admin of response.data){
+    					var newOption = new Option(admin.ime + " " + admin.prezime, admin.id, false, false);
+    					$('.js-example-basic-multiple').append(newOption).trigger('change');
+    				}
+    				
+    				$( "#formaKlinikaReg" ).show();
+                }.bind(this));
+            	
+            },
+            prikazi_registracija_admin(){
+            	this.sakrij_sve();
+            	axios.get("/api/akc/klinike/" + '?access_token=' + getCookie("access_token")).then(function(response){
+            		
+            		$('.js-example-basic-single').val(null).trigger('change');
+    				$('.js-example-basic-single').html('').select2({data: [{id: '', text: ''}]});
+    				 
+    				for (klinika of response.data){
+    					var newOption = new Option(klinika.naziv, klinika.id, false, false);
+    					$('.js-example-basic-single').append(newOption).trigger('change');
+    				}
+    				$('.js-example-basic-single' + " option")[0].remove();
+    				$( "#formaRA" ).show();
+                }.bind(this));
+            	
+            },
+            registruj_kliniku(){
+            	var l = $('.js-example-basic-multiple').find(':selected');
+            	var odabraniAdmini = [];
+				for(ad of l){
+					odabraniAdmini.push(ad.value);
+				}
+				
+				this.sakrij_greske_reg();
+				if(this.proveraUnosaRegKl()){
+				axios({
+                	method : 'post',
+                    url : '/api/akc/registracija_klinike' + '?access_token=' + getCookie("access_token"),
+                    data:{naziv:this.nazivK,adresa:this.adresaK, opis:this.opisK, admini:odabraniAdmini},
+                }).then(function(response){
+                	document.location.replace("/akcPocetna");
+                });
+				}
+            },
+            registruj_admina(){
+				
+				this.sakrij_greske_regAd();
+				if(this.proveraUnosaRegAd()){
+					if(this.tipR == "akc"){
+						axios({
+		                	method : 'post',
+		                    url : '/api/akc/registracija_akc' + '?access_token=' + getCookie("access_token"),
+		                    data:{email:this.emailR,ime:this.imeR,prezime:this.prezimeR, adresa:this.adresaR, broj:this.brojR},
+		                }).then(function(response){
+		                	if(response.data == "nema prava"){
+		                		document.getElementById('greskaRA6').style.display = "block";
+		                	}else if(response.data == "pogresan email"){
+		                		document.getElementById('greskaRA7').style.display = "block";
+		                	}else{
+		                		document.location.replace("/akcPocetna");
+		                	}
+		                });
+					}else{
+						var k = $('#klinikaSelect').find(':selected')[0].value;
+						axios({
+		                	method : 'post',
+		                    url : '/api/akc/registracija_ak' + '?access_token=' + getCookie("access_token"),
+		                    data:{email:this.emailR,ime:this.imeR,prezime:this.prezimeR, adresa:this.adresaR, broj:this.brojR, idK:k},
+		                }).then(function(response){
+							if(response.data == "pogresan email"){
+								document.getElementById('greskaRA7').style.display = "block";
+		                	}else{
+		                		document.location.replace("/akcPocetna");
+		                	}
+		                });
+					}
+				}
+            	
+            	
             },
             validEmail:function(email) {
 			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -299,6 +408,44 @@
                 	alert(error);
                 });
 			},
+			proveraUnosaRegKl(){
+            	if(this.nazivK == ''){
+            		document.getElementById('greskaR1').style.display = "block";
+            		return false;
+            	}
+            	if(this.adresaK == ''){
+            		document.getElementById('greskaR2').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+				
+			},
+			proveraUnosaRegAd(){
+            	if(this.emailR == ''){
+            		document.getElementById('greskaRA1').style.display = "block";
+            		return false;
+            	}
+            	if(this.imeR == ''){
+            		document.getElementById('greskaRA2').style.display = "block";
+            		return false;
+            	}
+            	if(this.prezimeR == ''){
+            		document.getElementById('greskaRA3').style.display = "block";
+            		return false;
+            	}
+            	if(this.adresaR == ''){
+            		document.getElementById('greskaRA4').style.display = "block";
+            		return false;
+            	}
+            	if(this.brojR == ''){
+            		document.getElementById('greskaRA5').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+				
+			},
 			izmeni_korisnika()
             {
             	if(!this.check()) return;
@@ -313,14 +460,36 @@
                 	this.error_message = "Podaci nisu izmenjeni";
                 });
             },
+            promeni_select(){
+            	if(this.tipR == "akc"){
+            		$("#klinikaSelect").attr('disabled', true);
+            	}else{
+            		$("#klinikaSelect").removeAttr('disabled');
+            	}	
+            },
             sakrij_sve(){
             	$( "#modalRZahtevi" ).hide();
             	$( "#modalOdbijanje" ).hide();
             	$( "#registracija" ).hide();
             	$( "#tabelaRZahtevi" ).hide();
             	$( "#tabelaSifrarnik" ).hide();
+            	$( "#formaKlinikaReg" ).hide();
+            	$( "#formaRA" ).hide();
             	$( "#tabela" ).hide();
             	
+            },
+            sakrij_greske_reg(){
+            	document.getElementById('greskaR1').style.display = "none";
+            	document.getElementById('greskaR2').style.display = "none";
+            },
+            sakrij_greske_regAd(){
+            	document.getElementById('greskaRA1').style.display = "none";
+            	document.getElementById('greskaRA2').style.display = "none";
+            	document.getElementById('greskaRA3').style.display = "none";
+            	document.getElementById('greskaRA4').style.display = "none";
+            	document.getElementById('greskaRA5').style.display = "none";
+            	document.getElementById('greskaRA6').style.display = "none";
+            	document.getElementById('greskaRA7').style.display = "none";
             },
             log_out_k(){
             	this.$root.$emit('logged-out')

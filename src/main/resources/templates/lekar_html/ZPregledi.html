@@ -7,7 +7,7 @@
     		</tr>
 		</thead>
 		<tbody v-if="items.length > 0">
-        	<tr v-for="(item, index) in items" :key="index" v-on:click = "modal_pregled(item.id)">
+        	<tr v-for="(item, index) in items" :key="index" title="Pritisnite za informacije o zakazanom pregledu" v-on:click = "modal_pregled(item.id)">
             	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="indexColumn">{{item[column]}}</td>
           	</tr>
     	</tbody>

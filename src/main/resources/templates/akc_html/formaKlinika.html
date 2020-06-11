@@ -1,0 +1,43 @@
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<div id="formaKlinikaReg" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="formaK" >
+	<fieldset>
+		<legend>Zahtevi za registraciju</legend>
+		<form class="form-horizontal" action="">
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="naziv">Naziv klinike:</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="naziv" v-model="nazivK" placeholder="Unesite naziv">
+		      <p id="greskaR1" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje naziva je obavezno</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="adresaa">Adresa:</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="adresaa" v-model="adresaK" placeholder="Unesite adresu">
+		      <p id="greskaR2" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje adrese je obavezno</p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="opis">Opis:</label>
+		    <div class="col-sm-10">
+		      <textarea class="form-control" v-model="opisK" rows="10" placeholder="Unesite opis" id="opis"></textarea>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="control-label col-sm-2" for="adminKSelect">Izaberite administratora/e klinike:</label>
+		    <div class="col-sm-10">
+		      <select id="adminKSelect" class="js-example-basic-multiple" multiple="multiple" style="width:400px;height: 50px;">
+			  </select>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		      <button type="button" v-on:click="registruj_kliniku" class="btn btn-success">Završite registraciju</button>
+		    </div>
+		  </div>
+		</form>
+	</fieldset>
+</div>

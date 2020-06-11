@@ -40,4 +40,9 @@ public class KorisnikService {
 		// TODO Auto-generated method stub
 		return korisnikRepository.findByEmail(username);
 	}
+
+	public void save(Korisnik p) {
+		// TODO Auto-generated method stub
+		korisnikRepository.save(p);
+	}
 }

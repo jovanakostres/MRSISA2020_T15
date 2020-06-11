@@ -46,6 +46,9 @@ public class Korisnik {
 	@Column(name="broj", unique=false, nullable=false)
 	private String broj;
 	
+	@Column(name="promena_lozinke", unique=false, nullable=false)
+	private boolean promenaLozinke;
+	
 	public Korisnik() {
 		
 	}
@@ -59,10 +62,10 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.adresa = adresa;
 		this.broj = broj;
+		this.promenaLozinke = false;
 	}
 
 	
-
 	public Korisnik(String email, String lozinka, String ime, String prezime, String adresa, String broj) {
 		super();
 		this.email = email;
@@ -71,6 +74,27 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.adresa = adresa;
 		this.broj = broj;
+		this.promenaLozinke = false;
+	}
+	
+	public Korisnik(String email, String lozinka, String ime, String prezime, String adresa, String broj,
+			boolean promenaLoznike) {
+		super();
+		this.email = email;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.adresa = adresa;
+		this.broj = broj;
+		this.promenaLozinke = promenaLoznike;
+	}
+
+	public boolean isPromenaLozinke() {
+		return promenaLozinke;
+	}
+
+	public void setPromenaLozinke(boolean promenaLoznike) {
+		this.promenaLozinke = promenaLoznike;
 	}
 
 	public Long getId() {

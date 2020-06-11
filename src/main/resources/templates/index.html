@@ -56,7 +56,12 @@
 	var app = new Vue({
 		el: '#log_elem',
 		mounted() {
-            Event.$on('logged-in',function(role){
+            Event.$on('logged-in',function(role,promenaLozinke){
+            	if(promenaLozinke == "true"){
+            		document.location.replace("/promena_lozinke");
+            		return;
+            	}
+            	
             	switch(role){
             	case 'ROLE_P' :
             		document.location.replace("/pacijentPocetna");
@@ -99,7 +104,7 @@
                 	//document.cookie = "user=" + response.data.access_token;
                 	document.location.replace("/");
                 }).catch((error)=>{
-                	alert(error);
+                	alert("Pogrešan imejl/lozinka!");
                 });
 				console.log("NESTO");
 			}

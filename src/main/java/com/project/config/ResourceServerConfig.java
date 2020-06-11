@@ -18,7 +18,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
         		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/","/favicon.ico","/api/registracija","/registracijaPacijenta","/lekarPocetna","/pacijentPocetna","/akcPocetna","/Izvestaj/**","/izmena_izvestaja/**", "/akPocetna").permitAll()
+                .antMatchers("/","/favicon.ico","/api/registracija","/registracijaPacijenta","/lekarPocetna","/pacijentPocetna","/akcPocetna","/Izvestaj/**","/izmena_izvestaja/**", "/akPocetna","/promena_lozinke").permitAll()
                 .antMatchers("/api/lekar/**").hasAuthority("ROLE_L")
                 .antMatchers("/api/akc/**").hasAuthority("ROLE_AKC")
                 .antMatchers("/api/potvrdiRegistraciju").hasAuthority("ROLE_AKC")

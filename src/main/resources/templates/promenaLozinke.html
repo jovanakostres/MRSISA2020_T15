@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<title>Promena lozinke</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   <style>
+		body, html {   
+		    width: 100%;
+		    height: 100%;
+		    margin: 0;
+		    padding: 0;
+		    display:table;
+		}
+		body {
+		    display:table-cell;
+		    vertical-align:middle;
+		    background-image: linear-gradient(#E6E7FA, white);
+		}
+		#glavniDiv {
+		    display:table;/* shrinks to fit content */
+		    margin:auto;
+		    text-align : center;
+		    background-color: #ffffff;
+		    padding : 5%;
+		}
+	</style>
+</head>
+<body>
+	<div id="glavniDiv">
+		<h2 style = "margin: 0px 0px 0px 3px;">Obavezna promena lozinke</h2>
+		</br></br>
+		<form class="form-horizontal" id = "log_elem" >
+			<login-component></login-component>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="lozinka">Unesite lozinku: </label>
+				<div class="col-sm-10">
+		        	<input class="form-control" v-model="lozinka1" type="password" id="lozinka"/>
+				</div>
+			</div>
+			
+			<div class="form-group">
+		        <label class="control-label col-sm-2" for="lozinkaP">Potvrdite lozinku: </label>
+		        <div class="col-sm-10">
+		        	<input class="form-control" v-model="lozinka2" type="password" id="lozinkaP"/>
+		  		</div>
+	  		</div>
+	  		
+	  		<div class="form-group">
+	        	<button type="button" class="btn btn-primary" v-on:click="promeniLozinku">Promeni lozinku</button>
+			</div>
+			
+			<div id="greska" style = "display:none;margin:10px 0px 10px 0px;" class="alert alert-danger">
+			  <strong>Greška!</strong> Lozinke nisu jednake!
+			</div>
+		</form>
+	</div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+<script src="/js/script.js"></script>
+
+<script>
+
+	var app = new Vue({
+		el: '#log_elem',
+        data : {
+			lozinka1:'',
+			lozinka2:''
+		},
+		methods: {
+			promeniLozinku(){
+				this.sakrij_greske();
+				
+				if(this.proveraUnosa()) {
+				axios({
+                	method : 'post',
+                    url : 'api/promena_lozinke_login' + '?access_token=' + getCookie("access_token"),
+                    data: this.lozinka1,
+                }).then(function(response){                	
+                	document.location.replace("/");
+                });
+				}
+			},
+			proveraUnosa(){
+				if(this.lozinka1 != this.lozinka2){
+					document.getElementById('greska').style.display = "block";
+					return false;
+				}
+				
+				return true;
+				
+			},
+			sakrij_greske(){
+				document.getElementById('greska').style.display = "none";
+			}
+		}
+	})
+
+</script>
+
+</html>

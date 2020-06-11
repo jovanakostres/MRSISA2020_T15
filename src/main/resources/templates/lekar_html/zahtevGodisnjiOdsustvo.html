@@ -1,0 +1,71 @@
+<div id="tabelaGOO" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="tableG" >
+	
+	<form class="form-inline" action="" style = "margin: 25px 0px 0px 0px;">
+	  <h2 >Unos zahteva za godišnji odmor/odsustvo</h2>
+	</form>
+	
+	<ul class="nav nav-tabs">
+  		<li class="active"><a data-toggle="tab" href="#god">Zahtev za godišnji odmor</a></li>
+  		<li><a data-toggle="tab" href="#ods">Zahtev za odsustvo</a></li>
+  	</ul>
+  	
+  	<div class="tab-content">
+  	<div id="god" class="tab-pane fade in active">
+		<form  action="" >
+		  <p>
+		    <span >Unos zahteva za godišnji odmor: </span>
+		  </p>
+		  <div class="form-group" style="display:inline;margin:10px 5px 80px 0px;">
+		    <label for="datumPoGo">Početni datum:</label>
+		    <input type="date" id="datumPoGo" v-model="datumOdGo" >
+		    <p id="greska1" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje datuma je obavezno</p>
+		  </div>
+		  </br> 
+		  <div class="form-group" style="display:inline;margin:10px 5px 10px 0px;">
+		    <label for="datumKrGo">Krajnji datum:</label>
+		    <input type="date" id="datumKrGo" v-model="datumDoGo" >
+		    <p id="greska2" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje datuma je obavezno</p>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="opisG">Dodatne informacije:</label>
+		    <textarea class="form-control" v-model="informacijeGo" rows="10" placeholder="Unesite dodatne informacije" id="opisG"></textarea>
+		  </div>
+		  <button type="button" class="btn btn-success" v-on:click="sacuvaj_god">Završi unos</button>
+		<div id="greska3" style = "display:none;margin:10px 0px 10px 0px;" class="alert alert-danger">
+		  <strong>Greška!</strong> Pogrešno postavljeni datumi.
+		</div>
+		</form>
+	</div>
+	
+	<div id="ods" class="tab-pane fade">
+	<form  action="" >
+		  <p>
+		    <span >Unos zahteva za odsustvo: </span>
+		  </p>
+		  <div class="form-group" style="display:inline;">
+		    <label for="datumPoO">Početni datum:</label>
+		    <input type="date" id="datumPoO" v-model="datumOdO" min="2000-01-02" required="true">
+		  	<p id="greska4" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje datuma je obavezno</p>
+		  </div>
+		  </br> 
+		  <div class="form-group" style="display:inline;">
+		    <label for="datumKrO">Krajnji datum:</label>
+		    <input type="date" id="datumKrO" v-model="datumDoO" required="true">
+		    <p id="greska5" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje datuma je obavezno</p>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="opisO">Razlog odsustva:</label>
+		    <textarea class="form-control" v-model="informacijeO" rows="10" id="opisO"></textarea>
+		  </div>
+		  <button type="button" class="btn btn-success" v-on:click="sacuvaj_ods">Završi unos</button>
+		  <div id="greska6" style = "display:none;margin:10px 0px 10px 0px;" class="alert alert-danger">
+		  <strong>Greška!</strong> Pogrešno postavljeni datumi.
+		</div>
+		</form>
+	</div>
+	
+	
+	</div>
+</div>

@@ -38,4 +38,14 @@ public class KlinikaService {
 	{
 		return klinikaRepository.getOne(ind).getLekari();
 	}
+
+	public void save(Klinika k) {
+		// TODO Auto-generated method stub
+		klinikaRepository.save(k);
+	}
+
+	public Klinika findById(Long idK) {
+		// TODO Auto-generated method stub
+		return klinikaRepository.findById(idK).orElseGet(null);
+	}
 }

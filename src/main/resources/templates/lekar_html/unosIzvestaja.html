@@ -170,7 +170,9 @@ function promena(){
 			},
 			sacuvaj(){
 				var s = document.getElementById("dijagnozaSelect");
-				this.odabranaDijagnoza = s.options[s.selectedIndex].value;
+				if(s.selectedIndex!=-1){
+					this.odabranaDijagnoza = s.options[s.selectedIndex].value;
+				}
 				
 				var l = $('.js-example-basic-multiple').find(':selected');
 				for(lek of l){

@@ -15,6 +15,10 @@ public class HomeController {
 		
 	}
 	
+	@GetMapping(value = "/promena_lozinke")
+	public String PromenaLozinke() {
+		return "promenaLozinke";
+	}
 	
 	@GetMapping(value = "/pacijentPocetna")
 	public String pacijentPocetna() {
@@ -54,5 +58,5 @@ public class HomeController {
 		return "lekar_html/izmenaIzvestaja";
 		
 	}
-	
+
 }

@@ -39,8 +39,8 @@
 				<li><a class="navbar-brand" v-on:click="prikazi_pacijente">Prikaz pacijenata</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_zpreglede" >Zakazani pregledi</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_rk" >Radni kalendar</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Godisnji odmor/odsustvo</a></li>
-		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zakazi pregled/operaciju</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_goo" >Godišnji odmor/odsustvo</a></li>
+		      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zakaži pregled/operaciju</a></li>
 		      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
 		    </ul>
 	    	<ul class="nav navbar-nav navbar-right">
@@ -55,6 +55,7 @@
 	<div th:replace="lekar_html/modalIzvestaj :: modalI"></div>
 	<div th:replace="lekar_html/radniKalendar :: calendar"></div>
 	<div th:replace="lekar_html/Pacijenti :: tableP"></div>
+	<div th:replace="lekar_html/zahtevGodisnjiOdsustvo :: tableG"></div>
 </div>
 </body>
 
@@ -84,6 +85,12 @@
 			adresa : '',
 			broj : '',
 			izvrsen: '',
+			datumOdGo: '',
+			datumDoGo: '',
+			datumOdO: '',
+			datumDoO: '',
+			informacijeGo: '',
+			informacijeO: '',
 			items : [],
 			columns : [],
 			labels : [],
@@ -107,6 +114,8 @@
 				}
 				return false;
 				});
+			
+			this.setVreme();
 		},
 		methods: {
 			isLoggedIn(){
@@ -198,6 +207,10 @@
                 }.bind(this));	
             	
             },
+            prikazi_goo(){
+            	this.sakrij_sve();
+            	$( "#tabelaGOO" ).show();
+            },
             izmeni_izvestaj(id){
             	document.location.replace("/izmena_izvestaja/" + id);
             },
@@ -243,6 +256,30 @@
 			zapocni_pregled(){
 				document.location.replace("/Izvestaj/" + this.item['id']);
 			},
+			sacuvaj_god(){
+				this.sakrij_greske();
+				if(this.proveraUnosaZahtevGod()){
+				axios({
+                	method : 'post',
+                    url : 'api/lekar/zahtev_goo'+ '?access_token=' + getCookie("access_token"),
+                    data:{informacije:this.informacijeGo, datumOd:this.datumOdGo, datumDo:this.datumDoGo, tipZauzetosti:"GODISNJIODMOR"},
+                }).then(function(response){                	
+                	document.location.replace("/lekarPocetna");
+                });
+				}
+			},
+			sacuvaj_ods(){
+				this.sakrij_greske();
+				if(this.proveraUnosaZahtevOds()){
+				axios({
+                	method : 'post',
+                    url : 'api/lekar/zahtev_goo'+ '?access_token=' + getCookie("access_token"),
+                    data:{informacije:this.informacijeO, datumOd:this.datumOdO, datumDo:this.datumDoO, tipZauzetosti:"ODSUSTVO"},
+                }).then(function(response){                	
+                	document.location.replace("/lekarPocetna");
+                });
+				}
+			},
 			izmeni_korisnika()
             {
             	if(!this.check()) return;
@@ -277,7 +314,14 @@
             parseTextTip(text){
             	if (text.includes("GODISNJIODMOR")){
             		return true;
-            	}else{
+            	}
+            	else if (text.includes("ODSUSTVO")){
+            		return true;
+            	}
+            	else if (text.includes("OPERACIJA")){
+            		return true;
+            	}
+            	else{
             		return false;
             	}
             },
@@ -285,12 +329,71 @@
             	this.$root.$emit('logged-out')
             	//Event.$emit('logged-out');
             },
+            setVreme(){
+            	var today = new Date();
+            	var dd = String(today.getDate()).padStart(2, '0');
+            	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            	var yyyy = today.getFullYear();
+
+            	today =  yyyy + '-' + mm + '-' + dd ;
+				document.getElementById("datumPoGo").setAttribute("min", today);
+				document.getElementById("datumKrGo").setAttribute("min", today);
+				document.getElementById("datumPoO").setAttribute("min", today);
+				document.getElementById("datumKrO").setAttribute("min", today);
+            },
+            proveraUnosaZahtevGod(){
+            	var po = document.getElementById('datumPoGo').value;
+            	var kr = document.getElementById('datumKrGo').value;
+            	
+            	if(!po){
+            		document.getElementById('greska1').style.display = "inline";
+            		return false;
+            	}
+            	if(!kr){
+            		document.getElementById('greska2').style.display = "inline";
+            		return false;
+            	}
+            	if(kr <= po){
+            		document.getElementById('greska3').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+            },
+            proveraUnosaZahtevOds(){
+            	var po = document.getElementById('datumPoO').value;
+            	var kr = document.getElementById('datumKrO').value;
+            	
+            	if(!po){
+            		document.getElementById('greska4').style.display = "inline";
+            		return false;
+            	}
+            	if(!kr){
+            		document.getElementById('greska5').style.display = "inline";
+            		return false;
+            	}
+            	if(kr <= po){
+            		document.getElementById('greska6').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+            },
             sakrij_sve(){
             	$( "#modalZPregledi" ).hide();
             	$( "#registracija" ).hide();
             	$( "#tabelaZPregledi" ).hide();
             	$( "#tabelaPacijenti" ).hide();
             	$( "#scheduler_here" ).hide();
+            	$( "#tabelaGOO" ).hide();
+            },
+            sakrij_greske(){
+            	document.getElementById('greska1').style.display = "none";
+            	document.getElementById('greska2').style.display = "none";
+            	document.getElementById('greska3').style.display = "none";
+            	document.getElementById('greska4').style.display = "none";
+            	document.getElementById('greska5').style.display = "none";
+            	document.getElementById('greska6').style.display = "none";
             }
 		}
 		});

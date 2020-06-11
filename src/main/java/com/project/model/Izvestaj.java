@@ -55,6 +55,13 @@ public class Izvestaj {
 
 
 
+	public Izvestaj(String informacije, Pregled pregled) {
+		// TODO Auto-generated constructor stub
+		super();
+		this.informacije = informacije;
+		this.pregled = pregled;
+	}
+
 	public Long getId() {
 		return id;
 	}

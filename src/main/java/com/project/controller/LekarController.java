@@ -8,19 +8,24 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.config.CustomUserDetails;
 import com.project.dto.KalendarDto;
 import com.project.model.Pacijent;
 import com.project.model.Pregled;
+import com.project.model.ZahtevZaOdmor;
 import com.project.model.ZauzetoVreme;
 import com.project.service.LekarService;
 import com.project.service.PregledService;
+import com.project.service.ZahtevZaOdmorService;
 import com.project.service.ZauzetoVremeService;
 
 @RestController
@@ -35,6 +40,9 @@ public class LekarController {
 	
 	@Autowired
     ZauzetoVremeService zauzetoVremeService;
+	
+	@Autowired
+    ZahtevZaOdmorService zahtevZaOdmorService;
 	
 	   @GetMapping(value ="/pacijentiklinike")
 	   public Set<Pacijent> getPacijenti() {
@@ -70,5 +78,17 @@ public class LekarController {
 		   
 		   return kalendar;
 	   }
-	
+	   
+	   @RequestMapping(value = "/zahtev_goo", method = RequestMethod.POST)
+	   public ResponseEntity saveZahtev(@RequestBody ZahtevZaOdmor zahtev) {
+	   	try {
+	   		System.out.println("PROSAOOO");
+	   		zahtevZaOdmorService.save(zahtev);
+	   		return new ResponseEntity(HttpStatus.OK);
+	   	}
+	   	catch(Exception ex){
+	   		return new ResponseEntity(HttpStatus.BAD_REQUEST);
+	   	}
+	    
+	   }
 }
