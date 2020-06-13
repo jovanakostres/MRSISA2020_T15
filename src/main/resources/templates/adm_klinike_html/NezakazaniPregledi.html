@@ -6,8 +6,8 @@
     		</tr>
 		</thead>
 		<tbody v-if="npregledi.length > 0">
-        	<tr v-for="(item, index) in npregledi" :key="index" >
-            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="item[id]">{{item[column]}}</td>
+        	<tr v-for="(item, index) in npregledi" :key="index" v-on:click = "pregled_sale(item.id, index)">
+            	<td class="col-md-3" v-for="(column, indexColumn) in columns" :key="item[id]" >{{item[column]}}</td>
           	</tr>
     	</tbody>
 	</table>

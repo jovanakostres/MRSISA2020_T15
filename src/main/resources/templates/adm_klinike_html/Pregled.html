@@ -1,0 +1,39 @@
+<head>
+	<meta charset="UTF-8">
+</head>
+<div id="modalPregledi" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalP">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalPregledi').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Informacije o pregledu</h4>
+      </div>
+      <div class="modal-body">
+        <table class = "table" id="tableModal">
+		<thead>	</thead>
+			<tbody>
+        	<tr v-for="(column, indexColumn) in columns" :key="indexColumn" >
+        		<td>{{labels[indexColumn]}}</td>
+        	  	<td>{{item[column]}}</td>
+        	</tr>
+        	<tr>
+        		<td>Sala</td>
+        		<td>
+            		<select style = "height: 30px;" id = "termin" v-model = "selected">
+            			<option v-for = "tt in sale" v-bind:value = "tt"> {{tt.naziv}} </option>
+					</select>
+				</td>
+        	</tr>
+        	</tbody>
+      	</table>
+      </div>
+      <div class="modal-footer">
+      	<button type = "button" class="btn btn-default" value  = "Zakazi" v-on:click = "zakazi_Pregled">
+        <button type="button" class="btn btn-default" onclick="document.getElementById('modalPregledi').style.display='none'">Nazad</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

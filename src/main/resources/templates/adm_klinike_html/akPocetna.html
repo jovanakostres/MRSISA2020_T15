@@ -30,6 +30,7 @@
 		</div>
 		<login-component></login-component>
 		<div th:replace="adm_klinike_html/NezakazaniPregledi :: nezakazani"></div>
+		<div th:replace="adm_klinike_html/Pregled :: modalP"></div>
 	</div>
 </body>
 
@@ -45,7 +46,10 @@
 		data: {
 			npregledi:[],
 			columns: [],
-			labels: []
+			labels: [],
+			sale: [],
+			selected: '',
+			item: {}
 		},
 		mounted() {
 			//this.pronadji_preglede();
@@ -73,6 +77,33 @@
             },
             hideAll(){
             	$( "#nezakazani" ).hide();
+            	$( "#modalPregledi" ).hide();
+            },
+            pregled_sale(id, index){
+            	alert(id);
+            	for(pregled of this.npregledi){
+					if(pregled['id'] == id)
+						this.item = pregled;
+				}
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/sale' + '?access_token=' + getCookie("access_token"),
+                    data:{pregled:this.item}
+                }).then(function(response){
+                    this.sale = response.data;
+                }.bind(this));
+				$( "#modalPregledi" ).show();
+            },
+            zakazi_Pregled(){
+            	alert(this.selected);
+            	this.item['sala'] = this.selected;
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),
+                    data : {pregled: this.item}
+                }).then(function(response){
+                	document.location.replace("/akPocetna");
+                });
             }
 		}
 		});
