@@ -343,6 +343,8 @@
 				$( "#modalOdbijanje" ).show();
 			},
 			zavrsi_odbijanje(){
+				this.sakrij_greske_obr();
+				if(this.proveraUnosaObr()){
 				this.item['obrazlozenje'] = this.obrazlozenje;
 				axios({
                 	method : 'post',
@@ -351,6 +353,7 @@
                 }).then(function(response){                	
                 	document.location.replace("/akcPocetna");
                 });
+				}
 			},
 			modal_dodaj_dijagnozu(){
 				$( "#modalDijagnoza" ).show();
@@ -362,6 +365,8 @@
 				$( "#modalSifrarnik" ).show();
 			},
 			dodaj_dijagnozu(){
+				this.sakrij_greske_dij()
+				if(this.proveraUnosaDij()){
 				axios({
                 	method : 'post',
                     url : "/api/dijagnoza/dodaj_dijagnozu" + '?access_token=' + getCookie("access_token"),
@@ -376,8 +381,11 @@
                 	console.log(error);
                 	alert("Postoji dijagnoza sa tim nazivom");
                 });
+				}
 			},
 			dodaj_lek(){
+				this.sakrij_greske_dij()
+				if(this.proveraUnosaLek()){
 				axios({
                 	method : 'post',
                     url : "/api/lek/dodaj_lek" + '?access_token=' + getCookie("access_token"),
@@ -390,6 +398,7 @@
                 }.bind(this)).catch((error)=>{
                 	alert("Postoji lek sa tim nazivom");
                 });
+				}
 			},
 			dodaj_u_sifarnik(){
 				var d = $('#dijagnozaSelect').find(':selected')[0];
@@ -446,6 +455,33 @@
             	return true;
 				
 			},
+			proveraUnosaDij(){
+            	if(this.dijag == ''){
+            		document.getElementById('greskaD1').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+				
+			},
+			proveraUnosaLek(){
+            	if(this.lek == ''){
+            		document.getElementById('greskaL1').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+				
+			},
+			proveraUnosaObr(){
+            	if(this.obrazlozenje == ''){
+            		document.getElementById('greskaO1').style.display = "block";
+            		return false;
+            	}
+            	
+            	return true;
+				
+			},
 			izmeni_korisnika()
             {
             	if(!this.check()) return;
@@ -490,6 +526,15 @@
             	document.getElementById('greskaRA5').style.display = "none";
             	document.getElementById('greskaRA6').style.display = "none";
             	document.getElementById('greskaRA7').style.display = "none";
+            },
+            sakrij_greske_dij(){
+            	document.getElementById('greskaD1').style.display = "none";
+            },
+            sakrij_greske_lek(){
+            	document.getElementById('greskaL1').style.display = "none";
+            },
+            sakrij_greske_obr(){
+            	document.getElementById('greskaO1').style.display = "none";
             },
             log_out_k(){
             	this.$root.$emit('logged-out')

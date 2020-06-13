@@ -1,3 +1,6 @@
+<head>
+	<meta charset="UTF-8">
+</head>
 <div id="modalLek" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalL">
   <div class="modal-dialog">
   
@@ -9,7 +12,8 @@
       <div class="modal-body">
        	<div class="form-group" style="margin:10px 10px 10px 10px;">
         	<label for="opis">Naziv:</label>
-    		<input type="text" class="form-control" v-model="lek" id="lek"></textarea>
+    		<input type="text" class="form-control" v-model="lek" placeholder="Unesite naziv" id="lek"></input>
+    		<p id="greskaL1" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje naziva je obavezno</p>
     	</div>
       </div>
       <div class="modal-footer">

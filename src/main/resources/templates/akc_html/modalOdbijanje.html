@@ -12,7 +12,8 @@
       <div class="modal-body">
        	<div class="form-group" style="margin:10px 10px 10px 10px;">
         	<label for="opis">Obrazloženje:</label>
-    		<textarea class="form-control" v-model="obrazlozenje" rows="20" id="obrazlozenje"></textarea>
+    		<textarea class="form-control" v-model="obrazlozenje" placeholder="Unesite obrazloženje"  rows="20" id="obrazlozenje"></textarea>
+    		<p id="greskaO1" class="text-danger" style = "display:none;"><span class="glyphicon glyphicon-exclamation-sign"></span>Unošenje obrazloženja za odbijanje je obavezno</p>
     	</div>
       </div>
       <div class="modal-footer">

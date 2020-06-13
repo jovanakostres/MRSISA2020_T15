@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Klinika</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 	<style>
 		body, html {   
 		    width: 100%;
@@ -17,7 +18,7 @@
 		    vertical-align:middle;
 		    background-image: linear-gradient(#E6E7FA, white);
 		}
-		div {
+		#div1 {
 		    display:table;/* shrinks to fit content */
 		    margin:auto;
 		    text-align : center;
@@ -25,16 +26,22 @@
 		    padding : 5%;
 		    border-radius : 30px;
 		}
+		#div2 {
+		    display:block;/* shrinks to fit content */
+		    height:50px;
+		    margin: 25px 0px 0px 0px;
+		    text-align : center;
+		}
 		input {
 			border-radius: 10px;
 		}
 	</style>
 </head>
 <body>
-	<div>
+	<div id="div1">
 		<form id = "log_elem" >
 			<login-component></login-component>
-			<label for="username">Korisnicko ime </label>
+			<label for="username">Korisničko ime </label>
 	        <input v-model="username" type="text" id="username"/>
 	        <br><br>
 	        <label for="password">Lozinka </label>
@@ -44,6 +51,9 @@
 	        <br><br>
 	        <p>Nemate nalog? <a href = "/registracijaPacijenta" style = "color: #48576B">Registrujte se.</a></p>
 		</form>
+	</div>
+	<div id="div2">
+	<p class="text-danger"><i style="display:none" id="ikonica" class="fas fa-exclamation-circle"></i><span id="greskaKI1"></span></p>
 	</div>
 </body>
 
@@ -86,7 +96,8 @@
 		},
 		methods: {
 			login(){
-							
+				this.sakrij_greske_log();
+				if(this.proveraUnosaLog()){
 				var params = new URLSearchParams();
                 params.append('grant_type', 'password');
                 params.append('username', this.username);
@@ -104,9 +115,30 @@
                 	//document.cookie = "user=" + response.data.access_token;
                 	document.location.replace("/");
                 }).catch((error)=>{
-                	alert("Pogrešan imejl/lozinka!");
+                	document.getElementById("greskaKI1").innerText = "Pogresan imejl/lozinka!";
+            		document.getElementById("ikonica").style.display = "inline";
                 });
+				}
 				console.log("NESTO");
+			},
+			sakrij_greske_log(){
+				document.getElementById("greskaKI1").innerText = "";
+				document.getElementById("ikonica").style.display = "none";
+				
+			},
+			proveraUnosaLog(){
+            	if(this.username == ''){
+            		document.getElementById("greskaKI1").innerText = "Unošenje korisničkog imena je obavezno!";
+            		document.getElementById("ikonica").style.display = "inline";
+            		return false;
+            	}
+            	if(this.password == ''){
+            		document.getElementById("greskaKI1").innerText = "Unošenje lozinke je obavezno!";
+            		document.getElementById("ikonica").style.display = "inline";
+            		return false;
+            	}
+            	
+            	return true;		
 			}
 		}
 	})

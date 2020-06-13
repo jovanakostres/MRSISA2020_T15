@@ -19,7 +19,7 @@
 		    background-image: linear-gradient(#E6E7FA, white);
 		}
 		div {
-		    display:table;/* shrinks to fit content */
+		    display:none;/* shrinks to fit content */
 		    margin:auto;
 		    text-align : center;
 		}
@@ -120,6 +120,9 @@
 			messageRazLoz : '',
 			messageLBO : '',
 			errorMessage :''
+		},
+		mounted() {
+			document.getElementById("registracija").style.display = "table";
 		},
 		methods: {
 			<!-- Funkcija uzeta sa neta -->
