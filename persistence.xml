@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+  <persistence-unit name="operacija_sala" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>com.project.model.Operacija</class>
+	<class>com.project.model.Sala</class>
+    <properties>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jpa_projekat;LOCK_TIMEOUT=10000"/>
+      <property name="hibernate.connection.username" value="jovana"/>
+      <property name="hibernate.connection.password" value="isamrs"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create-drop"/>
+      <property name="javax.persistence.sql-load-script-source" value="data-postgres.sql"/>
+    </properties>
+  </persistence-unit>
+  
+  <persistence-unit name="pregled_sala" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>com.project.model.Pregled</class>
+	<class>com.project.model.Sala</class>
+	<class>com.project.model.Lekar</class>
+	<class>com.project.model.Klinika</class>
+    <properties>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jpa_projekat;LOCK_TIMEOUT=10000"/>
+      <property name="hibernate.connection.username" value="jovana"/>
+      <property name="hibernate.connection.password" value="isamrs"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create-drop"/>
+      <property name="javax.persistence.sql-load-script-source" value="data-postgres.sql"/>
+    </properties>
+  </persistence-unit>
+  
+   <persistence-unit name="pacijent_zahtevpregled" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>com.project.model.Pacijent</class>
+	<class>com.project.model.ZahtevZaPregled</class>
+    <properties>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jpa_projekat;LOCK_TIMEOUT=10000"/>
+      <property name="hibernate.connection.username" value="jovana"/>
+      <property name="hibernate.connection.password" value="isamrs"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create-drop"/>
+      <property name="javax.persistence.sql-load-script-source" value="data-postgres.sql"/>
+    </properties>
+  </persistence-unit>
+
+   <persistence-unit name="lekari_operacija" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <class>com.project.model.Lekar</class>
+	<class>com.project.model.Operacija</class>
+    <properties>
+      <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+      <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jpa_projekat;LOCK_TIMEOUT=10000"/>
+      <property name="hibernate.connection.username" value="jovana"/>
+      <property name="hibernate.connection.password" value="isamrs"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create-drop"/>
+      <property name="javax.persistence.sql-load-script-source" value="data-postgres.sql"/>
+    </properties>
+  </persistence-unit>
+  
+</persistence>

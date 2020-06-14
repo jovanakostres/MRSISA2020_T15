@@ -3,16 +3,20 @@
 		<option v-for = "tt in tipovi" :value = "tt.id"> {{tt.ime}} </option>
 	</select>
 	<input type = "date" id = "datum" style = "height: 30px;">
-	<table class = "table table-hover">
+	<table id="tklinika" class = "table table-hover">
 		<thead>
 			<tr>
 				<th><input type = "text" v-model = "naziv" v-on:change = "filter" placeholder = "filter naziv"></th>
 				<th><input type = "text" v-model = "adresa_fil" v-on:change = "filter" placeholder = "filter adresa"></th>
-				<th><input type = "text" v-model = "opis"  v-on:change = "filter" placeholder = "filter opis"></th>
+				<th><input type = "text" v-model = "opis"  v-on:change = "filter" placeholder = "filter"></th>
 				<th><input type = "button" v-model = "minmax" value = "max" v-on:click = "filter"></th>
+				<th></th>
+				<th></th>
 			</tr>
 			<tr >
-        		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>
+        		<th class="col-md-3" v-for="(column, index) in labels" onclick="tableSort(this)" :key="index"> {{column}}</th>
+    			<th></th>
+    			<th></th>
     		</tr>
 		</thead>
 		<tbody v-if="items.length > 0">

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Version;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,6 +30,9 @@ public class Pregled {
 	@SequenceGenerator(name="pregled_generator",initialValue = 2, sequenceName = "pregled_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
+	
+	@Version
+    private Long version;
 	
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name="datum", unique=false, nullable=false)

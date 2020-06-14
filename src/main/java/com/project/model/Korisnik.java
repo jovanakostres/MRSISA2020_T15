@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="korisnici")
 @Inheritance(strategy=SINGLE_TABLE)
-@SequenceGenerator(name="korisnik_generator",initialValue = 8 ,sequenceName = "korisnik_seq")
+@SequenceGenerator(name="korisnik_generator",initialValue = 9 ,sequenceName = "korisnik_seq")
 @DiscriminatorColumn(name="type", discriminatorType=STRING)
 public class Korisnik {
 	

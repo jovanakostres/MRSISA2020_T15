@@ -6,6 +6,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  	<script src="/js/IntlTableSort.js"></script>
+  	<link rel="stylesheet" href="/css/IntlTableSort.css">
   		<style>
   		html, body {
 	    	width: 100%;
@@ -99,7 +101,9 @@
 			selected : '',
 			krvna_grupa : '',
 			visina : '',
-			tezina : ''
+			tezina : '',
+			sortKey: 'naziv',
+			reverse: false
 		},
 		mounted() {
 			//this.pronadji_preglede();
@@ -114,13 +118,16 @@
 			document.getElementById("datum").setAttribute("min", today);
 		},
 		methods: {
+			sortBy(sortKey){
+				this.reverse = (this.sortKey == sortKey) ? ! this.reverse : false;
+				this.sortKey = sortKey;
+			},
 			isLoggedIn(){
                 return window.Event.isLoggedIn;
             },
 			prikazi_profil()
 			{
 				this.hideAll();
-				alert(document.cookie);
                 axios({
                 	method : 'get',
                     url : 'api/profil'+ '?access_token=' + getCookie("access_token"),
@@ -220,7 +227,6 @@
             },
             zakaziPregled(lekar)
             {
-            	alert(this.selected);
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),

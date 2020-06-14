@@ -12,4 +12,6 @@ public interface AdminKlinikeRepository extends JpaRepository<AdminKlinike, Long
 	@Query("select s from AdminKlinike s where s.klinika is null ")
 	List<AdminKlinike> getAdminiBezKlinike();
 
+	AdminKlinike findByEmail(String username);
+
 }

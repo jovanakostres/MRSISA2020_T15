@@ -28,6 +28,11 @@ public class AdminKlinikeService {
 		// TODO Auto-generated method stub
 		akRepository.save(adminKlinike);
 	}
+
+	public AdminKlinike findByEmail(String username) {
+		// TODO Auto-generated method stub
+		return akRepository.findByEmail(username);
+	}
 	
 	
 }

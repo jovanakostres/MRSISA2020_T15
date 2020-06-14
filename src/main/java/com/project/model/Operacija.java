@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Version;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -35,6 +36,9 @@ public class Operacija {
 	@SequenceGenerator(name="operacija_generator",initialValue = 1, sequenceName = "operacija_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
+	
+	@Version
+    private Long version;
 	
 	@Column(name="lekar_zakazao_id", unique=true, nullable=false)
 	private Long lekarId;

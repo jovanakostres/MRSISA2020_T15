@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.config.CustomUserDetails;
 import com.project.dto.AdminKlinikeDto;
 import com.project.dto.LekarDTO;
 import com.project.dto.OperacijaDto;
@@ -33,6 +35,7 @@ import com.project.model.Sala;
 import com.project.model.ZahtevZaOperaciju;
 import com.project.model.ZahtevZaPregled;
 import com.project.model.ZauzetoVreme;
+import com.project.service.AdminKlinikeService;
 import com.project.service.EmailService;
 import com.project.service.LekarService;
 import com.project.service.OperacijaService;
@@ -61,12 +64,24 @@ public class AdminKlinikeController {
 
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	AdminKlinikeService akService;
 
 	@GetMapping(value = "/pregledi")
 	public ArrayList<PregledDto> getPregled() {
 		Set<ZahtevZaPregled> pregledi = zzpService.findBySala();
+		Set<ZahtevZaPregled> preglediN = new HashSet<ZahtevZaPregled>();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		AdminKlinike ak = akService.findByEmail(userDetails.getUsername());
+		
+		for(ZahtevZaPregled zp : pregledi) {
+			if(zp.getLekar().getKlinika().getId() == ak.getKlinika().getId()) {
+				preglediN.add(zp);
+			}
+		}
 		ArrayList<PregledDto> pp = new ArrayList<PregledDto>();
-		for (ZahtevZaPregled zzp : pregledi) {
+		for (ZahtevZaPregled zzp : preglediN) {
 			pp.add(new PregledDto(zzp.getId(), zzp.getLekar().getIme(), zzp.getLekar().getPrezime(), null,
 					zzp.getDatum(), zzp.getVremeOd(), null, zzp.getCena(), false, zzp.getTipPregleda().getIme()));
 		}
@@ -159,8 +174,18 @@ public class AdminKlinikeController {
 	@GetMapping(value = "/operacije")
 	public ArrayList<OperacijaDto> getOperacije() {
 		Set<ZahtevZaOperaciju> zahteviO = zzoService.findByPraznaSala();
+		Set<ZahtevZaOperaciju> zahteviN = new HashSet<ZahtevZaOperaciju>();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		AdminKlinike ak = akService.findByEmail(userDetails.getUsername());
+		
+		for(ZahtevZaOperaciju zo : zahteviO) {
+			Lekar l = lekarService.findById(zo.getLekarId());
+			if(l.getKlinika().getId() == ak.getKlinika().getId()) {
+				zahteviN.add(zo);
+			}
+		}
 		ArrayList<OperacijaDto> operacije = new ArrayList<OperacijaDto>();
-		for (ZahtevZaOperaciju zzo : zahteviO) {
+		for (ZahtevZaOperaciju zzo : zahteviN) {
 			operacije.add(new OperacijaDto(zzo.getId(), zzo.getLekari(), null, zzo.getDatum(), zzo.getVremeOd(),
 					zzo.getVremeDo(), zzo.getCena(), false, zzo.getTipPregleda().getIme(), zzo.getLekarId()));
 		}

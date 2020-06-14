@@ -72,7 +72,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Zahtev za registraciju");
 		mail.setText(user.toString());
@@ -87,7 +88,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Zahtev za pregled");
 		mail.setText(pregled.toString());
@@ -104,7 +106,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Pregled prihvacen");
 		mail.setText(pregled.toString());
@@ -120,7 +123,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sala je dodeljena");
 		mail.setText(pregled.toString());
@@ -136,7 +140,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sala je dodeljena");
 		mail.setText(pregled.toString());
@@ -152,7 +157,8 @@ public class EmailService {
 		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo("sara98.mik@gmail.com");
+		//mail.setTo("sara98.mik@gmail.com");
+		mail.setTo("jovanako15@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Odbijen pregled");
 		mail.setText("Nazalost vas pregled je odbijen");
