@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.config.CustomUserDetails;
 import com.project.dto.KalendarDto;
+import com.project.model.Operacija;
 import com.project.model.Pacijent;
 import com.project.model.Pregled;
 import com.project.model.ZahtevZaOdmor;
@@ -64,12 +65,11 @@ public class LekarController {
 		   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		   
 		   for (Pregled pregled : lekarService.findByEmail(userDetails.getUsername()).getPregledi()) {
-			   if(pregled.getOperacija()) {
-				   kalendar.add(new KalendarDto("Operacija " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
-			   }else {
-				   kalendar.add(new KalendarDto("Pregled " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));
-			   }
-			   
+
+				   kalendar.add(new KalendarDto("Pregled " + pregled.getId(), LocalDateTime.of(pregled.getDatum(),pregled.getVremeOd()),LocalDateTime.of(pregled.getDatum(),pregled.getVremeDo())));		   
+		}
+		   for (Operacija operacija : lekarService.findByEmail(userDetails.getUsername()).getOperacije()) {
+				   kalendar.add(new KalendarDto("Operacija " + operacija.getId(), LocalDateTime.of(operacija.getDatum(),operacija.getVremeOd()),LocalDateTime.of(operacija.getDatum(),operacija.getVremeDo())));			   
 		}
 		   
 		   for (ZauzetoVreme zv : lekarService.findByEmail(userDetails.getUsername()).getZauzetoVreme()) {

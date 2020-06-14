@@ -39,6 +39,10 @@ public class Sala {
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Pregled> pregledi;
+	
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Operacija> operacije;
 
 	public Sala() {
 		
@@ -53,6 +57,16 @@ public class Sala {
 		this.pregledi = pregledi;
 	}
 
+	
+
+	public Sala(Long id, String naziv, Klinika klinika, Set<Pregled> pregledi, Set<Operacija> operacije) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.klinika = klinika;
+		this.pregledi = pregledi;
+		this.operacije = operacije;
+	}
 
 
 	public Long getId() {
@@ -88,6 +102,16 @@ public class Sala {
 
 	public void setPregledi(Set<Pregled> pregledi) {
 		this.pregledi = pregledi;
+	}
+
+
+	public Set<Operacija> getOperacije() {
+		return operacije;
+	}
+
+
+	public void setOperacije(Set<Operacija> operacije) {
+		this.operacije = operacije;
 	}
 
 	

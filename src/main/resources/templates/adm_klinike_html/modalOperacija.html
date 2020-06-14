@@ -1,0 +1,46 @@
+<head>
+	<meta charset="UTF-8">
+</head>
+<div id="modalOperacija" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalO">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalOperacija').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Informacije o operaciji</h4>
+      </div>
+      <div class="modal-body">
+        <table class = "table" id="tableModal">
+		<thead>	</thead>
+			<tbody>
+        	<tr v-for="(column, indexColumn) in columns" :key="indexColumn" >
+        		<td>{{labels[indexColumn]}}</td>
+        	  	<td>{{item[column]}}</td>
+        	</tr>
+        	<tr>
+        		<td>Sala</td>
+        		<td>
+            		<select style = "height: 30px;" @change="getLekariSala($event)" id = "termin" v-model = "selected">
+            			<option v-for = "tt in sale" v-bind:value = "tt"> {{tt.naziv}} </option>
+					</select>
+				</td>
+        	</tr>
+        	<tr>
+        		<td>Lekari</td>
+        		<td>
+            		<select id="lekariOSelect" class="js-example-basic-multiple" multiple="multiple" style="width:400px;height: 50px;">
+			  </select>
+				</td>
+        	</tr>
+        	</tbody>
+      	</table>
+      </div>
+      <div class="modal-footer">
+      	<button type = "button" class="btn btn-default" v-on:click = "zakazi_operaciju">Zakaži</button>
+        <button type="button" class="btn btn-default" onclick="document.getElementById('modalOperacija').style.display='none'">Nazad</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

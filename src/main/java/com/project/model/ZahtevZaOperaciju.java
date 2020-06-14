@@ -2,7 +2,6 @@ package com.project.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,12 +26,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name="operacije")
-public class Operacija {
-
+@Table(name="zahtevi_za_operacije")
+public class ZahtevZaOperaciju {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "operacija_generator")
-	@SequenceGenerator(name="operacija_generator",initialValue = 1, sequenceName = "operacija_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "zahtevi_operacija_generator")
+	@SequenceGenerator(name="zahtevi_operacija_generator",initialValue = 2, sequenceName = "zahtevi_operacija_seq")
 	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	
@@ -51,13 +50,7 @@ public class Operacija {
 	
 	@Column(name="cena", unique=false, nullable=false)
 	private Double cena;	
-	
-	@Column(name="izvrsen", unique=false, nullable=false)
-	private Boolean izvrsen;
-	
-	@Column(name = "definisan", unique = false, nullable = false)
-	private Boolean definisan;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
 	private TipPregleda tipPregleda;
@@ -70,9 +63,8 @@ public class Operacija {
 	//@JoinColumn(name="sala_id")
 	private Sala sala;
 	
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "lekari_operacije", joinColumns = @JoinColumn(name = "operacija_id", referencedColumnName = "id"),
+	@JoinTable(name = "zahtevi_operacije_lekari", joinColumns = @JoinColumn(name = "zahtev_operacija_id", referencedColumnName = "id"),
 	        inverseJoinColumns = @JoinColumn(name = "lekar_id", referencedColumnName = "id"))
 	private Set<Lekar> lekari;
 	
@@ -80,9 +72,30 @@ public class Operacija {
 	@JsonBackReference
 	private ZdravstveniKarton zkPacijenta;
 	
-	public Operacija() {}
+	@Column(name="datumprijave", unique=false, nullable=false)
+	private LocalDate datumPrijave;
 	
-	public Operacija(String a) { lekari = new HashSet<Lekar>();}
+	@Column(name="vremeprijave", unique=false, nullable=false)
+	private LocalTime vremePrijave;
+	
+	public ZahtevZaOperaciju() {}
+	
+	public ZahtevZaOperaciju(LocalDate datum, LocalTime vremeOd, LocalTime vremeDo, Double cena,
+			TipPregleda tipPregleda, Sala sala, Set<Lekar> lekari, ZdravstveniKarton zkPacijenta,
+			LocalDate datumPrijave, LocalTime vremePrijave, Long lekarId) {
+		super();
+		this.datum = datum;
+		this.vremeOd = vremeOd;
+		this.vremeDo = vremeDo;
+		this.cena = cena;
+		this.tipPregleda = tipPregleda;
+		this.sala = sala;
+		this.lekari = lekari;
+		this.zkPacijenta = zkPacijenta;
+		this.datumPrijave = datumPrijave;
+		this.vremePrijave = vremePrijave;
+		this.lekarId = lekarId;
+	}
 
 	public Long getId() {
 		return id;
@@ -124,22 +137,6 @@ public class Operacija {
 		this.cena = cena;
 	}
 
-	public Boolean getIzvrsen() {
-		return izvrsen;
-	}
-
-	public void setIzvrsen(Boolean izvrsen) {
-		this.izvrsen = izvrsen;
-	}
-
-	public Boolean getDefinisan() {
-		return definisan;
-	}
-
-	public void setDefinisan(Boolean definisan) {
-		this.definisan = definisan;
-	}
-
 	public TipPregleda getTipPregleda() {
 		return tipPregleda;
 	}
@@ -160,8 +157,8 @@ public class Operacija {
 		return lekari;
 	}
 
-	public void setLekari(Set<Lekar> lekar) {
-		this.lekari = lekar;
+	public void setLekari(Set<Lekar> lekari) {
+		this.lekari = lekari;
 	}
 
 	public ZdravstveniKarton getZkPacijenta() {
@@ -170,6 +167,22 @@ public class Operacija {
 
 	public void setZkPacijenta(ZdravstveniKarton zkPacijenta) {
 		this.zkPacijenta = zkPacijenta;
+	}
+
+	public LocalDate getDatumPrijave() {
+		return datumPrijave;
+	}
+
+	public void setDatumPrijave(LocalDate datumPrijave) {
+		this.datumPrijave = datumPrijave;
+	}
+
+	public LocalTime getVremePrijave() {
+		return vremePrijave;
+	}
+
+	public void setVremePrijave(LocalTime vremePrijave) {
+		this.vremePrijave = vremePrijave;
 	}
 
 	public Long getLekarId() {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.project.model.Korisnik;
 import com.project.model.Pregled;
 import com.project.model.ZahtevZaPregled;
+import com.project.model.ZahtevZaOperaciju;
 import com.project.model.ZahtevZaRegistraciju;
 
 
@@ -114,6 +115,22 @@ public class EmailService {
 	
 	@Async
 	public void sendDodeljenaSala(ZahtevZaPregled pregled) throws MailException, InterruptedException {
+
+		//Simulacija duze aktivnosti da bi se uocila razlika
+		System.out.println("Slanje emaila...");
+
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("sara98.mik@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Sala je dodeljena");
+		mail.setText(pregled.toString());
+		javaMailSender.send(mail);
+
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendDodeljenaSalaOp(ZahtevZaOperaciju pregled) throws MailException, InterruptedException {
 
 		//Simulacija duze aktivnosti da bi se uocila razlika
 		System.out.println("Slanje emaila...");

@@ -26,5 +26,8 @@ public interface LekarRepository extends JpaRepository<Lekar, Long>{
 	@Query("select l from Lekar l where l.ime like ?1 and l.prezime like ?2")
 	Lekar findByNameAndSurname(String imeP, String prezimeP);
 	
+	@Query("select s from Lekar s where s.klinika.id = ?1")
+	List<Lekar> getLekariSala(Long id);
+	
 }
 

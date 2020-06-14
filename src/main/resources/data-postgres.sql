@@ -1,4 +1,4 @@
-insert into tip_pregleda (id, ime, cena) values (1,'opsti',100);
+insert into tip_pregleda (id, ime, cena) values (1,'opšti',100);
 insert into tip_pregleda (id, ime, cena) values (2,'stomatoloski',200);
 insert into zauzeto_vreme (id, datum_od, datum_do, tip_zauzetosti) values (1,'2020.05.25','2020.05.30', 'GODISNJIODMOR');
 
@@ -36,4 +36,6 @@ insert into lekovi(id, naziv) values (2, 'SOMATULINE AUTOGEL,injekcija, špric,1
 
 insert into sifarnik (dijagnoza_id,lek_id) values (1,1);
 insert into sifarnik (dijagnoza_id,lek_id) values (2,2);
+
+insert into zahtevi_za_operacije(id,datum,vreme_od,vreme_do,cena,tip_pregleda_id,datumprijave,vremeprijave,zk_pacijenta_pacijent_id,lekar_zakazao_id) values(1,'2020.07.03','10:00','11:00',5000, 1,'2020.06.14','10:00',1,3);
 

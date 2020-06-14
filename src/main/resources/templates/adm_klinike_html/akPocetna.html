@@ -6,6 +6,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  	   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
   		<style>
   		html, body {
 	    	width: 100%;
@@ -24,7 +26,8 @@
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 		    	<ul class="nav navbar-nav">
-					<li><a class="navbar-brand" v-on:click="pregledi">Nezakazani pregledi</a></li>			      	
+					<li><a class="navbar-brand" v-on:click="pregledi">Nezakazani pregledi</a></li>
+					<li><a class="navbar-brand" v-on:click="operacije">Nezakazane operacije</a></li>			      	
 			    </ul>
 		    	<ul class="nav navbar-nav navbar-right">
 		      		<li><a v-on:click="log_out_k"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -35,7 +38,10 @@
 		<login-component></login-component>
 		<div th:replace="adm_klinike_html/NezakazaniPregledi :: nezakazani"></div>
 		<div th:replace="adm_klinike_html/Pregled :: modalP"></div>
+		<div th:replace="adm_klinike_html/modalOperacija :: modalO"></div>
 		<div th:replace="adm_klinike_html/PreglediIzmeniDatum :: modalPreglediIspravka"></div>
+		<div th:replace="adm_klinike_html/modalIzmeniDatumOperacija :: modalOpIspravka"></div>
+		<div th:replace="adm_klinike_html/NezakazaneOperacije :: nezakazaneO"></div>
 	</div>
 </body>
 
@@ -45,6 +51,10 @@
 
 
 <script>
+$(document.body).on("change","#lekariOIzmenaSelect",function(){
+	 app.getLekariTermin();
+	});
+
 
 	var app = new Vue({
 		el: '#admin',
@@ -61,6 +71,23 @@
 		},
 		mounted() {
 			this.proveri_preglede();
+			this.proveri_operacije();
+			$('#lekariOSelect').select2({
+                placeholder: "Izaberi lekare..."
+            });
+			
+			$('#lekariOIzmenaSelect').select2({
+                placeholder: "Izaberi lekare..."
+            });
+			
+			var today = new Date();
+        	var dd = String(today.getDate()).padStart(2, '0');
+        	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        	var yyyy = today.getFullYear();
+
+        	today =  yyyy + '-' + mm + '-' + dd ;
+			document.getElementById("dateOp").setAttribute("min", today);
+			document.getElementById("date").setAttribute("min", today);
 		},
 		methods: {
 			isLoggedIn(){
@@ -76,6 +103,12 @@
                     url : 'api/adminKlinike/proveri_preglede' + '?access_token=' + getCookie("access_token"),
                 });
             },
+            proveri_operacije(){
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/proveri_operacije' + '?access_token=' + getCookie("access_token"),
+                });
+            },
             pregledi(){
             	this.hideAll();
             	axios({
@@ -84,15 +117,108 @@
                 }).then(function(response){
                     this.npregledi = response.data;
                     this.columns = [ 'datum', 'imeP', 'prezimeP', 'tipOp', 'vremeOd'];
-                    this.labels = [ 'Datum', 'Lekar', '','Tip', 'Vreme'];
+                    this.labels = [ 'Datum', 'Lekar', '','Tip', 'Vreme početka'];
                     console.log(this.npregledi[0]);
                     $( "#nezakazani" ).show();
                 }.bind(this));
+            },
+            operacije(){
+            	this.hideAll();
+            	axios({
+                	method : 'get',
+                    url : 'api/adminKlinike/operacije' + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){
+                    this.npregledi = response.data;
+                    this.columns = [ 'datum', 'cena', 'tipOp', 'vremeOd', 'vremeDo'];
+                    this.labels = [ 'Datum', 'Cena','Tip', 'Vreme početka', 'Vreme završetka'];
+                    console.log(this.npregledi[0]);
+                    $( "#nezakazane_operacije" ).show();
+                }.bind(this));
+            },
+            pregled_sale_operacija(id, index){
+            	for(pregled of this.npregledi){
+					if(pregled['id'] == id)
+					{
+						this.item = pregled;
+					}
+				}
+
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/sale_operacija' + '?access_token=' + getCookie("access_token"),
+                    data:this.item
+                }).then(function(response){
+                    this.sale = response.data;
+                    $( "#modalOperacija" ).show();
+                    //$( "#modalPreglediIzmena" ).show();
+                }.bind(this)).catch((error)=>{
+                	$( "#modalOperacijaIzmena" ).show();
+                });
+            },
+            getLekariSala(event){
+            	var id = event.target.value;
+            	var nesto = this.item;
+            	nesto['sala'] = this.selected['naziv'];
+            	axios({
+                	method : 'post',
+                    url : '/api/adminKlinike/lekari_sala' + '?access_token=' + getCookie("access_token"),
+                    data:nesto
+            	}).then(function(response){
+                	$('#lekariOSelect').val(null).trigger('change');
+    				$('#lekariOSelect').html('').select2({data: [{id: '', text: ''}]});
+    				 $('#lekariOSelect' + " option")[0].remove();
+    				 
+    				for (admin of response.data){
+    					var newOption = new Option(admin.ime + " " + admin.prezime, admin.id, false, false);
+    					$('#lekariOSelect').append(newOption).trigger('change');
+    				}
+                }.bind(this));	
+            	
+            },
+            getLekariSala2(event){
+            	var id = event.target.value;
+            	var nesto = this.item;
+            	nesto['sala'] = this.selected['naziv'];
+            	nesto['datum'] = this.selected_datum;
+            	axios({
+                	method : 'post',
+                    url : '/api/adminKlinike/lekari_sala' + '?access_token=' + getCookie("access_token"),
+                    data:nesto
+            	}).then(function(response){
+                	$('#lekariOIzmenaSelect').val(null).trigger('change');
+    				$('#lekariOIzmenaSelect').html('').select2({data: [{id: '', text: ''}]});
+    				 $('#lekariOIzmenaSelect' + " option")[0].remove();
+    				 
+    				for (admin of response.data){
+    					var newOption = new Option(admin.ime + " " + admin.prezime, admin.id, false, false);
+    					$('#lekariOIzmenaSelect').append(newOption).trigger('change');
+    				}
+                }.bind(this));	
+            	
+            },
+            zakazi_operaciju(){
+            	var l = $('#lekariOSelect').find(':selected');
+            	var odabraniLekari = [];
+				for(ad of l){
+					odabraniLekari.push(ad.value);
+				}
+            	this.item['sala'] = this.selected['naziv'];
+            	this.item['lekari_ids'] = odabraniLekari;
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/zakazi_operaciju'+ '?access_token=' + getCookie("access_token"),
+                    data : this.item
+                }).then(function(response){
+                	document.location.replace("/akPocetna");
+                });
             },
             hideAll(){
             	$( "#nezakazani" ).hide();
             	$( "#modalPregledi" ).hide();
             	$( "#modalPreglediIzmena" ).hide();
+            	$( "#modalOperacijaIzmena" ).hide();
+            	$( "#modalOperacija" ).hide();
+            	$( "#nezakazane_operacije" ).hide();
             },
             pregled_sale(id, index){
             	alert(id);
@@ -115,7 +241,6 @@
                 });
             },
             zakazi_Pregled(){
-            	alert(this.selected);
             	this.item['sala'] = this.selected['naziv'];
             	axios({
                 	method : 'post',
@@ -146,6 +271,39 @@
                 	$( "#modalPreglediIzmena" ).show();
                 }.bind(this));
             },
+            datumOp(){
+            	this.item['datum'] = $("#date").val()
+            	axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/sale_operacija'+ '?access_token=' + getCookie("access_token"),
+                    data : this.item
+                }).then(function(response){                	
+                	this.sale = response.data;
+                	$( "#modalOperacijaIzmena" ).show();
+                }.bind(this));
+            	
+            },
+            getLekariTermin(){
+            	var l = $('#lekariOIzmenaSelect').find(':selected');
+            	var odabraniLekari = [];
+				for(ad of l){
+					odabraniLekari.push(ad.value);
+				}
+				
+				var slanje = {
+						lekariIds : odabraniLekari,
+						datum : this.selected_datum
+				}
+				axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/terminiOp'+ '?access_token=' + getCookie("access_token"),
+                    data : slanje
+                }).then(function(response){                	
+                	this.termini = response.data;
+                	$( "#modalOperacijaIzmena" ).show();
+                }.bind(this));
+				   	
+            },
             zakazi_izmenjen(){
             	this.item['datum'] = this.selected_datum;
             	this.item['vremeOd'] = this.selected_time;
@@ -154,6 +312,25 @@
             		method : 'post',
                     url : 'api/adminKlinike/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),
                     data : {id:this.item['id'] ,imeP: this.item['imeP'], prezimeP: this.item['prezimeP'], datum: this.item['datum'], vremeOd:this.item['vremeOd'], sala: this.item['sala'], cena: this.item['cena'], vremeDo: this.item['vremeDo'], tipOp : this.item['tipOp'], izvrsen: this.item['izvrsen']}
+                }).then(function(response){                	
+                	document.location.replace("/akPocetna");
+                }.bind(this));
+            },
+            zakazi_izmenjenu_operaciju(){
+            	this.item['datum'] = this.selected_datum;
+            	this.item['vremeOd'] = this.selected_time;
+            	this.item['sala'] = this.selected['naziv'];
+            	var l = $('#lekariOIzmenaSelect').find(':selected');
+            	var odabraniLekari = [];
+				for(ad of l){
+					odabraniLekari.push(ad.value);
+				}
+            	this.item['lekari_ids'] = odabraniLekari;
+            	
+            	axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/zakazi_operaciju'+ '?access_token=' + getCookie("access_token"),
+                    data : this.item
                 }).then(function(response){                	
                 	document.location.replace("/akPocetna");
                 }.bind(this));

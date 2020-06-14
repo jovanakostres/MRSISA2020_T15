@@ -52,4 +52,9 @@ public class LekarService {
 		return lekarRepository.findByNameAndSurname(imeP, prezimeP);
 	}
 
+	public List<Lekar> getLekariSala(Long id) {
+		// TODO Auto-generated method stub
+		return lekarRepository.getLekariSala(id);
+	}
+
 }

@@ -112,5 +112,13 @@ public class Lekar extends Korisnik{
 		this.zauzetoVreme = zauzetoVreme;
 	}
 
+	public Set<Operacija> getOperacije() {
+		return operacije;
+	}
+
+	public void setOperacije(Set<Operacija> operacije) {
+		this.operacije = operacije;
+	}
+
 	
 }

@@ -42,12 +42,7 @@ public class PregledController {
 			Set <PregledDto> pregledi = new HashSet<PregledDto>();
 			String op;
 			for (Pregled pregled : pregledService.getZakazaniPregledi(l)) {
-				if(pregled.getOperacija()) {
-					op = "Operacija";
-				}else {
-					op = "Pregled";
-				}
-				pregledi.add(new PregledDto(pregled.getId(),pregled.getZkPacijenta().getPacijent().getIme(),pregled.getZkPacijenta().getPacijent().getPrezime(),pregled.getSala().getNaziv(),pregled.getDatum(),pregled.getVremeOd(),pregled.getVremeDo(),pregled.getCena(),pregled.getIzvrsen(),op));
+				pregledi.add(new PregledDto(pregled.getId(),pregled.getZkPacijenta().getPacijent().getIme(),pregled.getZkPacijenta().getPacijent().getPrezime(),pregled.getSala().getNaziv(),pregled.getDatum(),pregled.getVremeOd(),pregled.getVremeDo(),pregled.getCena(),pregled.getIzvrsen(),"Pregled"));
 			}
 		   
 		   return pregledi;
@@ -57,12 +52,7 @@ public class PregledController {
 	   public PregledDto getPregled(@PathVariable Long id) {
 		   Pregled pr = pregledService.findById(id);
 		   String op;
-		   if(pr.getOperacija()) {
-			   op = "Operacija";
-		   }else {
-			   op = "Pregled";
-		   }
-		   PregledDto pregled = new PregledDto(pr.getId(),pr.getZkPacijenta().getPacijent().getIme(),pr.getZkPacijenta().getPacijent().getPrezime(),pr.getSala().getNaziv(),pr.getDatum(),pr.getVremeOd(),pr.getVremeDo(),pr.getCena(),pr.getIzvrsen(),op);
+		   PregledDto pregled = new PregledDto(pr.getId(),pr.getZkPacijenta().getPacijent().getIme(),pr.getZkPacijenta().getPacijent().getPrezime(),pr.getSala().getNaziv(),pr.getDatum(),pr.getVremeOd(),pr.getVremeDo(),pr.getCena(),pr.getIzvrsen(),"Pregled");
 		   
 		   return pregled;
 	   }
