@@ -8,10 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -30,6 +34,12 @@ public class Lekar extends Korisnik{
 	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<Pregled> pregledi;
+	
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "lekari_operacije", joinColumns = @JoinColumn(name = "lekar_id", referencedColumnName = "id"),
+	        inverseJoinColumns = @JoinColumn(name = "operacija_id", referencedColumnName = "id"))
+	private Set<Operacija> operacije;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference

@@ -245,11 +245,21 @@
 					if(pregled['id'] == id){
 						this.izvrsen = !pregled['izvrsen'];
 						this.item = pregled;
+						
 					}
 				}
 				}else{
 					this.izvrsen = !it['izvrsen'];
 					this.item = it;
+					var danas = new Date();
+					var pregledDatumOd = it['datum'] + 'T' + it['vremeOd'];
+					pregledDatumOd = Date.parse(pregledDatumOd); 
+					var pregledDatumDo = it['datum'] + 'T' + it['vremeDo'];
+					pregledDatumDo = Date.parse(pregledDatumDo);
+					var diffMs = (pregledDatumOd - danas);
+					if(Math.round(diffMs / 60000) > 5){
+						this.izvrsen = false;
+					}
 				}
 				$( "#modalZPregledi" ).show();
 			},
