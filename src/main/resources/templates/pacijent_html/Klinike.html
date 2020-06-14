@@ -1,3 +1,6 @@
+<head>
+	<meta charset="UTF-8">
+	</head>
 <div id="tabela" style = "display:none;margin: 25px 100px;font-size: 20px;" th:fragment="table" >
 	<select id = "tip_pregleda" style = "height: 30px;" v-on:change = "pretraga($event)">
 		<option v-for = "tt in tipovi" :value = "tt.id"> {{tt.ime}} </option>
