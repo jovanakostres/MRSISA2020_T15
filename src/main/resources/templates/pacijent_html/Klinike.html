@@ -6,9 +6,9 @@
 	<table class = "table table-hover">
 		<thead>
 			<tr>
-				<th><input type = "text" v-model = "naziv" v-on:change = "filter"></th>
-				<th><input type = "text" v-model = "adresa_fil" v-on:change = "filter"></th>
-				<th><input type = "text" v-model = "opis"  v-on:change = "filter"></th>
+				<th><input type = "text" v-model = "naziv" v-on:change = "filter" placeholder = "filter naziv"></th>
+				<th><input type = "text" v-model = "adresa_fil" v-on:change = "filter" placeholder = "filter adresa"></th>
+				<th><input type = "text" v-model = "opis"  v-on:change = "filter" placeholder = "filter opis"></th>
 				<th><input type = "button" v-model = "minmax" value = "max" v-on:click = "filter"></th>
 			</tr>
 			<tr >

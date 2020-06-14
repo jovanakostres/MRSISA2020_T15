@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.config.CustomUserDetails;
 import com.project.dto.KlinikaPretragaDTO;
 import com.project.dto.LekarDTO;
+import com.project.dto.PregledDto;
 import com.project.dto.ZdravstveniKartonDTO;
 import com.project.model.Klinika;
 import com.project.model.Lekar;
@@ -111,7 +112,7 @@ public class PacijentController {
 	   return lekari;
    }
    
-   private List<LocalTime> kreirajTermine(LocalDate date, Lekar l) {
+   public static List<LocalTime> kreirajTermine(LocalDate date, Lekar l) {
 	// TODO Auto-generated method stub
 	   List<LocalTime> datumi = new ArrayList<LocalTime>();
 	   LocalTime vremeOd = l.getPocetakRada();
@@ -165,6 +166,19 @@ public class PacijentController {
 	   return lekarRet;
    }
    
+   
+   @RequestMapping(value = "/istorija", method = RequestMethod.GET)
+   public List<PregledDto> istorija()
+   {
+	   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       Pacijent pac = pacijentService.findByEmail(userDetails.getUsername());
+       ZdravstveniKarton zk = zkService.fingByPacijent(pac.getId());
+       List<Pregled> pregledi = pregledService.findByZKarton(zk.getId());
+       List<PregledDto> pregledidto = new ArrayList<PregledDto>();
+       for(Pregled p: pregledi)
+    	   pregledidto.add(new PregledDto(p.getId(), p.getLekar().getIme(), p.getLekar().getPrezime(), p.getSala().getNaziv(), p.getDatum(), p.getVremeOd(), null, p.getCena(), true, p.getTipPregleda().getIme()));
+	   return pregledidto;
+   }
    
    @RequestMapping(value = "/izmena_profila", method = RequestMethod.POST)
    public ResponseEntity updateProfil(@RequestBody Pacijent pacijent) {
@@ -250,11 +264,14 @@ public class PacijentController {
 	   minmax = params[3].split(":")[1].replace("\"","");
 	   String id = params[4].split(":")[1].replace("\"",""); // klinika
 	   Long tip = Long.parseLong(params[5].split(":")[1].replace("\"", "").replace("}", "")); //tip pregleda
+	   LocalDate date = LocalDate.parse(params[6].split(":")[1].replace("\"", "").replace("}", ""));
 	   List<Lekar> lekari = lekarService.filter(ime, prez, broj, minmax, Long.parseLong(id));
 	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
 	   for(Lekar l : lekari)
 	   {
-		   lekariRet.add(new LekarDTO(l.getId(),l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+		   LekarDTO lekar = new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme());
+		   lekar.setSlobodniTermini(kreirajTermine(date, l));
+		   lekariRet.add(lekar);
 	   }
 	   return lekariRet;
    }   
@@ -266,12 +283,15 @@ public class PacijentController {
 	   String param = pacijent[0].split(":")[1].replace("\"", "");
 	   String id = pacijent[1].split(":")[1].replace("\"", "");
 	   Long tip = Long.parseLong(pacijent[2].split(":")[1].replace("\"", "").replace("}", ""));
+	   LocalDate date = LocalDate.parse(pacijent[3].split(":")[1].replace("\"", "").replace("}", ""));
 	   System.out.println("PRETRAGA PARAM : .." + param+ "..");
 	   List<Lekar> lekari =  lekarService.search(param, Long.parseLong(id));
 	   List<LekarDTO> lekariRet = new ArrayList<LekarDTO>();
 	   for(Lekar l : lekari)
 	   {
-		   lekariRet.add(new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme()));
+		   LekarDTO lekar = new LekarDTO(l.getId(), l.getIme(), l.getPrezime(), l.getProsecnaOcena(), l.getTipPregleda().getIme());
+		   lekar.setSlobodniTermini(kreirajTermine(date, l));
+		   lekariRet.add(lekar);
 	   }
 	   return lekariRet;
 	  
@@ -333,6 +353,7 @@ public class PacijentController {
 	   System.out.println(zk == null);
 	   
 	   ZahtevZaPregled zzp = new ZahtevZaPregled(date, t, t.plusHours(1L), 100.0, lekar.getTipPregleda(), null, lekar, zk) ;
+	   zzp.setPacijent(p);
 	   
 	   zzpService.save(zzp);
 	   
@@ -358,6 +379,39 @@ public class PacijentController {
 	   ZdravstveniKartonDTO zkdto = new ZdravstveniKartonDTO(zk);
 	   
 	   return zkdto;
+   }
+   
+   @RequestMapping(value = "/potvda_pregleda", method = RequestMethod.GET)
+   public List<PregledDto> potvrdaPregleda()
+   {
+	   CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       Pacijent p = pacijentService.findByEmail(userDetails.getUsername());
+       List<ZahtevZaPregled> zahtevi = zzpService.findByPacijent(p);
+       List<PregledDto> pregledi = new ArrayList<PregledDto>();
+       for(ZahtevZaPregled z : zahtevi)
+    	   pregledi.add(new PregledDto(z.getId(), "","", z.getSala().getNaziv(), z.getDatum(), z.getVremeOd(), null, z.getCena(), false, z.getTipPregleda().getIme()));
+       return pregledi;
+   }
+   
+   @RequestMapping(value = "/potvrdi", method = RequestMethod.POST)
+   public void potvrdi(@RequestBody String zz) {
+	   System.out.println("Prosao");
+	   Long id = Long.parseLong(zz.split(":")[1].replace("}", ""));
+	   ZahtevZaPregled zzp = zzpService.findById(id);
+	   Pregled p = new Pregled();
+	   System.out.println(zzp==null);
+	   p.setCena(zzp.getCena());
+	   p.setDatum(zzp.getDatum());
+	   p.setIzvrsen(false);
+	   p.setDefinisan(false);
+	   p.setLekar(zzp.getLekar());
+	   p.setOperacija(false);
+	   p.setSala(zzp.getSala());
+	   p.setTipPregleda(zzp.getTipPregleda());
+	   p.setVremeOd(zzp.getVremeOd()); p.setVremeDo(zzp.getVremeDo());
+	   p.setZkPacijenta(zzp.getZkPacijenta());
+	   pregledService.save(p);
+	   zzpService.delete(zzp);
    }
    
 }

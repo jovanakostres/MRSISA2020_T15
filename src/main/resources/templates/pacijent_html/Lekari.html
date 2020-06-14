@@ -3,10 +3,10 @@
 	<table class = "table table-hover">
 		<thead>
 			<tr>
-				<th><input type = "text" v-model = "ime_lek" v-on:change = "filter_lekar"></th>
-				<th><input type = "text" v-model = "prez_lek" v-on:change = "filter_lekar"></th>
-				<th><input type = "text" v-model = "broj_lek"  v-on:change = "filter_lekar"></th>
+				<th><input type = "text" v-model = "ime_lek" v-on:change = "filter_lekar" placeholder = "filter ime"></th>
+				<th><input type = "text" v-model = "prez_lek" v-on:change = "filter_lekar" placeholder = "filter prezime"></th>
 				<th><input type = "button" v-model = "minmax" value = "max" v-on:click = "filter_lekar"></th>
+				<th><input type = "text" v-model = "broj_lek"  v-on:change = "filter_lekar" placeholder = "filter ocena"></th>
 			</tr>
 			<tr >
         		<th class="col-md-3" v-for="(column, index) in labels" :key="index"> {{column}}</th>

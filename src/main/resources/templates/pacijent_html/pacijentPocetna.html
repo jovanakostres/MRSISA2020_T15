@@ -32,6 +32,7 @@
 			      	<li><a class="navbar-brand" v-on:click="prikazi_istoriju" >Istorija</a></li>
 			      	<li><a class="navbar-brand" v-on:click="prikazi_karton" >Zdravstveni karton</a></li>
 			      	<li><a class="navbar-brand" v-on:click="prikazi_profil" >Profil</a></li>
+			      	<li><a class="navbar-brand" v-on:click="potvdi_pregled">Pregledi</a></li>
 			    </ul>
 		    	<ul class="nav navbar-nav navbar-right">
 		      		<li><a v-on:click="log_out_k"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -45,6 +46,8 @@
 		<div th:replace="pacijent_html/UnapredDefinisani :: buttons"></div>
 		<div th:replace="pacijent_html/Lekari :: table"></div>
 		<div th:replace="pacijent_html/ZKarton :: zk"></div>
+		<div th:replace="pacijent_html/Pregledi :: tablePregledi"></div>
+		<div th:replace="pacijent_html/Istorija :: tableIstorija"></div>
 	</div>
 </body>
 
@@ -119,6 +122,7 @@
 					this.lbo = response.data.lbo;
 					this.email = response.data.email;
                     console.log(response.data);
+                    $( "#registracija" ).show();
                 }.bind(this));
             },
             pronadji_preglede()
@@ -150,16 +154,16 @@
             },
 			prikazi_istoriju()
 			{		
-            	$( "#registracija" ).show();
-				console.log("Nesto se desilo")
+            	this.hideAll();
                 axios({
                 	method : 'get',
-                    url : 'api/pacijent/klinike',
+                    url : 'api/pacijent/istorija' + '?access_token=' + getCookie("access_token"),
                 }).then(function(response){
-                    this.ime_pl = response.data;
-                    console.log(this.ime_pl);
+                	this.columns = [ 'datum', 'vremeOd', 'imeP', 'prezimeP', 'tipOp', 'sala'];
+                    this.labels = [ 'Datum', 'Vreme', 'Lekar','','Tip pregleda', 'Sala'];
+                    this.items = response.data;
                 }.bind(this));
-				
+                $( "#tabelaIstorija" ).show();
             },
 			prikazi_karton()
 			{
@@ -324,10 +328,10 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/filter_lekar' + '?access_token=' + getCookie("access_token"),
-                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id, tip:this.tip_pregleda},
+                    data:{ime:this.ime_lek,prezime:this.prez_lek, broj:this.broj_lek, minmax:this.minmax, id:this.klinika_id, tip:this.tip_pregleda, datum:this.datum},
                 }).then(function(response){                	
                 	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
-                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda', 'SLobodni termini'];
                     this.items = response.data;
                     if(this.minmax=='max')
                     	this.minmax = 'min';
@@ -341,10 +345,10 @@
             	axios({
                 	method : 'post',
                     url : 'api/pacijent/pretraga_lekar' + '?access_token=' + getCookie("access_token"),
-                    data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id, tip:this.tip_pregleda},
+                    data:{pretraga_lek:this.pretragaLekar_text, id:this.klinika_id, tip:this.tip_pregleda, datum:this.datum},
                 }).then(function(response){                	
                 	this.columns = [ 'ime', 'prezime', 'ocena', 'naziv'];
-                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda'];
+                    this.labels = [ 'Ime', 'Prezime', 'Ocena', 'Tip pregleda', 'Slobodni termini'];
                     this.items = response.data;
                 }.bind(this));
             	$( "#tabela_lekari" ).show();
@@ -359,6 +363,30 @@
             	$( "#tabela_lekari" ).hide();
             	$( "#registracija" ).hide();
             	$( "#unapred_definisani" ).hide();
+            	$( "#tabelaPregled" ).hide();
+            	$( "#tabelaIstorija" ).hide();
+            },
+            potvdi_pregled(){
+            	this.hideAll();
+            	axios({
+                	method : 'get',
+                    url : 'api/pacijent/potvda_pregleda' + '?access_token=' + getCookie("access_token"),
+                }).then(function(response){                	
+                	this.columns = [ 'datum', 'vremeOd', 'tipOp', 'sala'];
+                    this.labels = [ 'Datum', 'Vreme', 'Tip pregleda', 'Sala'];
+                    this.items = response.data;
+                    $( "#tabelaPregled" ).show();
+                }.bind(this));
+            },
+            potvrdi(p){
+            	this.hideAll();
+            	axios({
+                	method : 'post',
+                    url : 'api/pacijent/potvrdi' + '?access_token=' + getCookie("access_token"),
+                    data : {id:p}
+                }).then(function(response){                	
+                	document.location.replace("/pacijentPocetna");
+                });
             }
 		}
 		});

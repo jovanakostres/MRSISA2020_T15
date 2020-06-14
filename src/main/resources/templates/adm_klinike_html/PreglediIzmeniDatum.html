@@ -1,0 +1,59 @@
+<head>
+	<meta charset="UTF-8">
+</head>
+<div id="modalPreglediIzmena" class="modal" style="font-size:150%;" role="dialog" th:fragment="modalPreglediIspravka">
+  <div class="modal-dialog">
+  
+  <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="document.getElementById('modalPreglediIzmena').style.display='none'" >&times;</button>
+        <h4 class="modal-title">Informacije o pregledu</h4>
+      </div>
+      <div class="modal-body">
+        <table class = "table" id="tableModal">
+		<thead>	</thead>
+			<tbody>
+        	<tr>
+        		<td>Lekar</td>
+        	  	<td>{{item.imeP}}</td>
+        	</tr>
+        	<tr>
+        		<td></td>
+        	  	<td>{{item.prezimeP}}</td>
+        	</tr>
+        	<tr>
+        		<td>Tip</td>
+        	  	<td>{{item.tipOp}}</td>
+        	</tr>
+        	<tr>
+        		<td>Datum</td>
+        	  	<td><input type = "date" v-on:change = "datum" id = "date" v-model = "selected_datum"></td>
+        	</tr>
+        	<tr>
+        		<td>Vreme</td>
+        		<td>
+            		<select style = "height: 30px;" id = "termin" v-model = "selected_time">
+            			<option v-for = "tt in termini" v-bind:value = "tt"> {{tt}} </option>
+					</select>
+				</td>
+        	</tr>
+        	<tr>
+        		<td>Sala</td>
+        		<td>
+            		<select style = "height: 30px;" id = "sala" v-model = "selected" >
+            			<option v-for = "tt in sale" v-bind:value = "tt"> {{tt.naziv}} </option>
+					</select>
+				</td>
+        	</tr>
+        	</tbody>
+      	</table>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-default" v-on:click="zakazi_izmenjen">Zakazi</button>
+      	<button type="button" class="btn btn-default" onclick="document.getElementById('modalPreglediIzmena').style.display='none'">Nazad</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

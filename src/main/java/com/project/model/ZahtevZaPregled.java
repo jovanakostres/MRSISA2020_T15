@@ -57,6 +57,10 @@ public class ZahtevZaPregled {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
+	private Pacijent pacijent;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private ZdravstveniKarton zkPacijenta;
 
 	public ZahtevZaPregled(LocalDate datum, LocalTime vremeOd, LocalTime vremeDo, Double cena,
@@ -148,6 +152,16 @@ public class ZahtevZaPregled {
 
 	public void setLekar(Lekar lekar) {
 		this.lekar = lekar;
+	}
+	
+	
+
+	public Pacijent getPacijent() {
+		return pacijent;
+	}
+
+	public void setPacijent(Pacijent pacijent) {
+		this.pacijent = pacijent;
 	}
 
 	public ZdravstveniKarton getZkPacijenta() {

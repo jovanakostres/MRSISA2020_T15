@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.model.Pacijent;
 import com.project.model.ZahtevZaPregled;
 import com.project.repository.ZahtevZaPregledRepository;
 
@@ -34,5 +35,14 @@ public class ZahtevZaPregledService {
 	public Set<ZahtevZaPregled> findBySala() {
 		// TODO Auto-generated method stub
 		return zahtevZaPregledRepository.findBySala(null);
+	}
+
+	public ZahtevZaPregled updateById(ZahtevZaPregled zzp) {
+		// TODO Auto-generated method stub
+		return zahtevZaPregledRepository.save(zzp);
+	}
+
+	public List<ZahtevZaPregled> findByPacijent(Pacijent p) {
+		return zahtevZaPregledRepository.findByPacijent(p.getId());
 	}
 }

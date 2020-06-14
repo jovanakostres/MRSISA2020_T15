@@ -25,19 +25,36 @@ public class PregledDto {
 	
 	private String tipOp;
 	
-	public PregledDto(Long id, String imeP, String prezimeP, String sala, LocalDate datum, LocalTime vreme,
-			LocalTime trajanje, Double cena, boolean izvrsen, String tip_op) {
+	public PregledDto() {}
+	
+	public PregledDto(Long id, String imeP, String prezimeP, String sala, LocalDate datum, LocalTime vremeOd,
+			LocalTime vremeDo, Double cena, boolean izvrsen, String tipOp) {
 		super();
 		this.id = id;
 		this.imeP = imeP;
 		this.prezimeP = prezimeP;
 		this.sala = sala;
 		this.datum = datum;
-		this.vremeOd = vreme;
-		this.vremeDo = trajanje;
+		this.vremeOd = vremeOd;
+		this.vremeDo = vremeDo;
 		this.cena = cena;
 		this.izvrsen = izvrsen;
-		this.tipOp = tip_op;
+		this.tipOp = tipOp;
+	}
+	
+	public PregledDto(String id, String imeP, String prezimeP, String sala, String datum, String vremeOd,
+			String vremeDo, String cena, boolean izvrsen, String tipOp) {
+		super();
+		this.id = Long.parseLong(id);
+		this.imeP = imeP;
+		this.prezimeP = prezimeP;
+		this.sala = sala;
+		this.datum = LocalDate.parse(datum);
+		this.vremeOd = LocalTime.parse(vremeOd);
+		this.vremeDo = LocalTime.parse(vremeDo);
+		this.cena = Double.parseDouble(cena);
+		this.izvrsen = izvrsen;
+		this.tipOp = tipOp;
 	}
 
 	public Long getId() {
@@ -118,6 +135,13 @@ public class PregledDto {
 
 	public void setTipOp(String tipOp) {
 		this.tipOp = tipOp;
+	}
+
+	@Override
+	public String toString() {
+		return "PregledDto [id=" + id + ", imeP=" + imeP + ", prezimeP=" + prezimeP + ", sala=" + sala + ", datum="
+				+ datum + ", vremeOd=" + vremeOd + ", vremeDo=" + vremeDo + ", cena=" + cena + ", izvrsen=" + izvrsen
+				+ ", tipOp=" + tipOp + "]";
 	}
 		
 	

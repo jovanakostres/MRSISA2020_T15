@@ -20,4 +20,9 @@ public class SalaService {
 		// TODO Auto-generated method stub
 		return salaRepository.getSale(datum, time);
 	}
+
+	public Sala findByNaziv(String sala) {
+		// TODO Auto-generated method stub
+		return salaRepository.findByNaziv(sala);
+	}
 }

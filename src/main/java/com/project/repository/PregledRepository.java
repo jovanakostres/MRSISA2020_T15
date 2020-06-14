@@ -16,4 +16,7 @@ public interface PregledRepository extends JpaRepository<Pregled, Long>{
 	
 	@Query("select s from Pregled s where s.lekar.id = ?1 and s.zkPacijenta.id = ?2")
 	List<Pregled> findByLekarPacijent(Long id, Long id2);
+
+	@Query("select s from Pregled s where s.zkPacijenta.id = ?1 and s.izvrsen = true")
+	List<Pregled> findByZKarton(Long id);
 }

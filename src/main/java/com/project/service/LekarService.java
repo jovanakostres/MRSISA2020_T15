@@ -47,4 +47,9 @@ public class LekarService {
 		return lekarRepository.findByEmail(email);
 	}
 
+	public Lekar findByNameAndSurname(String imeP, String prezimeP) {
+		// TODO Auto-generated method stub
+		return lekarRepository.findByNameAndSurname(imeP, prezimeP);
+	}
+
 }

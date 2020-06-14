@@ -12,7 +12,11 @@
 		}
 		#tabela {margin: 0 auto;}
 	</style>
-  	
+  	<script>
+	  	$(document).ready( function() {
+			document.getElementById('date').valueAsDate  = new Date();
+		});
+  	</script>
   	</head>
 <body>
 	<div id = "admin">
@@ -31,6 +35,7 @@
 		<login-component></login-component>
 		<div th:replace="adm_klinike_html/NezakazaniPregledi :: nezakazani"></div>
 		<div th:replace="adm_klinike_html/Pregled :: modalP"></div>
+		<div th:replace="adm_klinike_html/PreglediIzmeniDatum :: modalPreglediIspravka"></div>
 	</div>
 </body>
 
@@ -48,11 +53,14 @@
 			columns: [],
 			labels: [],
 			sale: [],
+			termini: [],
 			selected: '',
+			selected_datum: '',
+			selected_time: '',
 			item: {}
 		},
 		mounted() {
-			//this.pronadji_preglede();
+			this.proveri_preglede();
 		},
 		methods: {
 			isLoggedIn(){
@@ -61,6 +69,12 @@
             log_out_k(){
             	this.$root.$emit('logged-out')
             	//Event.$emit('logged-out');
+            },
+            proveri_preglede(){
+            	axios({
+                	method : 'post',
+                    url : 'api/adminKlinike/proveri_preglede' + '?access_token=' + getCookie("access_token"),
+                });
             },
             pregledi(){
             	this.hideAll();
@@ -78,32 +92,71 @@
             hideAll(){
             	$( "#nezakazani" ).hide();
             	$( "#modalPregledi" ).hide();
+            	$( "#modalPreglediIzmena" ).hide();
             },
             pregled_sale(id, index){
             	alert(id);
             	for(pregled of this.npregledi){
 					if(pregled['id'] == id)
+					{
 						this.item = pregled;
+					}
 				}
             	axios({
                 	method : 'post',
                     url : 'api/adminKlinike/sale' + '?access_token=' + getCookie("access_token"),
-                    data:{pregled:this.item}
+                    data:this.item
                 }).then(function(response){
                     this.sale = response.data;
-                }.bind(this));
-				$( "#modalPregledi" ).show();
+                    $( "#modalPregledi" ).show();
+                    //$( "#modalPreglediIzmena" ).show();
+                }.bind(this)).catch((error)=>{
+                	$( "#modalPreglediIzmena" ).show();
+                });
             },
             zakazi_Pregled(){
             	alert(this.selected);
-            	this.item['sala'] = this.selected;
+            	this.item['sala'] = this.selected['naziv'];
             	axios({
                 	method : 'post',
                     url : 'api/adminKlinike/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),
-                    data : {pregled: this.item}
+                    data : this.item
                 }).then(function(response){
                 	document.location.replace("/akPocetna");
                 });
+            },
+            datum(){
+            	alert($("#date").val());
+            	this.item['datum'] = $("#date").val()
+            	axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/sale'+ '?access_token=' + getCookie("access_token"),
+                    data : this.item
+                }).then(function(response){                	
+                	this.sale = response.data;
+                	$( "#modalPreglediIzmena" ).show();
+                }.bind(this));
+            	
+            	axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/termini'+ '?access_token=' + getCookie("access_token"),
+                    data : {ime: this.item['imeP'], prezime: this.item['prezimeP'], datum: this.item['datum']}
+                }).then(function(response){                	
+                	this.termini = response.data;
+                	$( "#modalPreglediIzmena" ).show();
+                }.bind(this));
+            },
+            zakazi_izmenjen(){
+            	this.item['datum'] = this.selected_datum;
+            	this.item['vremeOd'] = this.selected_time;
+            	this.item['sala'] = this.selected['naziv'];
+            	axios({
+            		method : 'post',
+                    url : 'api/adminKlinike/zakazi_pregled'+ '?access_token=' + getCookie("access_token"),
+                    data : {id:this.item['id'] ,imeP: this.item['imeP'], prezimeP: this.item['prezimeP'], datum: this.item['datum'], vremeOd:this.item['vremeOd'], sala: this.item['sala'], cena: this.item['cena'], vremeDo: this.item['vremeDo'], tipOp : this.item['tipOp'], izvrsen: this.item['izvrsen']}
+                }).then(function(response){                	
+                	document.location.replace("/akPocetna");
+                }.bind(this));
             }
 		}
 		});
