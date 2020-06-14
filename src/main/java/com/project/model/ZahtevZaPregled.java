@@ -62,9 +62,15 @@ public class ZahtevZaPregled {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
 	private ZdravstveniKarton zkPacijenta;
+	
+	@Column(name="datumprijave", unique=false, nullable=false)
+	private LocalDate datumPrijave;
+	
+	@Column(name="vremeprijave", unique=false, nullable=false)
+	private LocalTime vremePrijave;
 
 	public ZahtevZaPregled(LocalDate datum, LocalTime vremeOd, LocalTime vremeDo, Double cena,
-			TipPregleda tipPregleda, Sala sala, Lekar lekar, ZdravstveniKarton zkPacijenta) {
+			TipPregleda tipPregleda, Sala sala, Lekar lekar, ZdravstveniKarton zkPacijenta, LocalTime vremePrijave, LocalDate datumPrijave) {
 		super();
 		this.datum = datum;
 		this.vremeOd = vremeOd;
@@ -74,6 +80,8 @@ public class ZahtevZaPregled {
 		this.sala = sala;
 		this.lekar = lekar;
 		this.zkPacijenta = zkPacijenta;
+		this.datumPrijave = datumPrijave;
+		this.vremePrijave = vremePrijave;
 	}
 	
 	public ZahtevZaPregled() {}
@@ -88,6 +96,8 @@ public class ZahtevZaPregled {
 		this.sala = p.getSala();
 		this.lekar = p.getLekar();
 		this.zkPacijenta = p.getZkPacijenta();
+		this.datumPrijave = LocalDate.now();
+		this.vremePrijave = LocalTime.now();
 	}
 
 	public Long getId() {
@@ -170,6 +180,24 @@ public class ZahtevZaPregled {
 
 	public void setZkPacijenta(ZdravstveniKarton zkPacijenta) {
 		this.zkPacijenta = zkPacijenta;
+	}
+	
+	
+
+	public LocalDate getDatumPrijave() {
+		return datumPrijave;
+	}
+
+	public void setDatumPrijave(LocalDate datumPrijave) {
+		this.datumPrijave = datumPrijave;
+	}
+
+	public LocalTime getVremePrijave() {
+		return vremePrijave;
+	}
+
+	public void setVremePrijave(LocalTime vremePrijave) {
+		this.vremePrijave = vremePrijave;
 	}
 
 	@Override

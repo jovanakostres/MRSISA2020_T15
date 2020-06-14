@@ -11,7 +11,8 @@ import com.project.model.Sala;
 
 public interface SalaRepository extends JpaRepository<Sala, Long>{
 
-	@Query("select s from Sala s left join Pregled p on s.id = p.sala.id where (p.datum != ?1 or p.datum is null) and (p.vremeOd!= ?2 or p.vremeOd is null)")
+	@Query("select s from Sala s left join Pregled p on s.id = p.sala.id where (p.datum != ?1 or p.datum is null) and (p.vremeOd!= ?2 or p.vremeOd is null) "
+			+ "and (s.klinika.id=p.lekar.klinika.id)")
 	List<Sala> getSale(LocalDate datum, LocalTime vreme);
 
 	Sala findByNaziv(String sala);

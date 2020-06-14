@@ -18,8 +18,7 @@ insert into klinike (id,naziv, adresa, opis, ocena) values (2,'Klinika 2','Adres
 update korisnici set klinika_id = 1 where id = 3;
 insert into klinika_pacijenti (klinika_id,pacijent_id) values (1,1);
 
-update korisnici set klinika_id = 1 where id = 4;
-update korisnici set klinika_id = 2 where id = 3;
+update korisnici set klinika_id = 2 where id = 4;
 
 insert into sale (id,naziv,klinika_id) values (1, 'Sala 1', 1);
 insert into sale (id,naziv,klinika_id) values (2, 'Sala 2', 1);

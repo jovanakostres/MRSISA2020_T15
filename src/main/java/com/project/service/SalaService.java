@@ -16,7 +16,7 @@ public class SalaService {
 	@Autowired
 	SalaRepository salaRepository;
 
-	public List<Sala> findAll(LocalDate datum, LocalTime time) {
+	public List<Sala> findSale(LocalDate datum, LocalTime time) {
 		// TODO Auto-generated method stub
 		return salaRepository.getSale(datum, time);
 	}

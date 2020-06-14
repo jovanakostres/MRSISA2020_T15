@@ -352,7 +352,10 @@ public class PacijentController {
 	   
 	   System.out.println(zk == null);
 	   
-	   ZahtevZaPregled zzp = new ZahtevZaPregled(date, t, t.plusHours(1L), 100.0, lekar.getTipPregleda(), null, lekar, zk) ;
+	   LocalTime time = LocalTime.now();
+	   LocalDate d = LocalDate.now();
+	   
+	   ZahtevZaPregled zzp = new ZahtevZaPregled(date, t, t.plusHours(1L), 100.0, lekar.getTipPregleda(), null, lekar, zk, time, d) ;
 	   zzp.setPacijent(p);
 	   
 	   zzpService.save(zzp);

@@ -62,12 +62,22 @@ public class AdminKlinikeController {
 		Set<ZahtevZaPregled> pregledi = zzpService.findBySala();
 		for(ZahtevZaPregled zzp : pregledi)
 		{
-			if(zzp.getDatum().compareTo(yesterday)==0 && time.compareTo(zzp.getVremeOd())>0)
+			while(true)
 			{
-				List<Sala> sale = salaService.findAll(zzp.getDatum(), zzp.getVremeOd());
-				zzp.setSala(sale.get(0));
-				zzpService.save(zzp);
-				emailService.sendDodeljenaSala(zzp);
+				if(zzp.getDatumPrijave().compareTo(yesterday)==0 && time.compareTo(zzp.getVremePrijave())>0)
+				{
+					List<Sala> sale = salaService.findSale(zzp.getDatum(), zzp.getVremeOd());
+					if(sale.size()==0) 
+						zzp.setDatum(zzp.getDatum().plusDays(1L));
+					else
+					{
+						zzp.setSala(sale.get(0));
+						zzpService.save(zzp);
+						emailService.sendDodeljenaSala(zzp);
+						break;
+					}
+					
+				}
 			}
 		}
 	}
@@ -75,7 +85,7 @@ public class AdminKlinikeController {
 	@PostMapping(value ="/sale")
 	public ResponseEntity getSale(@RequestBody PregledDto pregled) {
 		System.out.println(pregled);
-		List<Sala> sale = salaService.findAll(pregled.getDatum(), pregled.getVremeOd());
+		List<Sala> sale = salaService.findSale(pregled.getDatum(), pregled.getVremeOd());
 		if(sale.size()!=0)
 			return new ResponseEntity(sale, HttpStatus.OK);
 		else
